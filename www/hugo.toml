@@ -1,0 +1,5 @@
+baseURL = 'https://cecinestpasunmariage.org/'
+languageCode = 'en-us'
+title = "Ceci n'est pas un mariage"
+theme = 'ananke'
+copyright = 'Isa & Juanma'
