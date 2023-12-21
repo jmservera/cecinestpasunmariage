@@ -1,8 +1,8 @@
 baseURL = 'https://cecinestpasunmariage.org/'
 languageCode = 'en-us'
 title = "Ceci n'est pas un mariage"
-theme = 'ananke'
+theme = ["github.com/theNewDynamic/gohugo-theme-ananke"]
 copyright = 'Isa & Juanma'
 
 [params]
-    featured_image = "/images/cecinestpasunmarriagev3.jpg"
+    featured_image = "/images/cecinestpasunmariagev3.jpg"
