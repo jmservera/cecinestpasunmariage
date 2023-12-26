@@ -1,5 +1,5 @@
 module github.com/jmservera/cecinestpasunmariage
 
-go 1.17
+go 1.18
 
-require github.com/theNewDynamic/gohugo-theme-ananke v0.0.0-20210714132908-e3f7fbe39d7b
+require github.com/zjedi/hugo-scroll v0.0.0-20231223180845-f1d65eeccb10 // indirect

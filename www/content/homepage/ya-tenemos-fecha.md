@@ -1,10 +1,8 @@
 ---
-title: "Ya Tenemos Fecha"
-date: 2023-12-21T19:28:11+01:00
-draft: false
+title: "Ya tenemos sitio y fecha"
+weight: 3
+header_menu: true
 ---
-
-## Ya tenemos sitio y fecha
 
 Fecha: 3 de Mayo de 2025
 

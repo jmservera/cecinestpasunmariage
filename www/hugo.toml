@@ -1,8 +1,10 @@
 baseURL = 'https://cecinestpasunmariage.org/'
+disableKinds = ["section", "taxonomy", "term", "RSS", "robotsTXT"]
 languageCode = 'en-us'
 title = "Ceci n'est pas un mariage"
-theme = "hugo-scroll"
+theme = "github.com/zjedi/hugo-scroll"
 copyright = 'Isa & Juanma'
 
 [params]
     featured_image = "/images/cecinestpasunmariagev3.jpg"
+
