@@ -5,16 +5,10 @@
     "connection-string": "@env('DATABASE_CONNECTION_STRING')",
     "options": {
       "database": "registrations",
-      "container": "users",
       "schema": "staticwebapp.database.schema.gql"
     }
   },
   "runtime": {
-    "rest": {
-      "enabled": false,
-      "path": "/api",
-      "request-body-strict": true
-    },
     "graphql": {
       "enabled": true,
       "path": "/graphql",
@@ -33,5 +27,17 @@
       "mode": "production"
     }
   },
-  "entities": {}
+  "entities": {
+    "User": {
+      "source": "users",
+      "permissions": [
+        {
+          "actions": [
+            "*"
+          ],
+          "role": "anonymous"
+        }
+      ]
+    }
+  }
 }
