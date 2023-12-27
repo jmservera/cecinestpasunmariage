@@ -28,6 +28,9 @@
   }
 
   (async () => {
-  console.log(await getUserInfo());
+    const info=await getUserInfo();
+    console.log(info);
+    const email = document.querySelector('input[name="email"]');
+    email.value = info.userDetails;
   })();
 </script>
