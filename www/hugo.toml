@@ -2,7 +2,7 @@ baseURL = 'https://cecinestpasunmariage.org/'
 disableKinds = ["section", "taxonomy", "term", "RSS", "robotsTXT"]
 languageCode = 'en-us'
 title = "Ceci n'est pas un mariage"
-theme = "github.com/zjedi/hugo-scroll"
+theme = "hugo-scroll"
 copyright = 'Isa & Juanma'
 
 [params]
