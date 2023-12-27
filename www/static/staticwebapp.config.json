@@ -4,7 +4,24 @@
             "route": "/registro",
             "allowedRoles": [
                 "authenticated"
-            ]
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
+            "route": "/logout",
+            "redirect": "/.auth/logout"
+        },
+        {
+            "route": "/login",
+            "redirect": "/.auth/login/aad"
         }
-    ]
+    ],
+    "responseOverrides": {
+        "401": {
+            "statusCode": 302,
+            "redirect": "/.auth/login/aad?post_login_redirect_uri=.referrer"
+        }
+    }
 }
