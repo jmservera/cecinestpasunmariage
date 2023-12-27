@@ -1,6 +1,6 @@
 ---
-title: "Login"
+title: "Logout"
 weight: 99
 header_menu: true
-external: /login
+external: /logout
 ---
