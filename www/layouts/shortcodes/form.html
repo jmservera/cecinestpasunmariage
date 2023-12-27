@@ -1,11 +1,7 @@
 <!-- more info at https://formkeep.com/guides/contact-form-hugo -->
 {{ $id := default "id" (.Get 0) }}{{ $button_name := default "Submit" (.Get 1)
 }}{{ $redirect := .Get 2 }}
-<form
-  accept-charset="UTF-8"
-  action="https://registro.cecinestpasunmariage.org/{{ $id }}"
-  method="POST"
->
+<div>
   <input type="hidden" name="utf8" value="✓" />
   {{ if $redirect }}<input
     type="hidden"
@@ -14,23 +10,62 @@
   />
   {{ end }}
   <input type="text" name="name" placeholder="Your name" />
+  <input type="hidden" name="id" value="{{ $id }}" />
   <input type="email" name="email" placeholder="name@example.com" />
   <input type="number" name="pax" placeholder="Number of guests" value="1" />
-  <button type="submit">{{ $button_name }}</button>
-</form>
+  <button id="save" onclick="create()">{{ $button_name }}</button>
+</div>
 
 <script lang="javascript">
-    async function getUserInfo() {
-    const response = await fetch('/.auth/me');
-    const payload = await response.json();
-    const { clientPrincipal } = payload;
-    return clientPrincipal;
-  }
+      async function getUserInfo() {
+      const response = await fetch('/.auth/me');
+      const payload = await response.json();
+      const { clientPrincipal } = payload;
+      return clientPrincipal;
+    }
 
-  (async () => {
-    const info=await getUserInfo();
-    console.log(info);
-    const email = document.querySelector('input[name="email"]');
-    email.value = info.userDetails;
-  })();
+    (async () => {
+      const info=await getUserInfo();
+      console.log(info);
+      const email = document.querySelector('input[name="email"]');
+      email.value = info.userDetails;
+      const id= document.querySelector('input[name="id"]');
+      id.value = info.userId;
+    })();
+
+    async function create() {
+
+      const id=document.querySelector('input[name="id"]');
+      const email = document.querySelector('input[name="email"]');
+
+  const data = {
+    id: id.value,
+    email: email.value,
+  };
+
+  const gql = `
+    mutation create($item: CreatePersonInput!) {
+      createPerson(item: $item) {
+        id
+        email
+      }
+    }`;
+
+  const query = {
+    query: gql,
+    variables: {
+      item: data
+    }
+  };
+
+  const endpoint = "/data-api/graphql";
+  const result = await fetch(endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(query)
+  });
+
+  const response = await result.json();
+  console.table(response.data.createPerson);
+  }
 </script>
