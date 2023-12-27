@@ -9,7 +9,7 @@ type Book @model {
 }
 """
 type User @model {
-  id: ID!
+  id: String!
   email: String!
   createdAt: String
   updatedAt: String
