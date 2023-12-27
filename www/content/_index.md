@@ -10,7 +10,7 @@ header_use_video: false
 #
 # Headers are safeHTML, you can use HTML tags such as b,i,u,br
 header_headline: "Isa & Juanma"
-header_subheadline: "Ceci n'est pas un mariage"
+header_subheadline: "03/05/2025"
 
 # Add a 'Go back to top' item to the navigation menu
 # Title: name of navigation menu entry
