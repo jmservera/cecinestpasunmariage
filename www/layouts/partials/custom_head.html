@@ -56,3 +56,33 @@
   sizes="16x16"
   href="{{ "images/favicon-16x16.png" | absURL }}"
 />
+<style>
+     body{
+          background-image:url('../images/background.png');
+          background-attachment:fixed;
+          background-repeat: no-repeat;
+          background-size: cover;
+     }
+
+     #site-head, #site-head.withCenteredImage
+     {
+          background-position: top;
+          background-repeat: no-repeat;
+          background-size: 500px;
+     }
+
+     :root {
+    /* see variables.scss for more variables*/
+*
+    --section-light-text-color: #893F40!important;
+    --section-light-bg-color: transparent!important;
+    /* --section-dark-bg-color: #035e00!important; */
+
+
+     /* define list element for unnumbered lists, leave empty for default list element */
+     /* fa-asterisk is the default icon if this variable definition is missing completely */
+     --ul-li-icon: fa-dashcube;     /* this sets fa-dashcube as list icon */
+     --ul-li-icon: ;                /* this sets the default html list icon */
+}
+
+</style>
