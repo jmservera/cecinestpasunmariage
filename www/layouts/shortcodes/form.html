@@ -1,0 +1,20 @@
+<!-- more info at https://formkeep.com/guides/contact-form-hugo -->
+{{ $id := default "id" (.Get 0) }}{{ $button_name := default "Submit" (.Get 1)
+}}{{ $redirect := .Get 2 }}
+<form
+  accept-charset="UTF-8"
+  action="https://registro.cecinestpasunmariage.org/{{ $id }}"
+  method="POST"
+>
+  <input type="hidden" name="utf8" value="✓" />
+  {{ if $redirect }}<input
+    type="hidden"
+    name="_redirect_url"
+    value="{{ $redirect }}"
+  />
+  {{ end }}
+  <input type="text" name="name" placeholder="Your name" />
+  <input type="email" name="email" placeholder="name@example.com" />
+  <input type="number" name="pax" placeholder="Number of guests" value="1" />
+  <button type="submit">{{ $button_name }}</button>
+</form>
