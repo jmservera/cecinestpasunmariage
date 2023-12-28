@@ -4,7 +4,8 @@
     "www": {
       "appLocation": ".",
       "outputLocation": "public",
-      "appBuildCommand": "hugo -b /"
+      "appBuildCommand": "hugo -b /",
+      "run": "hugo server -D"
     }
   }
 }
