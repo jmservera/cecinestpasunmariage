@@ -1,0 +1,2 @@
+source .env
+swa start ./public --data-api-location ../swa-db-connections
