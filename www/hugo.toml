@@ -1,4 +1,4 @@
-baseURL = 'https://cecinestpasunmariage.org/'
+baseURL = '/'
 disableKinds = ["section", "taxonomy", "term", "RSS", "robotsTXT"]
 languageCode = 'en-us'
 title = "Ceci n'est pas un mariage"
