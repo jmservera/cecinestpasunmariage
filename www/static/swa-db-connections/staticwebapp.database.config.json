@@ -19,7 +19,7 @@
         "origins": [
           "http://localhost:4280"
         ],
-        "allow-credentials": false
+        "allow-credentials": true
       },
       "authentication": {
         "provider": "StaticWebApps"
