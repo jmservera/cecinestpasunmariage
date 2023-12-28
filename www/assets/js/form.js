@@ -12,6 +12,12 @@ async function getUserInfo() {
   email.value = info.userDetails;
   const id = document.querySelector('input[name="id"]');
   id.value = info.userId;
+
+  const form = document.querySelector("form");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    create();
+  });
 })();
 
 async function create() {
