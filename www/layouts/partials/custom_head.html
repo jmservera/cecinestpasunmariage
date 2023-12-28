@@ -56,6 +56,7 @@
   sizes="16x16"
   href="{{ "images/favicon-16x16.png" | absURL }}"
 />
+
 <style>
      body{
           background-image:url('../images/background.png');
@@ -88,6 +89,34 @@
           height: 300px;
      }
 
+     #cuenta-atras #days
+     {
+          /* border: 1px solid red; */
+          width: 5%;
+          min-width: 75px;
+          height: 50px;
+          display: inline;
+          float: left;
+          position: absolute;
+          top: 45%;
+          left: 45%;
+          font-size: calc(2vw + 1vh + 1vmin);
+
+
+     }
+     #cuenta-atras #hours
+     {
+          /* border: 1px solid BLUE; */
+          width: 5%;
+          height: 50px;
+          display: inline;
+          float: left;
+          position: absolute;
+          top: 45%;
+          left: 52.5%;
+          font-size: calc(1vw + 2vh + 1vmin);
+     }
+     
      :root {
           /* see variables.scss for more variables*/
           --section-light-text-color: #893F40!important;
@@ -102,6 +131,7 @@
           --ul-li-icon: ;                /* this sets the default html list icon */
           --cover-text-color:var(--color-text);
           --highlight: #F0DAC8;
+          --sticky-menu-text-color: #EDAD53;
      }
 
 </style>
