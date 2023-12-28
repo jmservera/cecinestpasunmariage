@@ -8,3 +8,7 @@ copyright = 'Isa & Juanma'
 [params]
     featured_image = "/images/cecinestpasunmariagev3.jpg"
 
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
