@@ -1,1 +1,1 @@
-swa build && swa start ./public --data-api-location ./public/swa-db-connections
+swa build && swa start ./public --data-api-location ../swa-db-connections
