@@ -16,55 +16,14 @@
   <button id="save" onclick="create()">{{ $button_name }}</button>
 </div>
 
-<script lang="javascript">
-      async function getUserInfo() {
-      const response = await fetch('/.auth/me');
-      const payload = await response.json();
-      const { clientPrincipal } = payload;
-      return clientPrincipal;
-    }
-
-    (async () => {
-      const info=await getUserInfo();
-      console.log(info);
-      const email = document.querySelector('input[name="email"]');
-      email.value = info.userDetails;
-      const id= document.querySelector('input[name="id"]');
-      id.value = info.userId;
-    })();
-
-    async function create() {
-
-      const id=document.querySelector('input[name="id"]');
-      const email = document.querySelector('input[name="email"]');
-
-  const data = {
-    id: id.value,
-    email: email.value,
-  };
-
-  const gql = `mutation create($item: CreateUserInput!) {
-      createUser(item: $item) {
-        id
-        email
-      }
-    }`;
-
-  const query = {
-    query: gql,
-    variables: {
-      item: data
-    }
-  };
-
-  const endpoint = "/data-api/graphql";
-  const result = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(query)
-  });
-
-  const response = await result.json();
-  console.table(response.data.createUser);
-  }
-</script>
+{{ with resources.Get "js/form.js" }} {{ if eq hugo.Environment "development" }}
+{{ with . | js.Build }}
+<script src="{{ .RelPermalink }}"></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+$opts | fingerprint }}
+<script
+  src="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+  crossorigin="anonymous"
+></script>
+{{ end }} {{ end }} {{ end }}
