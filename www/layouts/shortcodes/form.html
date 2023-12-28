@@ -1,7 +1,7 @@
 <!-- more info at https://formkeep.com/guides/contact-form-hugo -->
 {{ $id := default "id" (.Get 0) }}{{ $button_name := default "Submit" (.Get 1)
 }}{{ $redirect := .Get 2 }}
-<div>
+<form target="_self">
   <input type="hidden" name="utf8" value="✓" />
   {{ if $redirect }}<input
     type="hidden"
@@ -13,8 +13,8 @@
   <input type="hidden" name="id" value="{{ $id }}" />
   <input type="email" name="email" placeholder="name@example.com" />
   <input type="number" name="pax" placeholder="Number of guests" value="1" />
-  <button id="save" onclick="create()">{{ $button_name }}</button>
-</div>
+  <button type="submit" id="save">{{ $button_name }}</button>
+</form>
 
 {{ with resources.Get "js/form.js" }} {{ if eq hugo.Environment "development" }}
 {{ with . | js.Build }}
