@@ -5,7 +5,9 @@
       "appLocation": ".",
       "outputLocation": "public",
       "appBuildCommand": "hugo -b /",
-      "run": "hugo -e development -b / --watch --verbose"
+      "run": "hugo server -e development -D",
+      "start": "http://localhost:1313",
+      "dataApiLocation": "../swa-db-connections"
     }
   }
 }

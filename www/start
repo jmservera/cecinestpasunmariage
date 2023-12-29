@@ -1,3 +1,10 @@
 #!/bin/bash
 source .env
-swa start --data-api-location ../swa-db-connections
+if (($1 == "prod")); then
+    echo "Starting staging server"
+    run="hugo server -e staging -p 1313"
+else
+    echo "Starting development server"
+    run="hugo server -e development -D -p 1313 -v"
+fi
+swa start http://localhost:1313 --run "$run"
