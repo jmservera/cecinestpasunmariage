@@ -1,10 +1,14 @@
 #!/bin/bash
 source .env
-if (($1 == "prod")); then
+
+# check if first parameter is "prod"
+
+if [ "$1" == "prod" ]; then
     echo "Starting staging server"
     run="hugo server -e staging -p 1313"
 else
     echo "Starting development server"
-    run="hugo server -e development -D -p 1313 -v"
+    run="hugo server -e development -D -p 1313 --disableFastRender  --renderToDisk"
 fi
-swa start http://localhost:1313 --run "$run"
+
+swa start http://localhost:1313 --run "$run" -V

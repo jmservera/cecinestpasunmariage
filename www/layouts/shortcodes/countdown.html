@@ -1,0 +1,14 @@
+<div id="days" name="days" class="days">20</div>
+<div id="hours" name="hours">20</div>
+
+{{ with resources.Get "js/countdown.js" }} {{ if eq hugo.Environment
+"development" }} {{ with . | js.Build }}
+<script src="{{ .RelPermalink }}"></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+$opts | fingerprint }}
+<script
+  src="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+  crossorigin="anonymous"
+></script>
+{{ end }} {{ end }} {{ end }}
