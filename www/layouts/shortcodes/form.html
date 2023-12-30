@@ -1,6 +1,20 @@
 {{ $id := default "id" (.Get 0) }}{{ $button_name := default "Submit" (.Get 1)
 }}{{ $redirect := .Get 2 }}
 <form target="_self">
+  <style>
+    label {
+      color: #b46b6b;
+      font-weight: bold;
+      display: block;
+    }
+    label:after {
+      content: ": ";
+    }
+    form button {
+      margin-top: 1em;
+      display: block;
+    }
+  </style>
   <input type="hidden" name="utf8" value="✓" />
   {{ if $redirect }}<input
     type="hidden"
@@ -8,17 +22,25 @@
     value="{{ $redirect }}"
   />
   {{ end }}
-  <label for="name">Name</label>
-  <input type="text" name="name" placeholder="Your name" />
+  <span>
+    <label for="name">Name</label>
+    <input type="text" name="name" placeholder="Your name" />
+  </span>
   <input type="hidden" name="id" value="{{ $id }}" />
-  <label for="email">Email</label>
-  <input type="email" name="email" placeholder="name@example.com" />
-  <label for="pax">Number of guests</label>
-  <input type="number" name="pax" placeholder="Number of guests" value="1" />
-  <button type="submit" id="save">{{ $button_name }}</button>
+  <span>
+    <label for="email">Email</label>
+    <input type="email" name="email" placeholder="name@example.com" />
+  </span>
+  <span>
+    <label for="pax">Number of guests</label>
+    <input type="number" name="pax" placeholder="Number of guests" value="1" />
+  </span>
+  <span>
+    <button type="submit" id="save">{{ $button_name }}</button>
+  </span>
 </form>
 
-{{ with resources.Get "js/form.js" }} {{ if eq hugo.Environment "development" }}
+{{ with resources.Get "js/form.ts" }} {{ if eq hugo.Environment "development" }}
 {{ with . | js.Build }}
 <script src="{{ .RelPermalink }}"></script>
 {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build

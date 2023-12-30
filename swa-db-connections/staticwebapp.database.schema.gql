@@ -11,6 +11,8 @@ type Book @model {
 type User @model {
   id: String!
   email: String!
+  name: String!
+  pax: Int!
   createdAt: String
   updatedAt: String
 }
