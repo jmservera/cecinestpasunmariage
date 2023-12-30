@@ -1,4 +1,3 @@
-<!-- more info at https://formkeep.com/guides/contact-form-hugo -->
 {{ $id := default "id" (.Get 0) }}{{ $button_name := default "Submit" (.Get 1)
 }}{{ $redirect := .Get 2 }}
 <form target="_self">
@@ -9,9 +8,12 @@
     value="{{ $redirect }}"
   />
   {{ end }}
+  <label for="name">Name</label>
   <input type="text" name="name" placeholder="Your name" />
   <input type="hidden" name="id" value="{{ $id }}" />
+  <label for="email">Email</label>
   <input type="email" name="email" placeholder="name@example.com" />
+  <label for="pax">Number of guests</label>
   <input type="number" name="pax" placeholder="Number of guests" value="1" />
   <button type="submit" id="save">{{ $button_name }}</button>
 </form>
