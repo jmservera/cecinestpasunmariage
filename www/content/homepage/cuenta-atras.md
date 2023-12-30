@@ -5,4 +5,4 @@ header_menu: false
 ---
 
 ![alt text](../images/cuenta_atras.png "Cuenta atrás")
-{{< countdown >}}
+{{< countdown "2025-05-03" 14 >}}

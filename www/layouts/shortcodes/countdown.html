@@ -1,3 +1,5 @@
+{{ $date := default "2025-05-03" (.Get 0) }} {{ $time := default "14" (.Get 1)
+}}
 <div id="days" name="days" class="days">20</div>
 <div id="hours" name="hours">20</div>
 
@@ -12,3 +14,8 @@ $opts | fingerprint }}
   crossorigin="anonymous"
 ></script>
 {{ end }} {{ end }} {{ end }}
+<script>
+  const future = new Date("{{ $date }}");
+  future.setHours(parseInt("{{ $time }}"));
+  runCountdown(future);
+</script>

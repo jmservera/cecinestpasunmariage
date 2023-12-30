@@ -5,7 +5,7 @@ source .env
 
 if [ "$1" == "prod" ]; then
     echo "Starting staging server"
-    run="hugo server -e staging -p 1313"
+    run="hugo server -e staging -p 1313 --disableFastRender --renderToDisk"
 else
     echo "Starting development server"
     run="hugo server -e development -D -p 1313 --disableFastRender  --renderToDisk"
