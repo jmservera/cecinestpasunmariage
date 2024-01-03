@@ -4,12 +4,19 @@ weight: 4
 header_menu: true
 ---
 
-Fecha: 3 de Mayo de 2025
+**Fecha**: 3 de Mayo de 2025
 
-Sitio: [Jardines la clave](https://maps.app.goo.gl/234ycG7ryKviRH7V6)
+**Sitio**: [Jardines la clave](https://maps.app.goo.gl/234ycG7ryKviRH7V6)
 
-Dress code: 
+**Dress code**:  "Casual Cóctel" <br/>
+Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped. <br>
+¡Lo más importante para nostros es que tú estés a gusto! <br />
+(¡Puedes dejar tus tacones y tu corbata en casa!)
 
-Menú Vegetariano. 
+**Menú Vegetariano**. <br />
+Isa es vegetariana y en su concepto de celebración no permitirá que se mate a ningún animal para festejar. <br />
+Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero no contendrá carne ni pescado.
 
-Animación para los niños :)
+
+**Animación para los niños** <br />
+A disfrutar, grandes y peques! :)
