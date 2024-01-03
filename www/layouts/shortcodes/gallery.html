@@ -1,0 +1,34 @@
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+{{ with resources.Get "js/jquery.justifiedGallery.min.js" }} {{ if eq hugo.Environment
+    "development" }}
+    <script src="{{ .RelPermalink }}"></script>
+    {{ end }} {{ else }} {{ with . | js.Build | fingerprint }}
+    <script
+      src="{{ .RelPermalink }}"
+      integrity="{{ .Data.Integrity }}"
+      crossorigin="anonymous"
+    ></script>
+    {{ end }} {{ end }}
+
+
+    {{ with resources.Get "css/justifiedGallery.min.css" }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" />
+    {{ end }}
+
+
+<div id="mygallery" >
+    <a href="/images/cecinestpasunmariagev3.jpg">
+        <img alt="Title 1" src="/images/cecinestpasunmariagev3.jpg"/>
+    </a>
+    <a href="path/to/myimage2_original.jpg">
+        <img alt="Title 2" src="path/to/myimage2_thumbnail.jpg"/>
+    </a>
+    <!-- other images... -->
+</div>
+
+
+<script>
+    $("#mygallery").justifiedGallery();
+</script>

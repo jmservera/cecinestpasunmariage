@@ -4,9 +4,15 @@ title: "Fotos"
 
 
 Uopppps!! Todavía no hay fotos!!
+<br />
+
+
+
+
+{{< gallery >}}
 
 Puedes enviarnos tus fotos a nuestro email:
-TBD: Poner mail cuando protejamos la web.
+servezas@outlook.com
 
 O subirlas aquí: 
-Link a OneDrive para subir las fotos. 
+TDB: Link a OneDrive para subir las fotos. 
