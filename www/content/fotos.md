@@ -3,8 +3,6 @@ title: "Fotos"
 ---
 
 
-### Recuerda que para ver las fotos de la fiesta tienes que estar registrado :)
-
 Uopppps!! Todavía no hay fotos!!
 
 Puedes enviarnos tus fotos a nuestro email:
