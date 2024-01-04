@@ -10,6 +10,15 @@
             }
         },
         {
+            "route": "/guestList",
+            "allowedRoles": [
+                "admin"
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
             "route": "/logout",
             "redirect": "/.auth/logout"
         },
