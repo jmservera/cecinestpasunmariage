@@ -10,6 +10,15 @@
             }
         },
         {
+            "route": "/fotos",
+            "allowedRoles": [
+                "authenticated"
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
             "route": "/guestList",
             "allowedRoles": [
                 "admin"

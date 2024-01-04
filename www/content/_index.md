@@ -9,7 +9,7 @@ header_use_video: false
 #header_logo: "images/chef-hat.png"
 #
 # Headers are safeHTML, you can use HTML tags such as b,i,u,br
-header_headline: "Isa & Juanma"
+header_headline: "La !boda de Isa & Juanma"
 header_subheadline: "03/05/2025"
 
 # Add a 'Go back to top' item to the navigation menu
