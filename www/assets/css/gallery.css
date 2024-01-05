@@ -1,0 +1,20 @@
+#mygallery {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* three equal columns */
+    grid-template-rows: 1fr 1fr 1fr; /* three equal rows */
+
+
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+#mygallery a {
+    background: #ccc; /* change as needed */
+    border: 1px solid #999; /* change as needed */
+    border-radius: 4px; /* change as needed */
+}

@@ -1,55 +1,27 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
-{{ with resources.Get "js/jquery.justifiedGallery.min.js" }} {{ if eq hugo.Environment
-    "development" }}
-    <script src="{{ .RelPermalink }}"></script>
-    {{ end }} {{ else }} {{ with . | js.Build | fingerprint }}
-    <script
-      src="{{ .RelPermalink }}"
-      integrity="{{ .Data.Integrity }}"
-      crossorigin="anonymous"
-    ></script>
-    {{ end }} {{ end }}
-
-
-    {{ with resources.Get "css/justifiedGallery.min.css" }}
-    <link rel="stylesheet" href="{{ .RelPermalink }}" />
-    {{ end }}
-
-
 <div id="mygallery" >
     <a href="/images/cecinestpasunmariagev3.jpg">
         <img alt="Title 1" src="/images/cecinestpasunmariagev3.jpg"/>
     </a>
-    <a href="https://noweddingpictures.blob.core.windows.net/pre/20200212_195303.jpg?sp=r&st=2024-01-04T12:18:59Z&se=2024-01-04T20:18:59Z&sv=2022-11-02&sr=b&sig=oogACOXECcYkL0nGaxsr%2Bgo0sLPA4q3S8LvEVftBZJk%3D">
-        <img alt="Title 2" src="https://noweddingpictures.blob.core.windows.net/pre/20200212_195303.jpg?sp=r&st=2024-01-04T12:18:59Z&se=2024-01-04T20:18:59Z&sv=2022-11-02&sr=b&sig=oogACOXECcYkL0nGaxsr%2Bgo0sLPA4q3S8LvEVftBZJk%3D"/>
-    </a>
-    <a href="https://noweddingpictures.blob.core.windows.net/pre/20200212_195306.jpg?sp=r&st=2024-01-04T12:21:58Z&se=2024-01-04T20:21:58Z&sv=2022-11-02&sr=b&sig=AAYwc4C8f8s%2B%2B5Z0zLDjTBc0S%2BEaBhNAVtSSoRbjYLM%3D">
-        <img alt="Title 1" src="https://noweddingpictures.blob.core.windows.net/pre/20200212_195306.jpg?sp=r&st=2024-01-04T12:21:58Z&se=2024-01-04T20:21:58Z&sv=2022-11-02&sr=b&sig=AAYwc4C8f8s%2B%2B5Z0zLDjTBc0S%2BEaBhNAVtSSoRbjYLM%3D"/>
-    </a>
-
-    <a href="    https://noweddingpictures.blob.core.windows.net/pre/20200212_195312.jpg?sp=r&st=2024-01-04T12:23:08Z&se=2024-01-04T20:23:08Z&sv=2022-11-02&sr=b&sig=I1sEt5FiQugUY4vg0HuDdFnhBDuVOT3IgioH6rAGJXE%3D">
-        <img alt="Title 1" src="    https://noweddingpictures.blob.core.windows.net/pre/20200212_195312.jpg?sp=r&st=2024-01-04T12:23:08Z&se=2024-01-04T20:23:08Z&sv=2022-11-02&sr=b&sig=I1sEt5FiQugUY4vg0HuDdFnhBDuVOT3IgioH6rAGJXE%3D"/>
-    </a>
-    
-    <a href="https://noweddingpictures.blob.core.windows.net/pre/20200217_103753.jpg?sp=r&st=2024-01-04T12:23:26Z&se=2024-01-04T20:23:26Z&sv=2022-11-02&sr=b&sig=Q8g70z71kVyWan0Le12wyY%2FMioeQ3IPddCREfPgv2Hs%3D">
-        <img alt="Title 1" src="https://noweddingpictures.blob.core.windows.net/pre/20200217_103753.jpg?sp=r&st=2024-01-04T12:23:26Z&se=2024-01-04T20:23:26Z&sv=2022-11-02&sr=b&sig=Q8g70z71kVyWan0Le12wyY%2FMioeQ3IPddCREfPgv2Hs%3D"/>
-    </a>
-    
-    <a href="https://noweddingpictures.blob.core.windows.net/pre/20200217_103801.jpg?sp=r&st=2024-01-04T12:23:40Z&se=2024-01-04T20:23:40Z&sv=2022-11-02&sr=b&sig=Fi0X6h4OZ%2FJM3HFD7wQPZeLIHwEY6T7D2E45PVOR%2FOg%3D">
-        <img alt="Title 1" src="https://noweddingpictures.blob.core.windows.net/pre/20200217_103801.jpg?sp=r&st=2024-01-04T12:23:40Z&se=2024-01-04T20:23:40Z&sv=2022-11-02&sr=b&sig=Fi0X6h4OZ%2FJM3HFD7wQPZeLIHwEY6T7D2E45PVOR%2FOg%3D"/>
-    </a>
-
-    <a href="https://noweddingpictures.blob.core.windows.net/pre/20200217_105627.jpg?sp=r&st=2024-01-04T12:23:56Z&se=2024-01-04T20:23:56Z&sv=2022-11-02&sr=b&sig=%2F9t9eSjKsvqA%2FEI1C5iz0Nsj%2F22wnpbucalW0d1xFBs%3D">
-        <img alt="Title 1" src="https://noweddingpictures.blob.core.windows.net/pre/20200217_105627.jpg?sp=r&st=2024-01-04T12:23:56Z&se=2024-01-04T20:23:56Z&sv=2022-11-02&sr=b&sig=%2F9t9eSjKsvqA%2FEI1C5iz0Nsj%2F22wnpbucalW0d1xFBs%3D"/>
-    </a>
-    <!-- https://noweddingpictures.blob.core.windows.net/pre/20200217_105638.jpg?sp=r&st=2024-01-04T12:24:10Z&se=2024-01-04T20:24:10Z&sv=2022-11-02&sr=b&sig=p0O64MBnu8GB61gtn2ig1D6DBmxrxWIwY1jOFbOlhR0%3D -->
-
     <!-- other images... -->
 </div>
 
+{{ with resources.Get "css/gallery.css" }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}" />
+{{ end }}
 
-<script>
-    $("#mygallery").justifiedGallery();
-</script>
+
+{{ with resources.Get "js/gallery.js" }} {{ if eq hugo.Environment
+    "development" }} {{ with . | js.Build }}
+    <script src="{{ .RelPermalink }}" defer></script>
+    {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+    $opts | fingerprint }}
+    <script
+      src="{{ .RelPermalink }}"
+      integrity="{{ .Data.Integrity }}"
+      crossorigin="anonymous"
+      defer
+    ></script>
+{{ end }} {{ end }} {{ end }}
+
