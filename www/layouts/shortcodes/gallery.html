@@ -1,11 +1,9 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<div id="mygallery" >
-    <a href="/images/cecinestpasunmariagev3.jpg">
-        <img alt="Title 1" src="/images/cecinestpasunmariagev3.jpg"/>
-    </a>
-    <!-- other images... -->
+<div id="mygallery" class="grid-container">  
+    <!-- https://codepen.io/rperry1886/pen/KKwbQNP -->
 </div>
+
 
 {{ with resources.Get "css/gallery.css" }}
     <link rel="stylesheet" href="{{ .RelPermalink }}" />

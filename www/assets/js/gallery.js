@@ -5,11 +5,16 @@
         try {
             const response = await fetch('../api/GetPhotos'); // replace with your API endpoint
             const data = await response.json();
-
+            
+            var i = 0;
             data.forEach(element => {
+                i++;
                 //add elements to mygallery
                 $("#mygallery").append(
-                    '<a href="'+element+'"><img src="'+element+'" alt="Image description" /></a>'
+                    '<div>' +
+                        '<img class="grid-item grid-item-'+i+'" src="'+element+'" alt="Image description" />' +
+                        '<p>Title</p>' +
+                    '</div>' 
                 );
                 console.log(element);
             });
