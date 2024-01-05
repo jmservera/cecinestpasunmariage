@@ -34,7 +34,7 @@ namespace functions
             List<String> picUris = new List<String>();
 
             // get uri for each blob item
-            foreach (BlobItem blobItem in containerClient.GetBlobs())
+            foreach (BlobItem blobItem in containerClient.GetBlobs().ToList().OrderBy(b => b.Name))
             {
                 BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
                 
