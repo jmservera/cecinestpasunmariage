@@ -3,7 +3,7 @@
     async function gallery()
     {
         try {
-            const response = await fetch('/api/GetPhotos'); // replace with your API endpoint
+            const response = await fetch('/api/GetPhotos?page=1'); // replace with your API endpoint
             const data = await response.json();
             
             var i = 0;
