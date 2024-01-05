@@ -2,11 +2,8 @@
 title: "Fotos"
 ---
 
-
-Uopppps!! Todavía no hay fotos!!
+(psss.. esto son fotos de prueba para ver qué tal queda la galería)
 <br />
-
-
 
 
 {{< gallery >}}
