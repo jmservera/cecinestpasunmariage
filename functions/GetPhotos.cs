@@ -17,7 +17,7 @@ namespace functions
         }
 
         [Function("GetPhotos")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req)
+        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req, int page)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -34,7 +34,7 @@ namespace functions
             List<String> picUris = new List<String>();
 
             // get uri for each blob item
-            foreach (BlobItem blobItem in containerClient.GetBlobs().ToList().OrderBy(b => b.Name))
+            foreach (BlobItem blobItem in containerClient.GetBlobs().ToList().OrderBy(b => b.Name).Take(page * 10))
             {
                 BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
                 
