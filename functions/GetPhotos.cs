@@ -17,14 +17,14 @@ namespace functions
         }
 
         [Function("GetPhotos")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req, int page=1)
+        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
             //access to blob storage
             //get connection string from environment variable
             string connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
-            
+
             string containerName = "pics";
 
 
@@ -37,7 +37,7 @@ namespace functions
             foreach (BlobItem blobItem in containerClient.GetBlobs().ToList().OrderBy(b => b.Name).Take(page * 10))
             {
                 BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
-                
+
                 var blobSasUri = blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
                 picUris.Add(blobSasUri.ToString());
             }
