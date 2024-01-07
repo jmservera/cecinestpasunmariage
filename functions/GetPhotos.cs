@@ -37,7 +37,10 @@ namespace functions
             photosResponse.NumPictures = allThePics.Count();
 
 
-            foreach (BlobItem blobItem in allThePics.Skip((page - 1) * 10).Take(10 * page))
+            // todo: use https://learn.microsoft.com/en-us/azure/architecture/web-apps/guides/security/secure-single-page-application-authorization
+            // to secure the access to the blob storage
+
+            foreach (BlobItem blobItem in allThePics.Skip((page - 1) * 10).Take(10))
             {
                 BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
 
