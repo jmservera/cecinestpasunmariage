@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace functions
 {
@@ -30,24 +31,40 @@ namespace functions
 
             BlobContainerClient containerClient = new BlobContainerClient(connectionString, containerName);
 
+            PhotosResponse photosResponse = new PhotosResponse();
+            
 
-            List<String> picUris = new List<String>();
-            // get uri for each blob item
-            foreach (BlobItem blobItem in containerClient.GetBlobs().ToList().OrderBy(b => b.Name).Take(10*page).Skip((page - 1) * 10))
+            var allThePics = containerClient.GetBlobs().ToList().OrderBy(b => b.Name);
+            photosResponse.NumPictures = allThePics.Count();
+
+
+            foreach (BlobItem blobItem in allThePics.Take(10*page).Skip((page - 1) * 10))
             {
                 BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
 
                 var blobSasUri = blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
-                picUris.Add(blobSasUri.ToString());
+                photosResponse.picUris.Add(new Photo(){ Name = blobClient.Name.ToString(), Uri = blobSasUri.ToString() });
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
-            var json = System.Text.Json.JsonSerializer.Serialize(picUris);
+            var json = System.Text.Json.JsonSerializer.Serialize(photosResponse);
             _logger.LogInformation(json);
             response.WriteString(json);
             return response;
+        }
+
+        protected class PhotosResponse
+        {
+            public List<Photo> picUris = new List<Photo>();
+            public int NumPictures { get; set; }
+        }
+
+        protected class Photo
+        {
+            public string Name { get; set; }
+            public string Uri { get; set; }
         }
     }
 }
