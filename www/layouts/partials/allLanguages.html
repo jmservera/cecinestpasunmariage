@@ -1,0 +1,5 @@
+<div style="position: absolute; top: 0; right: 0; z-index: 10;">
+{{ range $.Site.Home.AllTranslations }}
+    [<a href="{{ .RelPermalink }}" title="{{ .Language.LanguageName }}">{{ .Language }}</a>]
+    {{ end }}
+</div>
