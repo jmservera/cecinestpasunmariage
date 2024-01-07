@@ -5,6 +5,7 @@ async function gallery(page = 1) {
 
     var current_page = page; // the current page
     var pictures_per_page = 10; // 2 pictures per page
+    var max_num_of_pages = 5; // max number of pages to show in the pagination bar
     
 
     const response = await fetch(`/api/GetPhotos?page=${current_page}`); // replace with your API endpoint
@@ -12,10 +13,33 @@ async function gallery(page = 1) {
 
     var total_num_of_pictures = data.NumPictures; // total number of pictures
     $("#pages2").html('');
-    $("#pages2").append(`<div style="width: 100%;"> Total number of pictures: ${total_num_of_pictures} </div>`);
+    $("#pages2").append(`<div style="width: 100%;"> Número total de fotos: ${total_num_of_pictures} </div>`);
 
     $("#pages").html('');
-    for (var i = 1; i <= Math.ceil(total_num_of_pictures / pictures_per_page); i++) {
+    var num_of_pages = Math.ceil(total_num_of_pictures / pictures_per_page);
+
+    var inicial = 1;
+    var final = num_of_pages;
+
+    if(num_of_pages > max_num_of_pages)
+    {
+      $("#pages").append(`<button class="page" id="0" ><</button>`);
+      if( current_page > Math.floor(max_num_of_pages/2) )
+      {
+        inicial = current_page - Math.floor(max_num_of_pages/2);
+        if(current_page + Math.floor(max_num_of_pages/2) <= num_of_pages)
+        {
+          final = current_page + Math.floor(max_num_of_pages/2);
+          inicial = final - max_num_of_pages+1;
+        }
+      }
+      else
+      {
+        final = max_num_of_pages;
+      }           
+    }
+    
+    for (var i = inicial; i <= final; i++) {
       if(i == current_page)
       {
         $("#pages").append(`<button class="page selected" id="${i}" >${i}</button>`);
@@ -26,10 +50,18 @@ async function gallery(page = 1) {
       }
     }
 
+    if(num_of_pages > max_num_of_pages)
+    {
+      $("#pages").append(`<button class="page" id="1000" >></button>`);
+    }
+    
+
+
+
       // Add click event listeners to the page buttons
       $(".page").click(function() {
         $('.page').off('click'); // remove all the clicks before starting anew
-        gallery($(this).attr('id'));
+        gallery(parseInt($(this).attr('id')));
       });
     
     var i = 0;
