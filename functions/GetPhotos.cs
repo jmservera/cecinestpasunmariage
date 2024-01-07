@@ -4,7 +4,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace functions
 {
@@ -24,26 +23,26 @@ namespace functions
 
             //access to blob storage
             //get connection string from environment variable
-            string connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
 
             string containerName = "pics";
 
 
-            BlobContainerClient containerClient = new BlobContainerClient(connectionString, containerName);
+            BlobContainerClient containerClient = new(connectionString, containerName);
 
-            PhotosResponse photosResponse = new PhotosResponse();
-            
+            PhotosResponse photosResponse = new();
+
 
             var allThePics = containerClient.GetBlobs().ToList().OrderBy(b => b.Name);
             photosResponse.NumPictures = allThePics.Count();
 
 
-            foreach (BlobItem blobItem in allThePics.Take(10*page).Skip((page - 1) * 10))
+            foreach (BlobItem blobItem in allThePics.Skip((page - 1) * 10).Take(10 * page))
             {
                 BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
 
                 var blobSasUri = blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
-                photosResponse.picUris.Add(new Photo(){ Name = blobClient.Name.ToString(), Uri = blobSasUri.ToString() });
+                photosResponse.Pictures.Add(new Photo() { Name = blobClient.Name.ToString(), Uri = blobSasUri.ToString() });
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -57,14 +56,15 @@ namespace functions
 
         protected class PhotosResponse
         {
-            public List<Photo> picUris = new List<Photo>();
+
+            public List<Photo> Pictures { get; set; } = new List<Photo>();
             public int NumPictures { get; set; }
         }
 
-        protected class Photo
+        public class Photo
         {
-            public string Name { get; set; }
-            public string Uri { get; set; }
+            public string? Name { get; set; }
+            public string? Uri { get; set; }
         }
     }
 }

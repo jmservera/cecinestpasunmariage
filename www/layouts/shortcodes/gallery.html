@@ -1,25 +1,23 @@
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+></script>
 
-<div id="mygallery" class="grid-container">  
-    <!-- https://codepen.io/rperry1886/pen/KKwbQNP -->
+<div id="mygallery" class="grid-container">
+  <!-- https://codepen.io/rperry1886/pen/KKwbQNP -->
 </div>
 
-
 {{ with resources.Get "css/gallery.css" }}
-    <link rel="stylesheet" href="{{ .RelPermalink }}" />
-{{ end }}
-
-
-{{ with resources.Get "js/gallery.js" }} {{ if eq hugo.Environment
-    "development" }} {{ with . | js.Build }}
-    <script src="{{ .RelPermalink }}" defer></script>
-    {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
-    $opts | fingerprint }}
-    <script
-      src="{{ .RelPermalink }}"
-      integrity="{{ .Data.Integrity }}"
-      crossorigin="anonymous"
-      defer
-    ></script>
+<link rel="stylesheet" href="{{ .RelPermalink }}" />
+{{ end }} {{ with resources.Get "js/gallery.js" }} {{ if eq hugo.Environment
+"development" }} {{ with . | js.Build }}
+<script src="{{ .RelPermalink }}" defer></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+$opts | fingerprint }}
+<script
+  src="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+  crossorigin="anonymous"
+  defer
+></script>
 {{ end }} {{ end }} {{ end }}
-
