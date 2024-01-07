@@ -39,9 +39,21 @@
   #pages2, #pages
   {
     width: 90%; 
-    margin: 0 auto
+    margin: 10px auto
   }
   
-  
+  button
+  {
+    background-color: #F0DAC8;
+    border:1px solid #893F40;
+    padding: 5px;
+    margin: 0 1px 0 1px;
+  }
+
+  button.selected
+  {
+    background-color: #893F40;
+    color: #F0DAC8;
+  }
   
   

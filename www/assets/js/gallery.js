@@ -16,7 +16,14 @@ async function gallery(page = 1) {
 
     $("#pages").html('');
     for (var i = 1; i <= Math.ceil(total_num_of_pictures / pictures_per_page); i++) {
-      $("#pages").append(`<button class="page" id="${i}" >${i}</button>`);
+      if(i == current_page)
+      {
+        $("#pages").append(`<button class="page selected" id="${i}" >${i}</button>`);
+      }
+      else
+      {
+          $("#pages").append(`<button class="page" id="${i}" >${i}</button>`);
+      }
     }
 
       // Add click event listeners to the page buttons
