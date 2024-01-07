@@ -12,7 +12,7 @@ async function gallery(page = 1) {
 
     var total_num_of_pictures = data.NumPictures; // total number of pictures
     $("#pages2").html('');
-    $("#pages2").append(`<div style="width: 100%; border: 1px solid red;"> Total number of pictures: ${total_num_of_pictures} </div>`);
+    $("#pages2").append(`<div style="width: 100%;"> Total number of pictures: ${total_num_of_pictures} </div>`);
 
     $("#pages").html('');
     for (var i = 1; i <= Math.ceil(total_num_of_pictures / pictures_per_page); i++) {
