@@ -23,7 +23,11 @@ async function gallery(page = 1) {
 
     if(num_of_pages > max_num_of_pages)
     {
-      $("#pages").append(`<button class="page" id="0" ><</button>`);
+      if(current_page > 1)
+      {
+        $("#pages").append(`<button class="page" id="0" ><</button>`);
+      }
+      
       if( current_page > Math.floor(max_num_of_pages/2) )
       {
         inicial = current_page - Math.floor(max_num_of_pages/2);
@@ -50,18 +54,24 @@ async function gallery(page = 1) {
       }
     }
 
-    if(num_of_pages > max_num_of_pages)
+    if(num_of_pages > max_num_of_pages && current_page < num_of_pages)
     {
       $("#pages").append(`<button class="page" id="1000" >></button>`);
     }
     
-
-
-
       // Add click event listeners to the page buttons
       $(".page").click(function() {
         $('.page').off('click'); // remove all the clicks before starting anew
-        gallery(parseInt($(this).attr('id')));
+        next_page = parseInt($(this).attr('id'));
+        if(next_page == 0)
+        {
+          next_page = current_page-1;
+        }
+        else if(next_page == 1000)
+        {
+          next_page = current_page+1;
+        }
+        gallery(next_page);
       });
     
     var i = 0;
