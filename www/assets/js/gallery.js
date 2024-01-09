@@ -46,11 +46,11 @@ async function gallery(page = 1) {
     for (var i = inicial; i <= final; i++) {
       if(i == current_page)
       {
-        $("#pages").append(`<button class="page selected" id="${i}" >${i}</button>`);
+        $("#pages").append(`<button class="pageNumber selected" id="${i}" >${i}</button>`);
       }
       else
       {
-          $("#pages").append(`<button class="page" id="${i}" >${i}</button>`);
+          $("#pages").append(`<button class="pageNumber" id="${i}" >${i}</button>`);
       }
     }
 
@@ -60,8 +60,8 @@ async function gallery(page = 1) {
     }
     
       // Add click event listeners to the page buttons
-      $(".page").click(function() {
-        $('.page').off('click'); // remove all the clicks before starting anew
+      $(".pageNumber").click(function() {
+        $('.pageNumber').off('click'); // remove all the clicks before starting anew
         next_page = parseInt($(this).attr('id'));
         if(next_page == 0)
         {
@@ -80,7 +80,9 @@ async function gallery(page = 1) {
       i++;
       //add elements to mygallery
       $("#mygallery").append(`<div>
-      <img class="grid-item grid-item-${i}" src="${element.Uri}" alt="${element.Name}" />
+      <a href="${element.Uri}" target="_blank">
+      <img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Name}" />
+      </a>
       <p>${element.Name}</p>
       </div>`);
     });

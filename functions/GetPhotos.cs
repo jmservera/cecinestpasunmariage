@@ -26,26 +26,34 @@ namespace functions
             string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
 
             string containerName = "pics";
+            string thumbnailContainerName = "thumbnails";
 
 
-            BlobContainerClient containerClient = new(connectionString, containerName);
+            BlobContainerClient containerPicsClient = new(connectionString, containerName);
+            BlobContainerClient containerThumbnailsClient = new(connectionString, thumbnailContainerName);
 
             PhotosResponse photosResponse = new();
 
 
-            var allThePics = containerClient.GetBlobs().ToList().OrderBy(b => b.Name);
-            photosResponse.NumPictures = allThePics.Count();
+            var allTumbThePics = containerThumbnailsClient.GetBlobs().ToList().OrderBy(b => b.Name);
+            photosResponse.NumPictures = allTumbThePics.Count();
 
 
             // todo: use https://learn.microsoft.com/en-us/azure/architecture/web-apps/guides/security/secure-single-page-application-authorization
             // to secure the access to the blob storage
 
-            foreach (BlobItem blobItem in allThePics.Skip((page - 1) * 10).Take(10))
+            foreach (BlobItem blobTumbItem in allTumbThePics.Skip((page - 1) * 10).Take(10))
             {
-                BlobClient blobClient = containerClient.GetBlobClient(blobItem.Name);
+                BlobClient blobThumbClient = containerThumbnailsClient.GetBlobClient(blobTumbItem.Name);
+                var blobSasUriThumb = blobThumbClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
 
-                var blobSasUri = blobClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
-                photosResponse.Pictures.Add(new Photo() { Name = blobClient.Name.ToString(), Uri = blobSasUri.ToString() });
+                BlobClient blobPicsClient = containerPicsClient.GetBlobClient(blobTumbItem.Name);
+                var blobSasUriPics = blobPicsClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
+
+
+                photosResponse.Pictures.Add(new Photo() { Name = blobPicsClient.Name.ToString(), 
+                                                          Uri = blobSasUriPics.ToString(),
+                                                          ThumbnailUri = blobSasUriThumb.ToString() });
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -61,12 +69,14 @@ namespace functions
         {
 
             public List<Photo> Pictures { get; set; } = new List<Photo>();
+            
             public int NumPictures { get; set; }
         }
 
         public class Photo
         {
             public string? Name { get; set; }
+            public string? ThumbnailUri { get; set; }
             public string? Uri { get; set; }
         }
     }
