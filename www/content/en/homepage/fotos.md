@@ -7,5 +7,5 @@ header_menu: true
 
 Find [here](/en/fotos) the pictures to the party.
 
-(Recuerda que para ver las fotos de la fiesta tienes que estar registrado :)
+(You need to register to see the pictures)
 
