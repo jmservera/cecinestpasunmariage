@@ -1,0 +1,18 @@
+[countdown]
+other="compte à rebours"
+[days]
+one="jour"
+other="jours"
+[hours]
+one="heure"
+other="heures"
+[Title]
+other="Ceci n'est pas un mariage"
+[Name]
+other="Prénom"
+[Surname]
+other="Nom"
+[Email]
+other="Courriel"
+[NoOfGuests]
+other="Veuillez indiquer le nombre de personnes à inscrire"

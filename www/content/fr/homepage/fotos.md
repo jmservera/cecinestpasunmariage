@@ -1,11 +1,11 @@
 ---
-title: "Pictures"
+title: "Fotos"
 weight: 7
-detailed_page_path: /en/fotos
+detailed_page_path: /fr/fotos
 header_menu: true
 ---
 
-Find [here](/en/fotos) the pictures to the party.
+Aquí estan las [fotos](fotos) de la fiesta.
 
 (Recuerda que para ver las fotos de la fiesta tienes que estar registrado :)
 

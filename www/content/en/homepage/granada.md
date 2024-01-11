@@ -1,10 +1,8 @@
 ---
-title: "Más sobre Granada"
+title: "More about Granada"
 weight: 6
-detailed_page_path: /granada
+detailed_page_path: /en/granada
 header_menu: true
 ---
 
-Si quieres saber más sobre esta ciudad, puedes visitar esta página sobre [Granada](granada).
-
-
+Do you want to know more about this marvelous city? Visit the official [Granada](granada) guide.

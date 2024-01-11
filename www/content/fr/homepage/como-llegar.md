@@ -1,5 +1,5 @@
 ---
-title: "How to arrive"
+title: "Cómo llegar"
 weight: 5
 header_menu: true
 ---

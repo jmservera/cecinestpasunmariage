@@ -1,2 +1,18 @@
+[countdown]
+other="countdown"
+[days]
+one="day"
+other="days"
+[hours]
+one="hour"
+other="hours"
 [title]
-other="hello"
+other="This is not a mariage"
+[Name]
+other="Name"
+[Surname]
+other="Surname"
+[Email]
+other="Email"
+[NoOfGuests]
+other="Number of guests (including you)"

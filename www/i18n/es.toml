@@ -1,0 +1,18 @@
+[countdown]
+other="cuenta atrás"
+[days]
+one="día"
+other="días"
+[hours]
+one="hora"
+other="horas"
+[title]
+other="Esto no es una boda"
+[Name]
+other="Nombre"
+[Surname]
+other="Apellidos"
+[Email]
+other="Correo electrónico"
+[NoOfGuests]
+other="¿Cuántos sois?"

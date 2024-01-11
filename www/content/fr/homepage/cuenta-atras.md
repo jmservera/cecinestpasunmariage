@@ -1,5 +1,5 @@
 ---
-title: "Countdown to the party"
+title: "Compte à rebours"
 weight: 3
 header_menu: false
 ---

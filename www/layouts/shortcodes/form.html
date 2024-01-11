@@ -23,17 +23,21 @@
   />
   {{ end }}
   <span>
-    <label for="name">Name</label>
-    <input type="text" name="name" placeholder="Your name" />
+    <label for="name">{{ i18n "Name" }}</label>
+    <input type="text" name="name" placeholder="Bob" />
+  </span>
+  <span>
+    <label for="surname">{{ i18n "Surname" }}</label>
+    <input type="text" name="surname" placeholder="Sponge" />
   </span>
   <input type="hidden" name="id" value="{{ $id }}" />
   <span>
-    <label for="email">Email</label>
+    <label for="email">{{ i18n "Email" }}</label>
     <input type="email" name="email" placeholder="name@example.com" />
   </span>
   <span>
-    <label for="pax">Number of guests</label>
-    <input type="number" name="pax" placeholder="Number of guests" value="1" />
+    <label for="pax">{{ i18n "NoOfGuests" }}</label>
+    <input type="number" name="pax" value="1" />
   </span>
   <span>
     <button type="submit" id="save">{{ $button_name }}</button>
@@ -51,3 +55,4 @@ $opts | fingerprint }}
   crossorigin="anonymous"
 ></script>
 {{ end }} {{ end }} {{ end }}
+

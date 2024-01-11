@@ -1,7 +1,7 @@
 ---
 title: "Apúntate a la fiesta"
 weight: 10
-detailed_page_path: /en/registro
+detailed_page_path: /fr/registro
 header_menu: true
 ---
 

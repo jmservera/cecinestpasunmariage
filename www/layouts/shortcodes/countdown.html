@@ -1,21 +1,30 @@
 {{ $date := default "2025-05-03" (.Get 0) }} {{ $time := default "14" (.Get 1)
 }}
-<div id="days" name="days" class="days">20</div>
-<div id="hours" name="hours">20</div>
+{{ with resources.Get "/css/countdown.css" }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" />
+{{ end }}
 
-{{ with resources.Get "js/countdown.js" }} {{ if eq hugo.Environment
-"development" }} {{ with . | js.Build }}
-<script src="{{ .RelPermalink }}"></script>
-{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
-$opts | fingerprint }}
-<script
-  src="{{ .RelPermalink }}"
-  integrity="{{ .Data.Integrity }}"
-  crossorigin="anonymous"
-></script>
-{{ end }} {{ end }} {{ end }}
-<script>
-  const future = new Date("{{ $date }}");
-  future.setHours(parseInt("{{ $time }}"));
-  runCountdown(future);
-</script>
+<div class = "countdown">
+  {{ with resources.Get "/images/cuenta_atras.png" }}
+  <img src="{{ .RelPermalink }}" alt='{{ i18n "countdown" }}' />
+  {{ end }}
+  <div id="days" name="days" class="days"><span id="d">20</span> <span class='text'>{{ i18n "days" }}</span></div>
+  <div id="hours" name="hours"><span id="h">20</span> <span class='text'>{{ i18n "hours" }}</span></div>
+
+  {{ with resources.Get "/js/countdown.js" }} {{ if eq hugo.Environment
+  "development" }} {{ with . | js.Build }}
+  <script src="{{ .RelPermalink }}"></script>
+  {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+  $opts | fingerprint }}
+  <script
+    src="{{ .RelPermalink }}"
+    integrity="{{ .Data.Integrity }}"
+    crossorigin="anonymous"
+  ></script>
+  {{ end }} {{ end }} {{ end }}
+  <script>
+    const future = new Date("{{ $date }}");
+    future.setHours(parseInt("{{ $time }}"));
+    runCountdown(future);
+  </script>
+</div>

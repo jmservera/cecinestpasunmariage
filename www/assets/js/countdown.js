@@ -11,8 +11,9 @@ function runCountdown(future) {
   function updateDate() {
     const { days, hours } = calculateTimeDifference();
     console.log(`There are ${days} days and ${hours} hours until ${future}.`);
-    document.querySelector('[id="days"]').innerHTML = days + "<span class='text'> días </span>";
-    document.querySelector('[id="hours"]').innerHTML = hours + "<span class='text'> horas </span>";
+
+    document.querySelector('.countdown [id="d"]').innerHTML = days;
+    document.querySelector('.countdown [id="h"]').innerHTML = hours;
   }
 
   setInterval(updateDate, 60000);
