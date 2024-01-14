@@ -18,7 +18,8 @@ Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped
 
 **Menú Vegetariano**. <br />
 Isa es vegetariana y en su concepto de celebración no incluye que se mate a ningún animal para festejar nada. <br />
-Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero no contendrá concarne ni pescado.
+Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero no contendrá concarne ni pescado. <br />
+Si quieres saber más sobre el menú, [haz click aquí](menu)
 
 
 **Animación para los niños** <br />
