@@ -19,6 +19,42 @@
             }
         },
         {
+            "route": "/en/registro",
+            "allowedRoles": [
+                "authenticated"
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
+            "route": "/en/fotos",
+            "allowedRoles": [
+                "authenticated"
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
+            "route": "/fr/registro",
+            "allowedRoles": [
+                "authenticated"
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
+            "route": "/fr/fotos",
+            "allowedRoles": [
+                "authenticated"
+            ],
+            "headers": {
+                "Cache-Control": "no-store"
+            }
+        },
+        {
             "route": "/guestList",
             "allowedRoles": [
                 "admin"
