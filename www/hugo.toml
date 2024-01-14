@@ -1,35 +1,37 @@
 baseURL = '/'
 disableKinds = ["section", "taxonomy", "term", "RSS", "robotsTXT"]
 languageCode = 'es-es'
-title = "La !boda de Isa & Juanma"
+title = "Ceci n'est pas un mariage"
 theme = "hugo-scroll"
-copyright = 'Isa & Juanma'
+copyright = '©️ 2023 Isa & Juanma'
 
 
 defaultContentLanguage = 'es'
 defaultContentLanguageInSubdir = false
 [languages]
-  [languages.es]
-    contentDir = 'content'
+  [languages.es]   
+    title = 'Esto no es una boda'
+    weight = 1
+    contentDir = 'content/es'
     disabled = false
     languageCode = 'es-ES'
     languageDirection = 'ltr'
     languageName = 'Castellano'
     [languages.es.params]
       subtitle = 'Una fiesta loca'
-    title = 'Esto no es una boda'
-    weight = 1
   [languages.en]
     contentDir = 'content/en'
+    title = 'This is not a wedding'
     disabled = false
     languageCode = 'en-US'
     languageDirection = 'ltr'
     languageName = 'English'
+    weight = 2
     [languages.en.params]
       subtitle = 'A crazy party'
-    title = 'This is not a wedding'
-    weight = 2
   [languages.fr]
+    title = "Ceci n'est pas un mariage"
+    weight = 3
     contentDir = 'content/fr'
     disabled = false
     languageCode = 'fr-FR'
@@ -37,7 +39,6 @@ defaultContentLanguageInSubdir = false
     languageName = 'Français'
     [languages.fr.params]
       subtitle = 'Un folie de fête'
-    title = "Ceci n'est pas un mariage"
 
 [params]
     featured_image = "/images/cecinestpasunmariagev3.jpg"

@@ -1,22 +1,22 @@
-#cuenta-atras
+.countdown
 {
      width: 100%;
 }
 
-#cuenta-atras header
+.countdown header
 {
      display: none;
      height: 300px;
 }
 
-#cuenta-atras .text
+.countdown .text
 {
      color: #EDAD53;
      --color-text:  #EDAD53;
      font-size: calc(2vh);
 }
 
-#cuenta-atras #days
+.countdown #days
 {
      /* border: 1px solid red; */
      width: 10%;
@@ -31,7 +31,7 @@
 
 
 }
-#cuenta-atras #hours
+.countdown #hours
 {
      /* border: 1px solid BLUE; */
      width: 10%;

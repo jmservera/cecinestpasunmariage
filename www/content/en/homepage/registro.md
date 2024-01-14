@@ -1,11 +1,10 @@
 ---
-title: "Apúntate a la fiesta"
+title: "Register to the party"
 weight: 10
-detailed_page_path: /registro
+detailed_page_path: /en/registro
 header_menu: true
 ---
 
-Si quieres venir a la fiesta, rellena el [siguiente formulario](registro) y te enviaremos un correo con la confirmación.
+You only need to fill the [following form](registro) and we will send you a confirmation email.
 
-Recuerda que para acceder a las fotos (tanto del fotógrafo como de los invitados que compartan las suyas) tendrás que registrarte con este mismo correo electrónico.
-
+Remember to log-in with this same email when you want to check the pictures.

@@ -1,10 +1,7 @@
 {{ if .IsTranslated }}
-<h4>{{ i18n "translations" }}</h4>
-<ul>
-  {{ range .Translations }}
-  <li>
-    <a href="{{ .RelPermalink }}">{{ .Lang }}: {{ .LinkTitle }}{{ if .IsPage }} ({{ i18n "wordCount" . }}){{ end }}</a>
-  </li>
+<div style="position: absolute; top: 0; right: 0; z-index: 10;">
+{{ range .Translations }}
+  [<a href="{{ .RelPermalink }}">{{ .Lang }}</a>]
   {{ end }}
-</ul>
+</div>
 {{ end }}
