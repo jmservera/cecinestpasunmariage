@@ -1,6 +1,6 @@
 <div id="guestList"></div>
 
-{{ with resources.Get "js/guestList.ts" }} {{ if eq hugo.Environment
+{{ with resources.Get "js/guestlist.ts" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build }}
 
 <script src="{{ .RelPermalink }}"></script>

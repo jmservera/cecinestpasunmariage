@@ -1,19 +1,11 @@
+/// <reference lib="es2015" />
+/// <reference lib="dom" />
+
+import { runQuery, QueryVariables, queries, UserInput } from "./queries";
+
 type ClientPrincipal = {
   userDetails: string;
   userId: string;
-};
-
-type UserInput = {
-  id: string;
-  email: string;
-  name: string;
-  pax: number;
-};
-
-type QueryVariables = {
-  id?: string;
-  _partitionKeyValue?: string;
-  item?: UserInput;
 };
 
 async function getUserInfo(): Promise<ClientPrincipal> {
@@ -23,48 +15,20 @@ async function getUserInfo(): Promise<ClientPrincipal> {
   return clientPrincipal;
 }
 
-const getByIdGql =
-  "query getById($id: ID!) {\nuser_by_pk(id: $id) {\nid\nemail\nname\npax\n}\n}";
-
-const createGql =
-  "mutation create($item: CreateUserInput!) {\ncreateUser(item: $item) {\nid\nemail\nname\npax\n}\n}";
-
-const updateGql =
-  "mutation update($id: ID!, $_partitionKeyValue: String!, $item: UpdateUserInput!) " +
-  "{\nupdateUser(id: $id, _partitionKeyValue: $_partitionKeyValue, item: $item) {\nid\nemail\nname\npax\n}\n}";
-
-async function runQuery(
-  query: string,
-  data: QueryVariables
-): Promise<UserInput> {
-  const createQuery = {
-    query: query,
-    variables: data,
-  };
-
-  const endpoint = "/data-api/graphql";
-  const result = await fetch(endpoint, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(createQuery),
+function buildItem(): UserInput {
+  let user: UserInput = new UserInput();
+  Object.keys(user).forEach((key) => {
+    const el = document.querySelector<HTMLInputElement>(`input[name="${key}"]`);
+    if (el) {
+      let n = typeof user[key];
+      console.log(n);
+      if (key === "pax") {
+        user[key] = parseInt(el.value);
+      } else user[key] = el.value;
+    }
   });
 
-  const response: { data: { user: UserInput } } = await result.json();
-  return response.data[Object.keys(response.data)[0]];
-}
-
-function buildItem(): UserInput {
-  const id = document.querySelector<HTMLInputElement>('input[name="id"]');
-  const email = document.querySelector<HTMLInputElement>('input[name="email"]');
-  const name = document.querySelector<HTMLInputElement>('input[name="name"]');
-  const pax = document.querySelector<HTMLInputElement>('input[name="pax"]');
-
-  return {
-    id: id ? id.value : "",
-    email: email ? email.value : "",
-    name: name ? name.value : "",
-    pax: pax ? parseInt(pax.value) : 1,
-  };
+  return user;
 }
 
 async function createOrUpdate(): Promise<void> {
@@ -76,13 +40,16 @@ async function createOrUpdate(): Promise<void> {
     item: user,
   };
 
-  const existingUser = await runQuery(getByIdGql, data);
+  const existingUser = await runQuery(queries.getByIdGql, data);
 
   var response: UserInput;
   if (existingUser) {
-    response = await runQuery(updateGql, data);
+    data.item.updatedAt = new Date().toISOString();
+    response = await runQuery(queries.updateGql, data);
   } else {
-    response = await runQuery(createGql, data);
+    data.item.createdAt = new Date().toISOString();
+    data.item.updatedAt = data.item.createdAt;
+    response = await runQuery(queries.createGql, data);
   }
   console.table(response);
 }
@@ -94,28 +61,43 @@ async function createOrUpdate(): Promise<void> {
   if (email) {
     email.value = info.userDetails;
   }
+  const origin = document.querySelector<HTMLInputElement>(
+    'input[name="origin"]'
+  );
+  if (origin) {
+    origin.value = info.userDetails;
+  } else {
+    const form = document.querySelector<HTMLFormElement>("form");
+    const hiddenInput: HTMLInputElement = document.createElement("input");
+    hiddenInput.type = "hidden";
+    hiddenInput.name = "origin";
+    hiddenInput.value = info.userDetails;
+    form.appendChild(hiddenInput);
+  }
+
   const id = document.querySelector<HTMLInputElement>('input[name="id"]');
   if (id) {
     id.value = info.userId;
   }
 
-  const user = await runQuery(getByIdGql, { id: info.userId });
+  const user = await runQuery(queries.getByIdGql, { id: info.userId });
   console.log(user);
   if (user && user.id) {
-    const name = document.querySelector<HTMLInputElement>('input[name="name"]');
-    if (name) {
-      name.value = user.name;
-    }
-    const pax = document.querySelector<HTMLInputElement>('input[name="pax"]');
-    if (pax) {
-      pax.value = user.pax.toString();
-    }
-    const email = document.querySelector<HTMLInputElement>(
-      'input[name="email"]'
-    );
-    if (email) {
-      email.value = user.email;
-    }
+    Object.keys(user).forEach((key) => {
+      const el = document.querySelector<HTMLInputElement>(
+        `input[name="${key}"]`
+      );
+      if (el) {
+        el.value = user[key];
+      } else {
+        const form = document.querySelector<HTMLFormElement>("form");
+        const hiddenInput: HTMLInputElement = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = key;
+        hiddenInput.value = user[key];
+        form.appendChild(hiddenInput);
+      }
+    });
   }
 
   const form = document.querySelector<HTMLFormElement>("form");
