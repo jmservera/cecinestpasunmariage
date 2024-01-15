@@ -2,4 +2,4 @@
 title: "GuestList"
 ---
 
-Vamos allá
+{{< guestList >}}
