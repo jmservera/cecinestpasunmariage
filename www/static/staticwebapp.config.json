@@ -55,7 +55,7 @@
             }
         },
         {
-            "route": "/guestList",
+            "route": "/admin/*",
             "allowedRoles": [
                 "admin"
             ],

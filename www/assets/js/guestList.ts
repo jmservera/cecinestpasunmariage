@@ -35,9 +35,13 @@ async function list(): Promise<User[]> {
 }
 
 (async () => {
-  let userList: User[] = await list();
-
   const guestDiv = document.querySelector("#guestList");
+  if (!guestDiv) return console.error("guestList not found");
+
+  guestDiv.textContent = "Loading...";
+  let userList: User[] = await list();
+  guestDiv.textContent = "";
+
   let guestNode = document.createElement("table");
   let thead = document.createElement("thead");
   let thid = document.createElement("th");
