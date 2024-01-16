@@ -1,15 +1,15 @@
 <div id="guestList"></div>
 
 {{ with resources.Get "js/guestlist.ts" }} {{ if eq hugo.Environment
-"development" }} {{ with . | js.Build }}
+"development" }} {{ with . | js.Build}}
 
-<script src="{{ .RelPermalink }}"></script>
+<script src=" {{ .RelPermalink }}"></script>
 
 {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
 $opts | fingerprint }}
 
 <script
-  src="{{ .RelPermalink }}"
+  src="data:text/javascript;base64,{{ .Content | base64Encode }}"
   integrity="{{ .Data.Integrity }}"
   crossorigin="anonymous"
 ></script>
