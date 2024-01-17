@@ -51,6 +51,8 @@ namespace functions
                 var handleUpdateFunctionUrl = req.Url.ToString().Replace(SetUpFunctionName, UpdateFunctionName,
                                         ignoreCase: true, culture: CultureInfo.InvariantCulture);
                 _logger.LogInformation($"Registering bot with url {handleUpdateFunctionUrl}");
+                req.Headers.ToList().ForEach(h => _logger.LogInformation($"{h.Key} : {h.Value}"));
+
                 await _bot.Register(handleUpdateFunctionUrl);
                 _logger.LogInformation("Bot registered.");
                 response.WriteString("OK!");
