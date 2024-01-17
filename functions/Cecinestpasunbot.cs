@@ -21,10 +21,26 @@ namespace functions
             _bot = new Bot(loggerFactory);
         }
 
-        [Function(SetUpFunctionName)]
-        public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req)
+        [Function(UpdateFunctionName)]
+        public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, FunctionContext context,
+    CancellationToken cancellationToken)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("Update webhook called.");
+
+            var response = req.CreateResponse(HttpStatusCode.OK);
+            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+            _logger.LogInformation("Handling update...");
+            await _bot.UpdateAsync(req, cancellationToken);
+            _logger.LogInformation("Update handled.");
+            response.WriteString("OK!");
+            return response;
+        }
+
+        [Function(SetUpFunctionName)]
+        public async Task<HttpResponseData> Register([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req)
+        {
+
+            _logger.LogInformation("Register function called.");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
@@ -45,21 +61,6 @@ namespace functions
                 response.WriteString("Failed to register bot.");
             }
 
-            return response;
-        }
-
-        [Function(UpdateFunctionName)]
-        public async Task<HttpResponseData> Register([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req, FunctionContext context,
-    CancellationToken cancellationToken)
-        {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
-
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-            _logger.LogInformation("Handling update...");
-            await _bot.UpdateAsync(req, cancellationToken);
-            _logger.LogInformation("Update handled.");
-            response.WriteString("OK!");
             return response;
         }
     }
