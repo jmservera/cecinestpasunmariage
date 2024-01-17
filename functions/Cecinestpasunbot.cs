@@ -23,8 +23,7 @@ namespace functions
         }
 
         [Function(UpdateFunctionName)]
-        public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, FunctionContext context,
-    CancellationToken cancellationToken)
+        public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Update webhook called.");
 
