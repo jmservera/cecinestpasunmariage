@@ -4,14 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 bool isDevelopment = false;
-var host = new HostBuilder().ConfigureServices((hostContext, services) =>
-    {
-        isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
-        if (isDevelopment)
-        {
-            services.AddLogging(configure => configure.AddConsole());
-        }
-    })
+var host = new HostBuilder()
+// .ConfigureServices((hostContext, services) =>
+//     {
+//         isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
+//         if (isDevelopment)
+//         {
+//             services.AddLogging(configure => configure.AddConsole());
+//         }
+//     })
     .ConfigureFunctionsWorkerDefaults()
     .Build();
 
