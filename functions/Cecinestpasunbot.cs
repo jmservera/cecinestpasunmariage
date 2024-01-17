@@ -5,6 +5,7 @@ using functions.TelegramBot;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace functions
 {
@@ -48,10 +49,13 @@ namespace functions
             response.WriteString("Registering...");
             try
             {
+                req.Headers.TryGetValues("x-ms-original-url", out var values);
                 //get x-ms-original-url
-                var handleUpdateFunctionUrl = req.Headers.FirstOrDefault(h => h.Key.Equals("x-ms-original-url", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
+                var handleUpdateFunctionUrl = values?.FirstOrDefault();
                 if (string.IsNullOrEmpty(handleUpdateFunctionUrl))
                 {
+                    _logger.LogWarning("x-ms-original-url not found, using current url.");
+                    _logger.LogTrace($"Request: {JsonConvert.SerializeObject(values)}");
                     handleUpdateFunctionUrl = req.Url.ToString();
                 }
                 handleUpdateFunctionUrl = handleUpdateFunctionUrl.Replace(SetUpFunctionName, UpdateFunctionName, ignoreCase: true, culture: CultureInfo.InvariantCulture);
