@@ -48,11 +48,14 @@ namespace functions
             response.WriteString("Registering...");
             try
             {
-                var handleUpdateFunctionUrl = req.Url.ToString().Replace(SetUpFunctionName, UpdateFunctionName,
-                                        ignoreCase: true, culture: CultureInfo.InvariantCulture);
+                //get x-ms-original-url
+                var handleUpdateFunctionUrl = req.Headers.FirstOrDefault(h => h.Key.Equals("x-ms-original-url", StringComparison.OrdinalIgnoreCase)).Value.FirstOrDefault();
+                if (string.IsNullOrEmpty(handleUpdateFunctionUrl))
+                {
+                    handleUpdateFunctionUrl = req.Url.ToString();
+                }
+                handleUpdateFunctionUrl = handleUpdateFunctionUrl.Replace(SetUpFunctionName, UpdateFunctionName, ignoreCase: true, culture: CultureInfo.InvariantCulture);
                 _logger.LogInformation($"Registering bot with url {handleUpdateFunctionUrl}");
-
-                response.WriteString(req.Headers.Select(h => $"{h.Key} : {string.Join(',', h.Value)}<br/>").Aggregate((a, b) => a + b));
 
                 await _bot.Register(handleUpdateFunctionUrl);
                 _logger.LogInformation("Bot registered.");
