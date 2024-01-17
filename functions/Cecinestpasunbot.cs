@@ -23,14 +23,14 @@ namespace functions
         }
 
         [Function(UpdateFunctionName)]
-        public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, CancellationToken cancellationToken)
+        public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, FunctionContext context)
         {
             _logger.LogInformation("Update webhook called.");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
             _logger.LogInformation("Handling update...");
-            await _bot.UpdateAsync(req, cancellationToken);
+            await _bot.UpdateAsync(req, context.CancellationToken);
             _logger.LogInformation("Update handled.");
             response.WriteString("OK!");
             return response;
