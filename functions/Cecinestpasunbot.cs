@@ -52,7 +52,7 @@ namespace functions
                                         ignoreCase: true, culture: CultureInfo.InvariantCulture);
                 _logger.LogInformation($"Registering bot with url {handleUpdateFunctionUrl}");
 
-                response.WriteString(req.Headers.Select(h => $"{h.Key} : {h.Value}<br/>").Aggregate((a, b) => a + b));
+                response.WriteString(req.Headers.Select(h => $"{h.Key} : {string.Join(',', h.Value)}<br/>").Aggregate((a, b) => a + b));
 
                 await _bot.Register(handleUpdateFunctionUrl);
                 _logger.LogInformation("Bot registered.");
