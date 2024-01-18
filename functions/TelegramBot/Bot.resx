@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <data name="GreetingMessage">
+        <value>Welcome to the Isa &amp; Juanma's Picture Bot\. Send me a picture of the party and it will show up in the [website](https://cecinestpasunmariage.org/en/fotos)</value>
+        <comment>Greeting message that includes the user's first name.</comment>
+    </data>
+    <data name="Help">
+        <value>Just send me a picture and it will appear in the pictures [website](https://cecinestpasunmariage.org/en/fotos)</value>
+        <comment>Help message</comment>
+    </data>
+    <data name="PictureAdded">
+        <value>Picture added to the [website](https://cecinestpasunmariage.org/en/fotos)</value>
+        <comment>Message sent to the user when a picture is added to the website</comment>
+    </data>
+    <data name="PictureNotAdded">
+        <value>Sorry, I couldn't add the picture to the [website](https://cecinestpasunmariage.org/en/fotos)</value>
+        <comment>Message sent to the user when a picture is not added to the website</comment>
+    </data>
+</root>

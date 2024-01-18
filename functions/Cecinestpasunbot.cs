@@ -16,10 +16,10 @@ namespace functions
         private readonly Bot _bot;
         private readonly ILogger _logger;
 
-        public Cecinestpasunbot(ILoggerFactory loggerFactory)
+        public Cecinestpasunbot(ILoggerFactory loggerFactory, Bot bot)
         {
             _logger = loggerFactory.CreateLogger<Cecinestpasunbot>();
-            _bot = new Bot(loggerFactory);
+            _bot = bot;
         }
 
         [Function(UpdateFunctionName)]

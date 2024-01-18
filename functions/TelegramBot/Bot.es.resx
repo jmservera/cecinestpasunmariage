@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <data name="GreetingMessage">
+        <value>Bienvenido al bot de las fotos de la gran fiesta de Isa &amp; Juanma\. Envíame una foto y aparecerá en la [página web](https://cecinestpasunmariage.org/fotos)</value>
+        <comment>Mensaje de bienvenida que incluye el nombre del usuario.</comment>
+    </data>
+    <data name="Help">
+        <value>Envíame una foto y aparecerá en la [página web](https://cecinestpasunmariage.org/fotos)</value>
+        <comment>Mensaje de ayuda</comment>
+    </data>
+    <data name="PictureAdded">
+        <value>Imagen añadida a la [página web](https://cecinestpasunmariage.org/es/fotos)</value>
+        <comment>Mensaje enviado al usuario cuando se añade una imagen al sitio web</comment>
+    </data>
+    <data name="PictureNotAdded">
+        <value>Imagen no añadida a la [página web](https://cecinestpasunmariage.org/es/fotos)</value>
+        <comment>Mensaje enviado al usuario cuando no se puede añadir una imagen al sitio web</comment>
+    </data>
+</root>

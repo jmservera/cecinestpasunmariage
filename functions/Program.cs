@@ -1,18 +1,25 @@
-using System.Diagnostics;
 using functions.TelegramBot;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Localization;
+
+[assembly: RootNamespace("functions")]
+
 bool isDevelopment = false;
 var host = new HostBuilder()
-// .ConfigureServices((hostContext, services) =>
-//     {
-//         isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
-//         if (isDevelopment)
-//         {
-//             services.AddLogging(configure => configure.AddConsole());
-//         }
-//     })
+.ConfigureServices((hostContext, services) =>
+    {
+        services.AddLocalization();
+
+        services.AddTransient<Bot>();
+
+        isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
+        if (isDevelopment)
+        {
+            services.AddLogging(configure => configure.AddConsole());
+        }
+    })
     .ConfigureFunctionsWorkerDefaults()
     .Build();
 
@@ -20,10 +27,10 @@ var host = new HostBuilder()
 
 if (isDevelopment)
 {
-    var factory = (ILoggerFactory)host.Services.GetRequiredService(typeof(ILoggerFactory));
+    var factory = host.Services.GetRequiredService<ILoggerFactory>();
     var logger = factory.CreateLogger<Program>();
     logger.LogInformation("Running locally.");
-    using var bot = new Bot(factory);
+    using var bot = host.Services.GetRequiredService<Bot>();
     await bot.RunBot();
     host.Run();
 }
