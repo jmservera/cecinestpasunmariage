@@ -11,10 +11,10 @@ namespace functions
 {
     public class Cecinestpasunbot
     {
-        public const string SetUpFunctionName = "Cecinestpasunbotreg";
-        public const string UpdateFunctionName = "Cecinestpasunbot";
-        private readonly Bot _bot;
-        private readonly ILogger _logger;
+        const string SetUpFunctionName = "Cecinestpasunbotreg";
+        const string UpdateFunctionName = "Cecinestpasunbot";
+        readonly Bot _bot;
+        readonly ILogger _logger;
 
         public Cecinestpasunbot(ILoggerFactory loggerFactory, Bot bot)
         {
@@ -54,15 +54,15 @@ namespace functions
                 if (string.IsNullOrEmpty(handleUpdateFunctionUrl))
                 {
                     _logger.LogWarning("x-ms-original-url not found, using current url.");
-                    _logger.LogTrace($"Request: {JsonConvert.SerializeObject(values)}");
+                    _logger.LogTrace("Request: {Values}", JsonConvert.SerializeObject(values));
                     handleUpdateFunctionUrl = req.Url.ToString();
                 }
                 handleUpdateFunctionUrl = handleUpdateFunctionUrl.Replace(SetUpFunctionName, UpdateFunctionName, ignoreCase: true, culture: CultureInfo.InvariantCulture);
-                _logger.LogInformation($"Registering bot with url {handleUpdateFunctionUrl}");
+                _logger.LogInformation("Registering bot with url {UpdateFunctionUrl}", handleUpdateFunctionUrl);
 
                 await _bot.Register(handleUpdateFunctionUrl);
-                _logger.LogInformation("Bot registered.");
-                response.WriteString("OK!");
+                _logger.LogInformation("Bot registered to the address {UpdateFunctionUrl}.", handleUpdateFunctionUrl);
+                response.WriteString("Bot registered!");
             }
             catch (Exception e)
             {

@@ -27,12 +27,28 @@ var host = new HostBuilder()
 
 if (isDevelopment)
 {
+    // when running locally we need to instantiate the bot manually
     var factory = host.Services.GetRequiredService<ILoggerFactory>();
     var logger = factory.CreateLogger<Program>();
-    logger.LogInformation("Running locally.");
-    using var bot = host.Services.GetRequiredService<Bot>();
-    await bot.RunBot();
-    host.Run();
+    logger.LogInformation("Running {Program} locally.", nameof(Program));
+    Bot? bot = null;
+    try
+    {
+        try
+        {
+            bot = host.Services.GetRequiredService<Bot>();
+            await bot.RunBot();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error running bot. Won't be available locally.");
+        }
+        host.Run();
+    }
+    finally
+    {
+        bot?.Dispose();
+    }
 }
 else
 {

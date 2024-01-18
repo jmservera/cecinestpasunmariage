@@ -10,6 +10,10 @@
         <value>Welcome to the Isa &amp; Juanma's Picture Bot\. Send me a picture of the party and it will show up in the [website](https://cecinestpasunmariage.org/en/fotos)</value>
         <comment>Greeting message that includes the user's first name.</comment>
     </data>
+    <data name="EchoMessage">
+        <value>You said: {0}</value>
+        <comment>Message sent to the user when the bot receives a message</comment>
+    </data>
     <data name="Help">
         <value>Just send me a picture and it will appear in the pictures [website](https://cecinestpasunmariage.org/en/fotos)</value>
         <comment>Help message</comment>

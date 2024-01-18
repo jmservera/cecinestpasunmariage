@@ -51,9 +51,12 @@ namespace functions
                 var blobSasUriPics = blobPicsClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
 
 
-                photosResponse.Pictures.Add(new Photo() { Name = blobPicsClient.Name.ToString(), 
-                                                          Uri = blobSasUriPics.ToString(),
-                                                          ThumbnailUri = blobSasUriThumb.ToString() });
+                photosResponse.Pictures.Add(new Photo()
+                {
+                    Name = blobPicsClient.Name.ToString(),
+                    Uri = blobSasUriPics.ToString(),
+                    ThumbnailUri = blobSasUriThumb.ToString()
+                });
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -69,7 +72,7 @@ namespace functions
         {
 
             public List<Photo> Pictures { get; set; } = new List<Photo>();
-            
+
             public int NumPictures { get; set; }
         }
 
