@@ -1,1 +1,27 @@
-{{- partial "i18nList.html" . -}}
+<div
+  id="i18nList"
+  style="
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    margin: 0.5rem;
+  "
+>
+  {{- partial "i18nList.html" . -}}
+</div>
+
+<div
+  id="user"
+  style="
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0.5rem;
+  "
+>
+  {{- partial "user.html" . -}}
+</div>

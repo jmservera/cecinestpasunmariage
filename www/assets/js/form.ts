@@ -2,18 +2,7 @@
 /// <reference lib="dom" />
 
 import { runQuery, QueryVariables, queries, UserInput } from "./queries";
-
-type ClientPrincipal = {
-  userDetails: string;
-  userId: string;
-};
-
-async function getUserInfo(): Promise<ClientPrincipal> {
-  const response = await fetch("/.auth/me");
-  const payload = await response.json();
-  const { clientPrincipal } = payload;
-  return clientPrincipal;
-}
+import { getUserInfo } from "./userInfo";
 
 function buildItem(): UserInput {
   let user: UserInput = new UserInput();
@@ -56,7 +45,6 @@ async function createOrUpdate(): Promise<void> {
 
 (async () => {
   const info = await getUserInfo();
-  console.log(info);
   const email = document.querySelector<HTMLInputElement>('input[name="email"]');
   if (email) {
     email.value = info.userDetails;

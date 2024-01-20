@@ -70,6 +70,14 @@
         {
             "route": "/login",
             "redirect": "/.auth/login/aad"
+        },
+        {
+            "route": "/login/github",
+            "redirect": "/.auth/login/github"
+        },
+        {
+            "route": "/login/google",
+            "redirect": "/.auth/login/google"
         }
     ],
     "responseOverrides": {
