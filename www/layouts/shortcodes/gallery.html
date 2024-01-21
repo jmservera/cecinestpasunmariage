@@ -9,8 +9,13 @@
   <!-- https://codepen.io/rperry1886/pen/KKwbQNP -->
 </div>
 
-{{ with resources.Get "css/gallery.css" }}
-<link rel="stylesheet" href="{{ .RelPermalink }}" />
+{{ with resources.Get "css/gallery.css" | resources.Minify |
+resources.Fingerprint }}
+<link
+  rel="stylesheet"
+  href="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+/>
 {{ end }} {{ with resources.Get "js/gallery.js" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build }}
 <script src="{{ .RelPermalink }}" defer></script>
@@ -23,4 +28,3 @@ $opts | fingerprint }}
   defer
 ></script>
 {{ end }} {{ end }} {{ end }}
-
