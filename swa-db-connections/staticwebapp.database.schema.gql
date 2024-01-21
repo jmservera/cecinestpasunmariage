@@ -14,7 +14,11 @@ type User @model {
   email: String!
   name: String!
   surname: String
+  partnerName: String
   pax: Int!
+  children: Int
+  alergies: String
+  comment: String
   createdAt: String
   updatedAt: String
 }

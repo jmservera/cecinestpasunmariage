@@ -7,12 +7,20 @@ other="days"
 one="hour"
 other="hours"
 [title]
-other="This is not a mariage"
+other="!Wedding"
 [Name]
 other="Name"
 [Surname]
 other="Surname"
+[PartnerName]
+other ="Partner Name (if you bring someone)"
 [Email]
 other="Email"
 [NoOfGuests]
 other="Number of guests (including you)"
+[NoOfChildren]
+other="Number of children (between 2 and 11)"
+[Alergies]
+other="Any allergies we should be aware of?"
+[Comments]
+other="Any other comment"

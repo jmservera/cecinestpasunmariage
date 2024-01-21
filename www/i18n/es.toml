@@ -14,5 +14,13 @@ other="Nombre"
 other="Apellidos"
 [Email]
 other="Correo electrónico"
+[PartnerName]
+other="Nombre de tu pareja (si viene)"
 [NoOfGuests]
 other="¿Cuántos sois?"
+[NoOfChildren]
+other="Número de niños (entre 2 y 12)"
+[Alergies]
+other="¿Alguna alergia que debamos tener en cuenta?"
+[Comments]
+other="Algún otro comentario"

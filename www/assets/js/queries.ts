@@ -2,7 +2,7 @@
 /// <reference lib="dom" />
 
 const usr: string =
-  "{\nid\norigin\nemail\nname\nsurname\npax\ncreatedAt\nupdatedAt\n}";
+  "{\nid\norigin\nemail\nname\nsurname\npartnerName\npax\nchildren\nalergies\ncomments\ncreatedAt\nupdatedAt\n}";
 
 export const queries = {
   getByIdGql: "query getById($id: ID!) {\nuser_by_pk(id: $id) " + usr + "\n}",
@@ -24,7 +24,11 @@ export class UserInput {
   email: string;
   name: string;
   surname: string;
+  children?: number;
   pax: number;
+  partnerName?: string;  
+  alergies?: string;
+  comments?: string;
   createdAt?: string;
   updatedAt?: string;
 }
