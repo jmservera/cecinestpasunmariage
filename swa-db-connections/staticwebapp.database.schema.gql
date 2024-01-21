@@ -18,7 +18,7 @@ type User @model {
   pax: Int!
   children: Int
   alergies: String
-  comment: String
+  comments: String
   createdAt: String
   updatedAt: String
 }
