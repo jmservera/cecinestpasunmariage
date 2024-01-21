@@ -6,14 +6,19 @@ import { getUserInfo } from "./userInfo";
 
 function buildItem(): UserInput {
   let user: UserInput = new UserInput();
+  const form = document.querySelector('form[id="registrationForm"]');
+  var values = Object.values(form).reduce((obj, field) => {
+    obj[field.name] = field.value;
+    return obj;
+  }, {});
+
   Object.keys(user).forEach((key) => {
-    const el = document.querySelector<HTMLInputElement>(`input[name="${key}"]`);
-    if (el) {
+    if (values[key]) {
       let n = typeof user[key];
       console.log(n);
-      if (key === "pax") {
-        user[key] = parseInt(el.value);
-      } else user[key] = el.value;
+      if (key === "pax" || key === "children") {
+        user[key] = parseInt(values[key]);
+      } else user[key] = values[key];
     }
   });
 
@@ -45,52 +50,63 @@ async function createOrUpdate(): Promise<void> {
 
 (async () => {
   const info = await getUserInfo();
-  const email = document.querySelector<HTMLInputElement>('input[name="email"]');
-  if (email) {
-    email.value = info.userDetails;
-  }
-  const origin = document.querySelector<HTMLInputElement>(
-    'input[name="origin"]'
+  const registrationForm = document.querySelector<HTMLFormElement>(
+    'form[id="registrationForm"]'
   );
-  if (origin) {
-    origin.value = info.userDetails;
-  } else {
-    const form = document.querySelector<HTMLFormElement>("form");
-    const hiddenInput: HTMLInputElement = document.createElement("input");
-    hiddenInput.type = "hidden";
-    hiddenInput.name = "origin";
-    hiddenInput.value = info.userDetails;
-    form.appendChild(hiddenInput);
-  }
+  if (registrationForm) {
+    const email = registrationForm.querySelector<HTMLInputElement>(
+      'input[name="email"]'
+    );
+    if (email) {
+      email.value = info.userDetails;
+    }
+    const origin = registrationForm.querySelector<HTMLInputElement>(
+      'input[name="origin"]'
+    );
+    if (origin) {
+      origin.value = info.userDetails;
+    } else {
+      const hiddenInput: HTMLInputElement = document.createElement("input");
+      hiddenInput.type = "hidden";
+      hiddenInput.name = "origin";
+      hiddenInput.value = info.userDetails;
+      registrationForm.appendChild(hiddenInput);
+    }
 
-  const id = document.querySelector<HTMLInputElement>('input[name="id"]');
-  if (id) {
-    id.value = info.userId;
-  }
+    const id =
+      registrationForm.querySelector<HTMLInputElement>('input[name="id"]');
+    if (id) {
+      id.value = info.userId;
+    }
 
-  const user = await runQuery(queries.getByIdGql, { id: info.userId });
-  console.log(user);
-  if (user && user.id) {
-    Object.keys(user).forEach((key) => {
-      const el = document.querySelector<HTMLInputElement>(
-        `input[name="${key}"]`
-      );
-      if (el) {
-        el.value = user[key];
-      } else {
-        const form = document.querySelector<HTMLFormElement>("form");
-        const hiddenInput: HTMLInputElement = document.createElement("input");
-        hiddenInput.type = "hidden";
-        hiddenInput.name = key;
-        hiddenInput.value = user[key];
-        form.appendChild(hiddenInput);
-      }
-    });
-  }
+    const user = await runQuery(queries.getByIdGql, { id: info.userId });
+    console.log(user);
+    if (user && user.id) {
+      Object.keys(user).forEach((key) => {
+        const inputElement = registrationForm.querySelector<HTMLInputElement>(
+          `input[name="${key}"]`
+        );
+        if (inputElement) {
+          inputElement.value = user[key];
+        } else {
+          const textArea = registrationForm.querySelector<HTMLTextAreaElement>(
+            `textarea[name="${key}"]`
+          );
+          if (textArea) {
+            textArea.value = user[key];
+          } else {
+            const hiddenInput: HTMLInputElement =
+              document.createElement("input");
+            hiddenInput.type = "hidden";
+            hiddenInput.name = key;
+            hiddenInput.value = user[key];
+            registrationForm.appendChild(hiddenInput);
+          }
+        }
+      });
+    }
 
-  const form = document.querySelector<HTMLFormElement>("form");
-  if (form) {
-    form.addEventListener("submit", (e) => {
+    registrationForm.addEventListener("submit", (e) => {
       e.preventDefault();
       createOrUpdate();
     });

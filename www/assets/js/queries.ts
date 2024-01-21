@@ -26,7 +26,7 @@ export class UserInput {
   surname: string;
   children?: number;
   pax: number;
-  partnerName?: string;  
+  partnerName?: string;
   alergies?: string;
   comments?: string;
   createdAt?: string;
@@ -55,11 +55,22 @@ async function execQuery(query: string, data?: QueryVariables): Promise<any> {
   return await result.json();
 }
 
+interface GraphError {
+  locations: Array<object>;
+  message: string;
+  path: Array<string>;
+}
+
 export async function runQuery(
   query: string,
   data?: QueryVariables
 ): Promise<UserInput> {
-  const response: { data: { user: UserInput } } = await execQuery(query, data);
+  const response: { data: { user: UserInput }; errors: Array<GraphError> } =
+    await execQuery(query, data);
+  if (response.errors) {
+    console.error(response.errors);
+    throw new Error(response.errors[0].message);
+  }
   return response.data[Object.keys(response.data)[0]];
 }
 

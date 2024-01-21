@@ -1,6 +1,6 @@
 {{ $id := default "id" (.Get 0) }}{{ $button_name := default "Submit" (.Get 1)
 }}{{ $redirect := .Get 2 }}
-<form target="_self" style="width: 60%;">
+<form id="registrationForm" target="_self" style="width: 60%">
   <style>
     label {
       color: #b46b6b;
@@ -37,8 +37,8 @@
   </span>
 
   <span>
-    <label for="partnername">{{ i18n "PartnerName" }}</label>
-    <input type="text" name="partnername" placeholder="" />
+    <label for="partnerName">{{ i18n "PartnerName" }}</label>
+    <input type="text" name="partnerName" placeholder="" />
   </span>
   <span>
     <label for="pax">{{ i18n "NoOfGuests" }}</label>
@@ -50,11 +50,11 @@
   </span>
   <span>
     <label for="alergies">{{ i18n "Alergies" }}</label>
-    <textarea name="alergies" style="height: 50px; width: 400px; ">  </textarea>
+    <textarea name="alergies" style="height: 50px; width: 400px"> </textarea>
   </span>
   <span>
     <label for="comments">{{ i18n "Comments" }}</label>
-    <textarea name="comments" style="height: 50px; width: 400px; ">  </textarea>
+    <textarea name="comments" style="height: 50px; width: 400px"> </textarea>
   </span>
   <span>
     <button type="submit" id="save">{{ $button_name }}</button>
