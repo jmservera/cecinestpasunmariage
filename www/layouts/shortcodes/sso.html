@@ -1,0 +1,32 @@
+<ul id="sso">
+  <li>
+    <a href="/login">
+      <img
+        src="/images/Microsoft-logo_rgb_c-gray.png"
+        alt="Login with Microsoft"
+      />
+      Login with Microsoft
+    </a>
+  </li>
+  <li>
+    <a href="/login/github">
+      <img src="/images/github-mark-white.png" alt="Login with GitHub" />
+      Login with GitHub
+    </a>
+  </li>
+  <li>
+    <a href="/login/google">
+      <img src="/images/google-logo.png" alt="Login with Google" />
+      Login with Google
+    </a>
+  </li>
+</ul>
+{{ with resources.Get "css/sso.css" | resources.Minify | resources.Fingerprint
+}}
+<link
+  rel="stylesheet"
+  href="{{ .RelPermalink }}"
+  type="text/css"
+  integrity="{{ .Data.Integrity }}"
+/>
+{{ end }}

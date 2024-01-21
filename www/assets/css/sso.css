@@ -1,0 +1,25 @@
+#sso {
+  width: max-content;
+}
+#sso li {
+  display: flex;
+  align-items: center;
+  padding: 0.5em;
+  margin: 1em;
+  background-color: gray;
+  /*width: max-content; /* Set width to max length of the text */
+}
+
+#sso li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+#sso li a img {
+  width: 40px;
+  height: auto;
+  transition: all 0.3s ease-in-out;
+  margin-right: 1em;
+}
