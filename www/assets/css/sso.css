@@ -7,6 +7,7 @@
   padding: 0.5em;
   margin: 1em;
   background-color: gray;
+  border: 1px solid gray;
   /*width: max-content; /* Set width to max length of the text */
 }
 
@@ -17,9 +18,14 @@
   color: white;
 }
 
+#sso li:hover {
+  background-color: lightgray;
+  border: 1px solid black;
+  transition: all 0.3s ease-in-out;
+}
+
 #sso li a img {
   width: 40px;
   height: auto;
-  transition: all 0.3s ease-in-out;
   margin-right: 1em;
 }
