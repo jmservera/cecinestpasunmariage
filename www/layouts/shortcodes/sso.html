@@ -1,6 +1,6 @@
 <ul id="sso">
   <li>
-    <a href="/login">
+    <a href="/.auth/login/aad">
       <img
         src="/images/Microsoft-logo_rgb_c-gray.png"
         alt="Login with Microsoft"
@@ -9,13 +9,13 @@
     </a>
   </li>
   <li>
-    <a href="/login/github">
+    <a href="/.auth/login/github">
       <img src="/images/github-mark-white.png" alt="Login with GitHub" />
       Login with GitHub
     </a>
   </li>
   <li>
-    <a href="/login/google">
+    <a href="/.auth/login/google">
       <img src="/images/google-logo.png" alt="Login with Google" />
       Login with Google
     </a>
@@ -29,4 +29,15 @@
   type="text/css"
   integrity="{{ .Data.Integrity }}"
 />
-{{ end }}
+{{ end }} {{ with resources.Get "js/sso.ts" }} {{ if eq hugo.Environment
+"development" }} {{ with . | js.Build }}
+<script src="{{ .RelPermalink }}" defer></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+$opts | fingerprint }}
+<script
+  src="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+  crossorigin="anonymous"
+  defer
+></script>
+{{ end }} {{ end }} {{ end }}
