@@ -85,5 +85,8 @@
             "statusCode": 302,
             "redirect": "/sso?post_login_redirect_uri=.referrer"
         }
+    },
+    "globalHeaders": {
+        "Referrer-Policy": "same-origin"
     }
 }
