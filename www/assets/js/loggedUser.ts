@@ -2,13 +2,19 @@ import { getUserInfo } from "./userInfo";
 
 (async () => {
   const info = await getUserInfo();
-  const hello = document.querySelector<HTMLSpanElement>("div#user span#hello");
-  const logout = document.querySelector<HTMLAnchorElement>("div#user a#logout");
-  const login = document.querySelector<HTMLAnchorElement>("div#user a#login");
+  const hello = document.querySelector<HTMLSpanElement>(
+    "div#loggedUser span#hello"
+  );
+  const logout = document.querySelector<HTMLAnchorElement>(
+    "div#loggedUser a#logout"
+  );
+  const login = document.querySelector<HTMLAnchorElement>(
+    "div#loggedUser a#login"
+  );
 
   if (info) {
     const username = document.querySelector<HTMLSpanElement>(
-      "div#user span#username"
+      "div#loggedUser span#username"
     );
     username.innerText = info.userDetails;
     hello.style.display = "";

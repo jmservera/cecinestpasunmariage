@@ -2,7 +2,7 @@
 /// <reference lib="dom" />
 
 const usr: string =
-  "{\nid\norigin\nemail\nname\nsurname\npax\ncreatedAt\nupdatedAt\n}";
+  "{\nid\norigin\nemail\nname\nsurname\npartnerName\npax\nchildren\nalergies\ncomments\ncreatedAt\nupdatedAt\n}";
 
 export const queries = {
   getByIdGql: "query getById($id: ID!) {\nuser_by_pk(id: $id) " + usr + "\n}",
@@ -24,7 +24,11 @@ export class UserInput {
   email: string;
   name: string;
   surname: string;
+  children?: number;
   pax: number;
+  partnerName?: string;
+  alergies?: string;
+  comments?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -51,11 +55,22 @@ async function execQuery(query: string, data?: QueryVariables): Promise<any> {
   return await result.json();
 }
 
+interface GraphError {
+  locations: Array<object>;
+  message: string;
+  path: Array<string>;
+}
+
 export async function runQuery(
   query: string,
   data?: QueryVariables
 ): Promise<UserInput> {
-  const response: { data: { user: UserInput } } = await execQuery(query, data);
+  const response: { data: { user: UserInput }; errors: Array<GraphError> } =
+    await execQuery(query, data);
+  if (response.errors) {
+    console.error(response.errors);
+    throw new Error(response.errors[0].message);
+  }
   return response.data[Object.keys(response.data)[0]];
 }
 
