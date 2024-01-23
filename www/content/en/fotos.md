@@ -1,15 +1,9 @@
 ---
-title: "Fotos"
+title: "Photos"
 ---
 
-(psss.. esto son fotos de prueba para ver qué tal queda la galería)
-<br />
+Send us your party photos through our [Telegram bot](https://t.me/cecinestpasun_bot) and they will appear here automatically.
 
+(psss.. these are test photos to see how the gallery looks)
 
 {{< gallery >}}
-
-Puedes enviarnos tus fotos a nuestro email:
-servezas@outlook.com
-
-O subirlas aquí: 
-TDB: Link a OneDrive para subir las fotos. 

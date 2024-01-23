@@ -1,15 +1,9 @@
 ---
-title: "Fotos"
+title: "Photos"
 ---
 
-(psss.. esto son fotos de prueba para ver qué tal queda la galería)
-<br />
+Envoyez-nous vos photos de la fête via notre [bot Telegram](https://t.me/cecinestpasun_bot) et elles apparaîtront automatiquement ici.
 
+(psss.. ce sont des photos de test pour voir comment la galerie rend)
 
 {{< gallery >}}
-
-Puedes enviarnos tus fotos a nuestro email:
-servezas@outlook.com
-
-O subirlas aquí: 
-TDB: Link a OneDrive para subir las fotos. 

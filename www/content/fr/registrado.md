@@ -1,3 +1,7 @@
-# R
+# Vous êtes enregistré
 
-¡Gracias!
+Vos données sont :
+
+{{< form_data >}}
+
+Merci !

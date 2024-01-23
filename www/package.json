@@ -5,6 +5,10 @@
     "build": "npm run clean && hugo --gc --minify"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.6"
+    "@azure/static-web-apps-cli": "^1.1.6",
+    "@types/jquery": "^3.5.29"
+  },
+  "dependencies": {
+    "jquery": "^3.5.1"
   }
 }

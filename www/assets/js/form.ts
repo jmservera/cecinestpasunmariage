@@ -3,10 +3,20 @@
 
 import { runQuery, QueryVariables, queries, UserInput } from "./queries";
 import { getUserInfo } from "./userInfo";
+import { showLoading, hideLoading } from "./loading";
+
+const formId = "registrationForm";
+const internalFields = [
+  "id",
+  "_redirect_url",
+  "origin",
+  "createdAt",
+  "updatedAt",
+];
 
 function buildItem(): UserInput {
   let user: UserInput = new UserInput();
-  const form = document.querySelector('form[id="registrationForm"]');
+  const form = document.querySelector(`form[id="${formId}"]`);
   var values = Object.values(form).reduce((obj, field) => {
     obj[field.name] = field.value;
     return obj;
@@ -26,89 +36,130 @@ function buildItem(): UserInput {
 }
 
 async function createOrUpdate(): Promise<void> {
-  const user = buildItem();
+  showLoading();
+  try {
+    const user = buildItem();
 
-  const data: QueryVariables = {
-    id: user.id,
-    _partitionKeyValue: user.id,
-    item: user,
-  };
+    const data: QueryVariables = {
+      id: user.id,
+      _partitionKeyValue: user.id,
+      item: user,
+    };
 
-  const existingUser = await runQuery(queries.getByIdGql, data);
+    const existingUser = await runQuery(queries.getByIdGql, data);
 
-  var response: UserInput;
-  if (existingUser) {
-    data.item.updatedAt = new Date().toISOString();
-    response = await runQuery(queries.updateGql, data);
-  } else {
-    data.item.createdAt = new Date().toISOString();
-    data.item.updatedAt = data.item.createdAt;
-    response = await runQuery(queries.createGql, data);
+    var response: UserInput;
+    if (existingUser) {
+      data.item.updatedAt = new Date().toISOString();
+      response = await runQuery(queries.updateGql, data);
+    } else {
+      data.item.createdAt = new Date().toISOString();
+      data.item.updatedAt = data.item.createdAt;
+      response = await runQuery(queries.createGql, data);
+    }
+    console.table(response);
+    const redirectInput = document.querySelector<HTMLInputElement>(
+      `form[id="${formId}"] input[name="_redirect_url"]`
+    );
+    if (redirectInput) {
+      const redirectUrl = redirectInput.value;
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      }
+    }
+  } finally {
+    hideLoading();
   }
-  console.table(response);
 }
 
 (async () => {
-  const info = await getUserInfo();
   const registrationForm = document.querySelector<HTMLFormElement>(
-    'form[id="registrationForm"]'
+    `form[id="${formId}"]`
   );
   if (registrationForm) {
-    const email = registrationForm.querySelector<HTMLInputElement>(
-      'input[name="email"]'
-    );
-    if (email) {
-      email.value = info.userDetails;
-    }
-    const origin = registrationForm.querySelector<HTMLInputElement>(
-      'input[name="origin"]'
-    );
-    if (origin) {
-      origin.value = info.userDetails;
-    } else {
-      const hiddenInput: HTMLInputElement = document.createElement("input");
-      hiddenInput.type = "hidden";
-      hiddenInput.name = "origin";
-      hiddenInput.value = info.userDetails;
-      registrationForm.appendChild(hiddenInput);
-    }
+    showLoading();
+    try {
+      const info = await getUserInfo();
+      const email = registrationForm.querySelector<HTMLInputElement>(
+        'input[name="email"]'
+      );
+      if (email) {
+        email.value = info.userDetails;
+      }
+      const origin = registrationForm.querySelector<HTMLInputElement>(
+        'input[name="origin"]'
+      );
+      if (origin) {
+        origin.value = info.userDetails;
+      } else {
+        const hiddenInput: HTMLInputElement = document.createElement("input");
+        hiddenInput.type = "hidden";
+        hiddenInput.name = "origin";
+        hiddenInput.value = info.userDetails;
+        registrationForm.appendChild(hiddenInput);
+      }
 
-    const id =
-      registrationForm.querySelector<HTMLInputElement>('input[name="id"]');
-    if (id) {
-      id.value = info.userId;
-    }
+      const id =
+        registrationForm.querySelector<HTMLInputElement>('input[name="id"]');
+      if (id) {
+        id.value = info.userId;
+      }
 
-    const user = await runQuery(queries.getByIdGql, { id: info.userId });
-    console.log(user);
-    if (user && user.id) {
-      Object.keys(user).forEach((key) => {
-        const inputElement = registrationForm.querySelector<HTMLInputElement>(
-          `input[name="${key}"]`
-        );
-        if (inputElement) {
-          inputElement.value = user[key];
-        } else {
-          const textArea = registrationForm.querySelector<HTMLTextAreaElement>(
-            `textarea[name="${key}"]`
+      const user = await runQuery(queries.getByIdGql, { id: info.userId });
+      console.log(user);
+      if (user && user.id) {
+        Object.keys(user).forEach((key) => {
+          const inputElement = registrationForm.querySelector<HTMLInputElement>(
+            `input[name="${key}"]`
           );
-          if (textArea) {
-            textArea.value = user[key];
+          if (inputElement) {
+            inputElement.value = user[key];
           } else {
-            const hiddenInput: HTMLInputElement =
-              document.createElement("input");
-            hiddenInput.type = "hidden";
-            hiddenInput.name = key;
-            hiddenInput.value = user[key];
-            registrationForm.appendChild(hiddenInput);
+            const textArea =
+              registrationForm.querySelector<HTMLTextAreaElement>(
+                `textarea[name="${key}"]`
+              );
+            if (textArea) {
+              textArea.value = user[key];
+            } else {
+              const hiddenInput: HTMLInputElement =
+                document.createElement("input");
+              hiddenInput.type = "hidden";
+              hiddenInput.name = key;
+              hiddenInput.value = user[key];
+              registrationForm.appendChild(hiddenInput);
+            }
           }
-        }
-      });
+        });
+      }
+    } finally {
+      hideLoading();
     }
-
     registrationForm.addEventListener("submit", (e) => {
       e.preventDefault();
       createOrUpdate();
     });
+  } else {
+    var dataDiv = document.querySelector<HTMLDivElement>("#registrationData");
+    if (dataDiv) {
+      const table: HTMLTableElement = document.createElement("table");
+      const info = await getUserInfo();
+      const user = await runQuery(queries.getByIdGql, { id: info.userId });
+      Object.keys(user).forEach((key) => {
+        if (internalFields.includes(key)) {
+          return;
+        }
+        const keytd: HTMLTableCellElement = document.createElement("td");
+        keytd.innerText = key + ":";
+        keytd.style.textAlign = "right";
+        const valuetd: HTMLTableCellElement = document.createElement("td");
+        valuetd.innerText = user[key];
+        const infoRow: HTMLTableRowElement = document.createElement("tr");
+        infoRow.appendChild(keytd);
+        infoRow.appendChild(valuetd);
+        table.appendChild(infoRow);
+      });
+      dataDiv.replaceChildren(table);
+    }
   }
 })();

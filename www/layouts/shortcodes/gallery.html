@@ -1,8 +1,3 @@
-<script
-  type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-></script>
-
 <div id="pages2"></div>
 <div id="pages"></div>
 <div id="mygallery" class="grid-container">
@@ -16,7 +11,7 @@ resources.Fingerprint }}
   href="{{ .RelPermalink }}"
   integrity="{{ .Data.Integrity }}"
 />
-{{ end }} {{ with resources.Get "js/gallery.js" }} {{ if eq hugo.Environment
+{{ end }} {{ with resources.Get "js/gallery.ts" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build }}
 <script src="{{ .RelPermalink }}" defer></script>
 {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
