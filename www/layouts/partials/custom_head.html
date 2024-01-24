@@ -1,7 +1,6 @@
 <!-- A partial to be overwritten by the user.
      Its content will appear before the closing </head>-tag -->
 
-
 <!-- Custom CSS via inline styles
      You may use this template to add custom CSS to your site like so: -->
 <!--
@@ -38,86 +37,66 @@
 <!-- Custom link-tags for different icons
      Generated via https://favicon.io/favicon-generator/ -->
 
-
-<link
-  rel="apple-touch-icon"
-  sizes="180x180"
-  href="{{ "/images/apple-touch-icon.png" | absURL }}"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="32x32"
-  href="{{ "/images/favicon-32x32.png" | absURL }}"
-/>
-<link
-  rel="icon"
-  type="image/png"
-  sizes="16x16"
-  href="{{ "/images/favicon-16x16.png" | absURL }}"
-/>
+<link rel="apple-touch-icon" sizes="180x180" href="{{
+"/images/apple-touch-icon.png" | absURL }}" /> <link rel="icon" type="image/png"
+sizes="32x32" href="{{ "/images/favicon-32x32.png" | absURL }}" /> <link
+rel="icon" type="image/png" sizes="16x16" href="{{ "/images/favicon-16x16.png" |
+absURL }}" />
 
 <style>
-     body{
-          background-image:url('/images/background.png');
-          background-attachment:fixed;
-          background-repeat: no-repeat;
-          background-size: cover;
-          color: #893e3e;
-          --color-text:  #893e3e;
-     }
+  body {
+    background-image: url("/images/background.png");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: #893e3e;
+    --color-text: #893e3e;
+  }
 
-     #site-head, #site-head.withCenteredImage
-     {
-          background-position: top;
-          background-repeat: no-repeat;
-          background-size: 800px;
-     }
+  #site-head,
+  #site-head.withCenteredImage {
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: 800px;
+  }
 
-     #site-head a.btn:hover, #site-head.withCenteredImage a.btn:hover
-     {
-          background-color: #893e3e !important;
-     }
+  #site-head a.btn:hover,
+  #site-head.withCenteredImage a.btn:hover {
+    background-color: #893e3e !important;
+  }
 
-     .post
-     {
-          max-width: none;
-     }
+  .post {
+    max-width: none;
+  }
 
-     .post-content
-     {
-          color: black;
-          --color-text:  black;
-     }
+  .post-content {
+    color: black;
+    --color-text: black;
+  }
 
-     .post-content h3
-     {
-          color: #F19888;
-          --color-text:  #F19888;
-     }
+  .post-content h3 {
+    color: #f19888;
+    --color-text: #f19888;
+  }
 
-     .post-content h4
-     {
-          color: #F0D9C7;
-          --color-text:  #F0D9C7;
-     }
+  .post-content h4 {
+    color: #f0d9c7;
+    --color-text: #f0d9c7;
+  }
 
-     
-     :root {
-          /* see variables.scss for more variables*/
-          --section-light-text-color: #893F40!important;
-          --section-light-bg-color: transparent!important;
-          --section-dark-text-color: #893F40!important;
-          --section-dark-bg-color: transparent!important;
+  :root {
+    /* see variables.scss for more variables*/
+    --section-light-text-color: #893f40 !important;
+    --section-light-bg-color: transparent !important;
+    --section-dark-text-color: #893f40 !important;
+    --section-dark-bg-color: transparent !important;
 
-
-          /* define list element for unnumbered lists, leave empty for default list element */
-          /* fa-asterisk is the default icon if this variable definition is missing completely */
-          --ul-li-icon: fa-dashcube;     /* this sets fa-dashcube as list icon */
-          --ul-li-icon: ;                /* this sets the default html list icon */
-          --cover-text-color:var(--color-text);
-          --highlight: #F0DAC8;
-          --sticky-menu-text-color: #EDAD53;
-     }
-
+    /* define list element for unnumbered lists, leave empty for default list element */
+    /* fa-asterisk is the default icon if this variable definition is missing completely */
+    --ul-li-icon: fa-dashcube; /* this sets fa-dashcube as list icon */
+    --ul-li-icon: ; /* this sets the default html list icon */
+    --cover-text-color: var(--color-text);
+    --highlight: #f0dac8;
+    --sticky-menu-text-color: #edad53;
+  }
 </style>

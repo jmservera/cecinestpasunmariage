@@ -1,15 +1,18 @@
 {{ $date := default "2025-05-03" (.Get 0) }} {{ $time := default "14" (.Get 1)
-}}
-{{ with resources.Get "/css/countdown.css" }}
+}} {{ with resources.Get "/css/countdown.css" }}
 <link rel="stylesheet" href="{{ .RelPermalink }}" />
 {{ end }}
 
-<div class = "countdown">
+<div class="countdown">
   {{ with resources.Get "/images/cuenta_atras.png" }}
   <img src="{{ .RelPermalink }}" alt='{{ i18n "countdown" }}' />
   {{ end }}
-  <div id="days" name="days" class="days"><span id="d">20</span> <span class='text'>{{ i18n "days" }}</span></div>
-  <div id="hours" name="hours"><span id="h">20</span> <span class='text'>{{ i18n "hours" }}</span></div>
+  <div id="days" name="days" class="days">
+    <span id="d">20</span> <span class="text">{{ i18n "days" }}</span>
+  </div>
+  <div id="hours" name="hours">
+    <span id="h">20</span> <span class="text">{{ i18n "hours" }}</span>
+  </div>
 
   {{ with resources.Get "/js/countdown.js" }} {{ if eq hugo.Environment
   "development" }} {{ with . | js.Build }}

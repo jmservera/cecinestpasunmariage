@@ -1,46 +1,39 @@
-.countdown
-{
-     width: 100%;
+.countdown {
+  width: 100%;
 }
 
-.countdown header
-{
-     display: none;
-     height: 300px;
+.countdown header {
+  display: none;
+  height: 300px;
 }
 
-.countdown .text
-{
-     color: #EDAD53;
-     --color-text:  #EDAD53;
-     font-size: calc(2vh);
+.countdown .text {
+  color: #edad53;
+  --color-text: #edad53;
+  font-size: calc(2vh);
 }
 
-.countdown #days
-{
-     /* border: 1px solid red; */
-     width: 10%;
-     min-width: 150px;
-     height: 50px;
-     display: inline;
-     float: left;
-     position: absolute;
-     top: 45%;
-     left: 47%;
-     font-size: calc(1vw + 1vh + 1vmin);
-
-
+.countdown #days {
+  /* border: 1px solid red; */
+  width: 10%;
+  min-width: 150px;
+  height: 50px;
+  display: inline;
+  float: left;
+  position: absolute;
+  top: 45%;
+  left: 47%;
+  font-size: calc(1vw + 1vh + 1vmin);
 }
-.countdown #hours
-{
-     /* border: 1px solid BLUE; */
-     width: 10%;
-     min-width: 150px;
-     height: 50px;
-     display: inline;
-     float: left;
-     position: absolute;
-     top: 51%;
-     left: 47%;
-     font-size: calc(1vw + 1vh + 1vmin);
+.countdown #hours {
+  /* border: 1px solid BLUE; */
+  width: 10%;
+  min-width: 150px;
+  height: 50px;
+  display: inline;
+  float: left;
+  position: absolute;
+  top: 51%;
+  left: 47%;
+  font-size: calc(1vw + 1vh + 1vmin);
 }

@@ -1,89 +1,90 @@
 {
-    "routes": [
-        {
-            "route": "/registro",
-            "allowedRoles": [
-                "authenticated"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/fotos",
-            "allowedRoles": [
-                "authenticated"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/en/registro",
-            "allowedRoles": [
-                "authenticated"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/en/fotos",
-            "allowedRoles": [
-                "authenticated"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/fr/registro",
-            "allowedRoles": [
-                "authenticated"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/fr/fotos",
-            "allowedRoles": [
-                "authenticated"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/admin/*",
-            "allowedRoles": [
-                "admin"
-            ],
-            "headers": {
-                "Cache-Control": "no-store"
-            }
-        },
-        {
-            "route": "/logout",
-            "redirect": "/.auth/logout"
-        },
-        {
-            "route": "/login",
-            "redirect": "/.auth/login/aad"
-        },
-        {
-            "route": "/login/github",
-            "redirect": "/.auth/login/github"
-        },
-        {
-            "route": "/login/google",
-            "redirect": "/.auth/login/google"
-        }
-    ],
-    "responseOverrides": {
-        "401": {
-            "statusCode": 302,
-            "redirect": "/sso?post_login_redirect_uri=.referrer"
-        }
+  "trailingSlash": "always",
+  "routes": [
+    {
+      "route": "/registro/*",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/fotos/*",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/en/registro/*",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/en/fotos/*",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/fr/registro/*",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/fr/fotos/*",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/admin/*",
+      "allowedRoles": [
+        "admin"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/logout",
+      "redirect": "/.auth/logout"
+    },
+    {
+      "route": "/login",
+      "redirect": "/.auth/login/aad"
+    },
+    {
+      "route": "/login/github",
+      "redirect": "/.auth/login/github"
+    },
+    {
+      "route": "/login/google",
+      "redirect": "/.auth/login/google"
     }
+  ],
+  "responseOverrides": {
+    "401": {
+      "statusCode": 302,
+      "redirect": "/sso?post_login_redirect_uri=.referrer"
+    }
+  }
 }
