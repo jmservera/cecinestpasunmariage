@@ -1,4 +1,3 @@
-import $ from "jquery";
 import { hideLoading, showLoading } from "./loading";
 
 async function gallery(page: number = 1): Promise<void> {

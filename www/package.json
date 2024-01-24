@@ -2,13 +2,14 @@
   "scripts": {
     "start": "bash start",
     "clean": "rm -rf public",
-    "build": "npm run clean && hugo --gc --minify"
+    "build": "npm run clean && hugo --gc --minify",
+    "test": "prettier --check . ",
+    "format": "prettier --write . "
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.6",
-    "@types/jquery": "^3.5.29"
-  },
-  "dependencies": {
-    "jquery": "^3.5.1"
+    "@azure/static-web-apps-cli": "^0.2.1",
+    "@types/jquery": "^3.5.29",
+    "prettier": "^2.8.7",
+    "prettier-plugin-go-template": "0.0.13"
   }
 }
