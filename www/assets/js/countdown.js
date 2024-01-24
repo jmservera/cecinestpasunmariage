@@ -22,4 +22,4 @@ function runCountdown(future) {
 
 // disable minification for the following function
 // todo: use proper modules
-window.runCountdown = runCountdown;
+export default runCountdown;
