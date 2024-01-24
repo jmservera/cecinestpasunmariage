@@ -1,7 +1,7 @@
 {
   "routes": [
     {
-      "route": "/registro/*",
+      "route": "/registro",
       "allowedRoles": [
         "authenticated"
       ],
@@ -10,7 +10,7 @@
       }
     },
     {
-      "route": "/fotos/*",
+      "route": "/fotos",
       "allowedRoles": [
         "authenticated"
       ],
@@ -19,7 +19,7 @@
       }
     },
     {
-      "route": "/en/registro/*",
+      "route": "/en/registro",
       "allowedRoles": [
         "authenticated"
       ],
@@ -28,7 +28,7 @@
       }
     },
     {
-      "route": "/en/fotos/*",
+      "route": "/en/fotos",
       "allowedRoles": [
         "authenticated"
       ],
@@ -37,7 +37,7 @@
       }
     },
     {
-      "route": "/fr/registro/*",
+      "route": "/fr/registro",
       "allowedRoles": [
         "authenticated"
       ],
@@ -46,7 +46,7 @@
       }
     },
     {
-      "route": "/fr/fotos/*",
+      "route": "/fr/fotos",
       "allowedRoles": [
         "authenticated"
       ],
