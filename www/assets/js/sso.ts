@@ -1,6 +1,6 @@
 let search: string = window.location.search;
 if (search.endsWith(".referrer")) {
-  console.log("Referrer replace failed, redirecting to main page");
+  console.log("Referrer replace failed, getting from local storage");
   const url: string = localStorage.getItem("lastPage");
   if (url) {
     search = search.replace(".referrer", url);
