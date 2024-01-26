@@ -11,5 +11,5 @@ if (search.endsWith(".referrer")) {
 }
 var links = document.querySelectorAll<HTMLLinkElement>("ul#sso li a");
 links.forEach((link) => {
-  link.href = link.href + window.location.search;
+  link.href = link.href + search;
 });
