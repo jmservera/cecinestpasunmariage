@@ -1,2 +1,2 @@
 #/bin/bash
-cd www && ./start
+cd www && ./start "$@"

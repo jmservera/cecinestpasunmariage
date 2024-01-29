@@ -1,6 +1,18 @@
 {
   "routes": [
     {
+      "route": "/data-api/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/api/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
       "route": "/registro",
       "allowedRoles": [
         "authenticated"
