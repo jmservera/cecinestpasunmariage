@@ -4,7 +4,6 @@
 import { UserInput, runQueryAll, queries } from "./queries";
 import { hideLoading, showLoading } from "./loading";
 
-
 (async () => {
   showLoading();
   try {
