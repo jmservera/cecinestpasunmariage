@@ -6,11 +6,11 @@
 
 version: 2
 updates:
- - package-ecosystem: "devcontainers"
-   directory: "/"
-   schedule:
-     interval: weekly
- - package-ecosystem: "gomod" # See documentation for possible values
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: weekly
+  - package-ecosystem: "gomod" # See documentation for possible values
     directory: "/www/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -26,7 +26,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
-   - package-ecosystem: "nuget"
+  - package-ecosystem: "nuget"
     directory: "/functions" #functions.csproj
     schedule:
       interval: "weekly"
