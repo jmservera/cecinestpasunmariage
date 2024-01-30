@@ -1,7 +1,5 @@
-/// <reference lib="es2015" />
-/// <reference lib="dom" />
-
-import { UserInput, runQueryAll, queries } from "./queries";
+import { getAllUsersGql } from "./queries";
+import { UserInput, runQueryAll } from "./userQueries";
 import { hideLoading, showLoading } from "./loading";
 
 (async () => {
@@ -11,7 +9,7 @@ import { hideLoading, showLoading } from "./loading";
     if (!guestDiv) return console.error("guestList not found");
 
     guestDiv.textContent = "Loading...";
-    let userList: UserInput[] = await runQueryAll(queries.getAllUsersGql);
+    let userList: UserInput[] = await runQueryAll(getAllUsersGql);
     guestDiv.textContent = "";
 
     let guestNode: HTMLTableElement = document.createElement("table");
