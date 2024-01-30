@@ -1,76 +1,95 @@
 {
+  "trailingSlash": "always",
   "routes": [
     {
       "route": "/data-api/*",
-      "allowedRoles": ["authenticated"]
+      "allowedRoles": [
+        "authenticated"
+      ]
     },
     {
       "route": "/api/*",
-      "allowedRoles": ["authenticated"]
+      "allowedRoles": [
+        "authenticated"
+      ]
     },
     {
-      "route": "/registro",
-      "allowedRoles": ["authenticated"],
+      "route": "/registro/",
+      "allowedRoles": [
+        "authenticated"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
-      "route": "/fotos",
-      "allowedRoles": ["authenticated"],
+      "route": "/fotos/",
+      "allowedRoles": [
+        "authenticated"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
-      "route": "/en/registro",
-      "allowedRoles": ["authenticated"],
+      "route": "/en/registro/",
+      "allowedRoles": [
+        "authenticated"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
-      "route": "/en/fotos",
-      "allowedRoles": ["authenticated"],
+      "route": "/en/fotos/",
+      "allowedRoles": [
+        "authenticated"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
-      "route": "/fr/registro",
-      "allowedRoles": ["authenticated"],
+      "route": "/fr/registro/",
+      "allowedRoles": [
+        "authenticated"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
-      "route": "/fr/fotos",
-      "allowedRoles": ["authenticated"],
+      "route": "/fr/fotos/",
+      "allowedRoles": [
+        "authenticated"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/admin/*",
-      "allowedRoles": ["admin"],
+      "allowedRoles": [
+        "admin"
+      ],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
-      "route": "/logout",
+      "route": "/logout/",
       "redirect": "/.auth/logout"
     },
     {
-      "route": "/login",
+      "route": "/login/",
       "redirect": "/.auth/login/aad"
     },
     {
-      "route": "/login/github",
+      "route": "/login/github/",
       "redirect": "/.auth/login/github"
     },
     {
-      "route": "/login/google",
+      "route": "/login/google/",
       "redirect": "/.auth/login/google"
     }
   ],

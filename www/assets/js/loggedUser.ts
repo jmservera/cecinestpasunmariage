@@ -1,7 +1,6 @@
 import { getUserInfo } from "./userInfo";
 
-(async () => {
-  const info = await getUserInfo();
+getUserInfo().then(info => {
   const hello = document.querySelector<HTMLSpanElement>(
     "div#loggedUser span#hello"
   );
@@ -25,4 +24,14 @@ import { getUserInfo } from "./userInfo";
     logout.style.display = "none";
     login.style.display = "";
   }
-})();
+});
+
+window.onbeforeunload = function () {
+  const active = document.activeElement as HTMLAnchorElement;
+  if (active.href) {
+    localStorage.setItem("lastPage", active.href);
+  }
+  else {
+    localStorage.setItem("lastPage", window.location.href);
+  }
+};
