@@ -35,44 +35,54 @@ Para viajar desde otro destino tendrás llegar a Madrid o Barcelona en avión y 
 
 ### Llegar a "La Clave"
 
-Dirección: Carretera Otura a Dílar s/n, 18152 Dílar, Granada
+Dirección: Carretera Otura a Dílar s/n, 18152 Dílar, Granada <br />
+
+Tendremos un autobús que saldrá desde el **Hotel Abades Nevada Palace** a las 12.30 para llevar al sitio de la celebración a todo el que quiera usarlo (por favor, confirma en el registro si estás interesado para contar el número de plazas que necesitamos). <br />
+
 
 #### Desde la estación de tren
 
 ##### En Uber/Taxi
 
-TBD
+En Granada puedes pedir un [Uber](https://www.uber.com/) desde su aplicación. <br />
+O un taxi en [FreeNow](https://www.free-now.com/). <br />
+Desde la estación de tren al hotel costará aprox. 20€.
 
 ##### En trasporte público
 
-TBD
+Desde la estación de tren, hasta el hotel hay tanto tranvía como autobús. <br />
+Puedes consultar horarios en [Google Maps]
+(https://www.google.es/maps/dir/Granada+Train+Station,+Av.+de+Andaluces,+S%2FN,+Beiro,+18014+Granada,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1674773,-3.6216068,14z/data=!4m14!4m13!1m5!1m1!1s0xd71fcee883f1ced:0xf7fbba9c759097f0!2m2!1d-3.6088877!2d37.1840129!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu)
+
+El viaje cuesta menos de 2€. <br />
+El tranvia tarda 17 minunos y pasa cada 10 minutos. Hay que caminar 5 minutos. <br />
+El autobús tarda 38 minunos y pasa cada 10 minutos. Hay que caminar 15 minutos. <br />
+
 
 #### Desde el aeropuerto
 
 ##### En Uber/Taxi
 
-TBD
+En Granada puedes pedir un [Uber](https://www.uber.com/) desde su aplicación. <br />
+O un taxi en [FreeNow](https://www.free-now.com/). <br />
+Desde la estación de tren al hotel costará aprox. 100€.
 
 ##### En trasporte público
 
-TBD
+Hay un autobús desde el aeropuerto que sale 30 minutos después de la llegada de cada vuelo. Cuesta 3€. 
+[Autobús Ruta 245](https://www.granadadirect.com/transporte/autobuses-aeropuerto-granada/). 
+Tarda aprox. 45 minutos en llegar al centro de Granada. <br />
+
+Baja en 9 paradas, en "Acera de Darro" (frente al Corte Inglés). <br />
+
+Desde ahí coger la línea 8 (frente al Corte Inglés) y esperar 11 paradas. Baja en "el Palacio de Deportes". <br />
+
+Consulta el trayecto también en [Google Maps](https://www.google.es/maps/dir/Aeropuerto+de+F.G.L.+Granada-Ja%C3%A9n+(GRX),+A-4075,+Chauchina,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1750637,-3.7680021,12z/am=t/data=!4m14!4m13!1m5!1m1!1s0xd7201ae692e9a55:0xcbd3ce42b1495573!2m2!1d-3.7779577!2d37.1877446!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu)
+
 
 ### Llegar al hotel
 
-Recomendación de hoteles.
+**Desde el sitio de la celebración**: Tenemos previstas dos horas de vuelta: un poco después de empezar la barra libre (aprox. a las 22h) y a la hora de cierre de la barra libre (aprox. 3 am). <br />
 
-- **Hotel Abades Nevada Palace** 4\* <br />
-  https://www.abadeshoteles.com/es/hotel-abades-nevada-palace-en-granada/ <br />
-  A 15 min en taxi del sitio de la celebración. Y a 10 min en taxi del centro de Granada. <br />
-  Aprox. 100€ la noche.<br />
-
-- **Alhambra Palace Hotel** 5\*<br />
-  https://www.hotelalhambrapalace.com/es <br />
-  Emblemático, con vistas a la Alhambra. <br />
-  A 25 min en coche al sitio de la celebración. A 15 min a pie del centro de Granada.<br />
-  Aprox. 450 € la noche. <br />
-
-- **Barceló Carmen Granada**. 4\* <br />
-  https://www.barcelo.com/es-es/barcelo-carmen-granada <br />
-  A 20 min en coche del lugar de la celebración. ¡Muy céntrico! <br />
-  Aprox 100€ la noche.
+Igualmente, el hotel y el sitio de la celebración están muy cerca. <br />
+Si te cansas en cualquier momento puedes llamar un taxi/uber por unos 20€.
