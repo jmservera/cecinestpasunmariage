@@ -1,7 +1,19 @@
 {
   "routes": [
     {
-      "route": "/registro",
+      "route": "/data-api/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/api/*",
+      "allowedRoles": [
+        "authenticated"
+      ]
+    },
+    {
+      "route": "/registro/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -10,7 +22,7 @@
       }
     },
     {
-      "route": "/fotos",
+      "route": "/fotos/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -19,7 +31,7 @@
       }
     },
     {
-      "route": "/en/registro",
+      "route": "/en/registro/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -28,7 +40,7 @@
       }
     },
     {
-      "route": "/en/fotos",
+      "route": "/en/fotos/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -37,7 +49,7 @@
       }
     },
     {
-      "route": "/fr/registro",
+      "route": "/fr/registro/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -46,7 +58,7 @@
       }
     },
     {
-      "route": "/fr/fotos",
+      "route": "/fr/fotos/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -64,19 +76,19 @@
       }
     },
     {
-      "route": "/logout",
+      "route": "/logout/",
       "redirect": "/.auth/logout"
     },
     {
-      "route": "/login",
+      "route": "/login/",
       "redirect": "/.auth/login/aad"
     },
     {
-      "route": "/login/github",
+      "route": "/login/github/",
       "redirect": "/.auth/login/github"
     },
     {
-      "route": "/login/google",
+      "route": "/login/google/",
       "redirect": "/.auth/login/google"
     }
   ],

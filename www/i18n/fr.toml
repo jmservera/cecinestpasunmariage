@@ -16,3 +16,9 @@ other="Nom"
 other="Courriel"
 [NoOfGuests]
 other="Veuillez indiquer le nombre de personnes à inscrire"
+[NoOfChildren]
+other="Nombre d'enfants (entre 2 et 11 ans)"
+[Alergies]
+other="Des allergies dont nous devrions être au courant ?"
+[Comments]
+other="Tout autre commentaire"

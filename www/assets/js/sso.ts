@@ -4,8 +4,7 @@ if (search.endsWith(".referrer")) {
   const url: string = localStorage.getItem("lastPage");
   if (url && url !== undefined) {
     search = search.replace(".referrer", url);
-  }
-  else {
+  } else {
     search = "";
   }
 }

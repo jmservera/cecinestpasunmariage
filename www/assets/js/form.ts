@@ -1,7 +1,5 @@
-/// <reference lib="es2015" />
-/// <reference lib="dom" />
-
-import { runQuery, QueryVariables, queries, UserInput } from "./queries";
+import { getByIdGql, updateGql, createGql } from "./queries";
+import { runQuery, type QueryVariables, UserInput } from "./userQueries";
 import { getUserInfo } from "./userInfo";
 import { showLoading, hideLoading } from "./loading";
 
@@ -46,16 +44,16 @@ async function createOrUpdate(): Promise<void> {
       item: user,
     };
 
-    const existingUser = await runQuery(queries.getByIdGql, data);
+    const existingUser = await runQuery(getByIdGql, data);
 
     var response: UserInput;
     if (existingUser) {
       data.item.updatedAt = new Date().toISOString();
-      response = await runQuery(queries.updateGql, data);
+      response = await runQuery(updateGql, data);
     } else {
       data.item.createdAt = new Date().toISOString();
       data.item.updatedAt = data.item.createdAt;
-      response = await runQuery(queries.createGql, data);
+      response = await runQuery(createGql, data);
     }
     console.table(response);
     const redirectInput = document.querySelector<HTMLInputElement>(
@@ -105,7 +103,7 @@ async function createOrUpdate(): Promise<void> {
         id.value = info.userId;
       }
 
-      const user = await runQuery(queries.getByIdGql, { id: info.userId });
+      const user = await runQuery(getByIdGql, { id: info.userId });
       console.log(user);
       if (user && user.id) {
         Object.keys(user).forEach((key) => {
@@ -144,7 +142,7 @@ async function createOrUpdate(): Promise<void> {
     if (dataDiv) {
       const table: HTMLTableElement = document.createElement("table");
       const info = await getUserInfo();
-      const user = await runQuery(queries.getByIdGql, { id: info.userId });
+      const user = await runQuery(getByIdGql, { id: info.userId });
       Object.keys(user).forEach((key) => {
         if (internalFields.includes(key)) {
           return;

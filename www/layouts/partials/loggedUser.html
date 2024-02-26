@@ -2,9 +2,9 @@
   <span id="hello" style="display: none"
     >Hello, <span id="username"></span>!</span
   >
-  <a id="login" style="display: none" href="/sso">Login</a>
-  <a id="logout" style="display: none" href="/logout">Logout</a>
-  <a id="delete" style="display: none" href="/unregister">Unregister</a>
+  <a id="login" style="display: none" href="/sso/">Login</a>
+  <a id="logout" style="display: none" href="/logout/">Logout</a>
+  <a id="delete" style="display: none" href="/unregister/">Unregister</a>
 </div>
 {{ with resources.Get "js/loggedUser.ts" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build}}
