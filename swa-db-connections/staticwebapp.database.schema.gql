@@ -19,6 +19,7 @@ type User @model {
   children: Int
   alergies: String
   comments: String
+  bus: Boolean
   createdAt: String
   updatedAt: String
 }

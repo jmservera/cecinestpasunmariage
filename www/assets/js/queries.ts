@@ -1,5 +1,5 @@
 const usr: string =
-    "{\nid\norigin\nemail\nname\nsurname\npartnerName\npax\nchildren\nalergies\ncomments\ncreatedAt\nupdatedAt\n}";
+    "{\nid\norigin\nemail\nname\nsurname\npartnerName\npax\nchildren\nalergies\ncomments\nbus\ncreatedAt\nupdatedAt\n}";
 
 export const getByIdGql = "query getById($id: ID!) {\nuser_by_pk(id: $id) " + usr + "\n}";
 export const createGql = "mutation create($item: CreateUserInput!) {\ncreateUser(item: $item) " + usr + "\n}";
