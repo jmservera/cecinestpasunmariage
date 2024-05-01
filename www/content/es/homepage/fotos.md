@@ -1,6 +1,6 @@
 ---
 title: "Fotos"
-weight: 7
+weight: 8
 detailed_page_path: /fotos
 header_menu: true
 ---
