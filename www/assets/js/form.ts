@@ -16,7 +16,12 @@ function buildItem(): UserInput {
   let user: UserInput = new UserInput();
   const form = document.querySelector(`form[id="${formId}"]`);
   var values = Object.values(form).reduce((obj, field) => {
-    obj[field.name] = field.value;
+    if(field.type==="checkbox"){
+      obj[field.name] = field.checked;
+    }
+    else{
+      obj[field.name] = field.value;
+    }
     return obj;
   }, {});
 
@@ -26,7 +31,8 @@ function buildItem(): UserInput {
       console.log(n);
       if (key === "pax" || key === "children") {
         user[key] = parseInt(values[key]);
-      } else user[key] = values[key];
+      }
+      else user[key] = values[key];
     }
   });
 
@@ -111,7 +117,12 @@ async function createOrUpdate(): Promise<void> {
             `input[name="${key}"]`
           );
           if (inputElement) {
-            inputElement.value = user[key];
+            if(inputElement.type==="checkbox"){
+              inputElement.checked = user[key];
+            }
+            else{
+              inputElement.value = user[key];
+            }
           } else {
             const textArea =
               registrationForm.querySelector<HTMLTextAreaElement>(
