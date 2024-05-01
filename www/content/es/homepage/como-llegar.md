@@ -51,8 +51,7 @@ Desde la estación de tren al hotel costará aprox. 20€.
 ##### En trasporte público
 
 Desde la estación de tren, hasta el hotel hay tanto tranvía como autobús. <br />
-Puedes consultar horarios en [Google Maps]
-(https://www.google.es/maps/dir/Granada+Train+Station,+Av.+de+Andaluces,+S%2FN,+Beiro,+18014+Granada,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1674773,-3.6216068,14z/data=!4m14!4m13!1m5!1m1!1s0xd71fcee883f1ced:0xf7fbba9c759097f0!2m2!1d-3.6088877!2d37.1840129!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu)
+Puedes consultar horarios en [Google Maps](https://www.google.es/maps/dir/Granada+Train+Station,+Av.+de+Andaluces,+S%2FN,+Beiro,+18014+Granada,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1674773,-3.6216068,14z/data=!4m14!4m13!1m5!1m1!1s0xd71fcee883f1ced:0xf7fbba9c759097f0!2m2!1d-3.6088877!2d37.1840129!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu)
 
 El viaje cuesta menos de 2€. <br />
 El tranvia tarda 17 minunos y pasa cada 10 minutos. Hay que caminar 5 minutos. <br />
