@@ -1,0 +1,15 @@
+---
+title: "¡No nos casamos!"
+weight: 3
+header_menu: true
+---
+
+Querido amigo o familar, nos complace anunciar que estamos organizando una fiesta para celebrar un **momento especial** en nuestras vidas. 
+
+Hace unos años decidimos que queríamos estar **toda la vida juntos** y queremos hacer una **gran fiesta** para celebrarlo. Estamos muy emocionados de compartir este día con todas las **personas** que son **importantes en nuestras vidas**. Si has llegado aquí a través de un QR, tú eres una de ellas ;)
+
+La fecha de la fiesta es el **3 de mayo de 2025** y lo celebraremos en la **Granada** natal de Isa, en un fantástico lugar llamado "Jardines La Clave" (más abajo tienes más información) 
+
+Si eres de fuera y quieres venir a pasar el fin de semana, o visitar Granada unos días días más, hemos preparado una sección sobre qué cosas no puedes perderte en la ciudad: [Más sobre Granada](granada).
+
+Esperamos que puedas venir a celebrar con nosotros este momento tan especial.
