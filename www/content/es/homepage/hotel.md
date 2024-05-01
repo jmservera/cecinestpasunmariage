@@ -4,7 +4,7 @@ weight: 5
 header_menu: true
 ---
 
-Nuestra recomendaciñon:
+Nuestra recomendación:
 
 - **Hotel Abades Nevada Palace** 4\* <br />
   Nosotros y nuestra familia (de fuera) nos alojaremos aquí la noche de antes y la después. <br />
