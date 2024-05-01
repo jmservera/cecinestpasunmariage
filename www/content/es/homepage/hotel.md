@@ -4,8 +4,6 @@ weight: 5
 header_menu: true
 ---
 
-### Hotel
-
 Recomendación de hoteles.
 
 - **Hotel Abades Nevada Palace** 4\* <br />
