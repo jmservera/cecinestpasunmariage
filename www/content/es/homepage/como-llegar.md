@@ -37,7 +37,7 @@ Para viajar desde otro destino tendrás llegar a Madrid o Barcelona en avión y 
 
 Dirección: Carretera Otura a Dílar s/n, 18152 Dílar, Granada <br />
 
-Tendremos un autobús que saldrá desde el **Hotel Abades Nevada Palace** a las 12.30 para llevar al sitio de la celebración a todo el que quiera usarlo (por favor, confirma en el registro si estás interesado para contar el número de plazas que necesitamos). <br />
+Tendremos un autobús que saldrá desde el [**Hotel Abades Nevada Palace**](https://www.abadeshoteles.com/es/hotel-abades-nevada-palace-in-granada/) a las 12.30 para llevar al sitio de la celebración a todo el que quiera usarlo (por favor, confirma en el registro si estás interesado para contar el número de plazas que necesitamos). <br />
 
 
 #### Desde la estación de tren
