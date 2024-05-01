@@ -10,7 +10,7 @@ defaultContentLanguage = 'es'
 defaultContentLanguageInSubdir = false
 [languages]
   [languages.es]   
-    title = 'Esto no es una boda'
+    title = 'La no boda de Isa y Juanma'
     weight = 1
     contentDir = 'content/es'
     languageCode = 'es-ES'

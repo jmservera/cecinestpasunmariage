@@ -21,8 +21,8 @@
   display: inline;
   float: left;
   position: absolute;
-  top: 45%;
-  left: 47%;
+  top: 48%;
+  left: 48%;
   font-size: calc(1vw + 1vh + 1vmin);
 }
 .countdown #hours {
@@ -33,7 +33,7 @@
   display: inline;
   float: left;
   position: absolute;
-  top: 51%;
-  left: 47%;
+  top: 54%;
+  left: 48%;
   font-size: calc(1vw + 1vh + 1vmin);
 }
