@@ -20,4 +20,4 @@ Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero
 Si quieres saber más sobre el menú, [haz click aquí](menu)
 
 **Animación para los niños** <br />
-A disfrutar, grandes y peques! :)
+Para que tanto grandes como pequeños puedan disfrutar de la fiesta, tendremos un grupo especializado en animación infantil. A disfrutar, grandes y peques! :)
