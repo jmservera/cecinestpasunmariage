@@ -1,5 +1,5 @@
 ---
-title: "The Menu"
+title: "Menu"
 ---
 
 ## Starters

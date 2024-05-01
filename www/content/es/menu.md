@@ -2,8 +2,6 @@
 title: "Menú"
 ---
 
-# Menú
-
 ## Entrantes / Cóctel
 
 (Todavía tenemos que hacer pruebas y decidirlo, pero estas son algunas ideas)
