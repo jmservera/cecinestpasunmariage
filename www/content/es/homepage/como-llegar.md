@@ -81,7 +81,7 @@ Consulta el trayecto también en [Google Maps](https://www.google.es/maps/dir/Ae
 
 ### Llegar al hotel
 
-**Desde el sitio de la celebración**: Tenemos previstas dos horas de vuelta: un poco después de empezar la barra libre (aprox. a las 22h) y a la hora de cierre de la barra libre (aprox. 3 am). <br />
+**Desde el sitio de la celebración**: Tenemos previstas dos horas de vuelta: un poco después de empezar la barra libre (aprox. a las 17h) y a la hora de cierre de la barra libre (aprox. 20h). <br />
 
 Igualmente, el hotel y el sitio de la celebración están muy cerca. <br />
 Si te cansas en cualquier momento puedes llamar un taxi/uber por unos 20€.
