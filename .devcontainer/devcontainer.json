@@ -32,7 +32,8 @@
 				"ms-azuretools.vscode-azurefunctions",
 				"ms-azuretools.vscode-azurestaticwebapps",
 				"esbenp.prettier-vscode",
-				"ms-dotnettools.csdevkit"
+				"ms-dotnettools.csdevkit",
+				"GitHub.copilot"
 			]
 		}
 	}
