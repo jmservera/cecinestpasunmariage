@@ -11,7 +11,12 @@ header_menu: true
 
 ![Jardines la clave](/images/jardines3.jpeg)
 
-**Dress code**: "Casual Cóctel" <br/>
+**Dress code**: Llamémosle "Casual Cóctel" <br/>
+Vamos, una fiesta informal o fiesta de cóctel.  <br/>
+No hacen falta corbata, ni trajes, ni tacones de aguja. <br />
+
+![Dresscode](/images/dresscode.jpeg)
+
 Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped. <br>
 ¡Lo más importante para nosotros es que tú estés a gusto! <br />
 (¡Puedes dejar los tacones y la corbata en casa!)
