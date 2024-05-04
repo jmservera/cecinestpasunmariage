@@ -9,6 +9,8 @@ header_menu: true
 
 **Sitio**: [Jardines la clave](https://maps.app.goo.gl/234ycG7ryKviRH7V6)
 
+![Jardines la clave](../../../assets/images/jardines3.jpeg)
+
 **Dress code**: "Casual Cóctel" <br/>
 Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped. <br>
 ¡Lo más importante para nosotros es que tú estés a gusto! <br />
