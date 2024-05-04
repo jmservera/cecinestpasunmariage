@@ -11,6 +11,10 @@ header_menu: true
 
 ![Jardines la clave](/images/jardines3.jpeg)
 
+En Granada:
+
+![Dresscode](/assets/images/granada.jpeg)
+
 **Código de vestimenta**: Llamémosle "Casual Cóctel" <br/>
 Vamos, una fiesta informal o fiesta de cóctel.  <br/>
 No hacen falta corbata, ni trajes, ni tacones de aguja. <br />
