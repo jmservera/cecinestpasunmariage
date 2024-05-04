@@ -13,15 +13,13 @@ header_menu: true
 
 En Granada:
 
-![Dresscode](/assets/images/granada.jpeg)
+![Dresscode](/images/granada.jpeg)
 
 **Código de vestimenta**: Llamémosle "Casual Cóctel" <br/>
 Vamos, una fiesta informal o fiesta de cóctel.  <br/>
 No hacen falta corbata, ni trajes, ni tacones de aguja. <br />
 
-![Dresscode](/images/dresscode.jpeg)
-![Dresscode](/assets/images/dresscode.jpeg)
-
+![Dresscode](/images/dresscode.jpg)
 
 Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped. <br>
 ¡Lo más importante para nosotros es que tú estés a gusto! <br />
