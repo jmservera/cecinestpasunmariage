@@ -11,6 +11,7 @@ export class UserInput {
   alergies?: string;
   comments?: string;
   bus?: boolean;
+  consphoto?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
