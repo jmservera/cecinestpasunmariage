@@ -12,3 +12,5 @@ Nuestra recomendación:
   https://www.abadeshoteles.com/es/hotel-abades-nevada-palace-en-granada/ <br />
   A 15 min en taxi del sitio de la celebración. Y a 10 min en taxi del centro de Granada. <br />
   Aprox. 100€ la noche.<br />
+
+![Hotel Abades Nevada Palace](/images/hotel.jpeg)
