@@ -1,7 +1,7 @@
 ---
-title: "The more the merrier"
+title: "Join us!"
 ---
 
 Register to the party and we will send you a confirmation email.
 
-{{< form 1 Registrarse "/en/registrado" >}}
+{{< form 1 Register "/en/registrado" >}}

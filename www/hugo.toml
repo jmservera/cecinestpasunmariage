@@ -20,7 +20,7 @@ defaultContentLanguageInSubdir = false
       subtitle = 'Una fiesta loca'
   [languages.en]
     contentDir = 'content/en'
-    title = 'This is not a wedding'
+    title = 'The no wedding of Isa and Juanma'
     languageCode = 'en-US'
     languageDirection = 'ltr'
     languageName = 'English'

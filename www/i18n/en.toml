@@ -17,7 +17,7 @@ other ="Partner Name (if you bring someone)"
 [Email]
 other="Email"
 [NoOfGuests]
-other="Number of guests (including you)"
+other="Number of adults"
 [NoOfChildren]
 other="Number of children (between 2 and 11)"
 [Alergies]

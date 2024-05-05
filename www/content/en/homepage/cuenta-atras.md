@@ -1,6 +1,6 @@
 ---
-title: "Countdown to the party"
-weight: 3
+title: "Countdown"
+weight: 2
 header_menu: false
 ---
 
