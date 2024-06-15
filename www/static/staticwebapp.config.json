@@ -1,6 +1,10 @@
 {
   "routes": [
     {
+      "route": "/api/Cecinestpasunbot",
+      "allowedRoles": ["anonymous"]
+    },
+    {
       "route": "/data-api/*",
       "allowedRoles": [
         "authenticated"
