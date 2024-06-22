@@ -1,6 +1,6 @@
 ---
 title: "More about Granada"
-detailed_page_path: /granada
+detailed_page_path: /en/granada
 header_menu: true
 ---
 
