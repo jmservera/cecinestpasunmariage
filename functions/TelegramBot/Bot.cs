@@ -86,14 +86,14 @@ namespace functions.TelegramBot
             return;
         }
 
-        private async Task TelegramPictureToBlob(string containerName, Telegram.Bot.Types.File file, string uid, string username, CancellationToken cancellationToken)
+        private async Task TelegramPictureToBlob(string containerName, Telegram.Bot.Types.File file, string uid, string username, CancellationToken cancellationToken, string mimeType = "image/jpeg")
         {
             if (file.FilePath != null)
             {
                 using MemoryStream stream = new();
                 await _client.DownloadFileAsync(file.FilePath, stream, cancellationToken: cancellationToken);
                 stream.Seek(0, SeekOrigin.Begin);
-                await SaveToBlob(containerName, $"{username}{uid}{Path.GetExtension(file.FilePath)}", stream, cancellationToken);
+                await SaveToBlob(containerName, $"{username}{uid}{Path.GetExtension(file.FilePath)}", stream, cancellationToken, mimeType);
             }
         }
 
@@ -113,7 +113,7 @@ namespace functions.TelegramBot
             _logger.LogInformation("{FileName} Saved", fileName);
         }
 
-        async Task SendToStorage(Message message, CancellationToken cancellationToken)
+        async Task SendPhotoToStorage(Message message, CancellationToken cancellationToken)
         {
             if (message.Photo is { } photos)
             {
@@ -131,10 +131,43 @@ namespace functions.TelegramBot
                 }
                 if (photos.Last() is { } p)
                 {
-                    using MemoryStream stream = new();
                     Telegram.Bot.Types.File file = await _client.GetFileAsync(p.FileId, cancellationToken: cancellationToken);
                     await TelegramPictureToBlob("pics", file, uid, username, cancellationToken);
                 }
+            }
+        }
+
+
+        async Task SendDocumentToStorage(Message message, CancellationToken cancellationToken)
+        {
+            if (message.Document is { } doc)
+            {
+                switch (doc.MimeType)
+                {
+                    case "image/jpeg":
+                        break;
+                    case "image/png":
+                        break;
+                    case "image/gif":
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Invalid file type {message.Document?.MimeType}");
+                }
+                string uid = "";
+                string username = HttpUtility.HtmlEncode(message.From?.Username ?? "");
+
+                if (!string.IsNullOrEmpty(username)) username = $"{username}/";
+
+                if (doc.Thumbnail is { } thumbnail)
+                {
+                    Telegram.Bot.Types.File thumbFile = await _client.GetFileAsync(thumbnail.FileId, cancellationToken: cancellationToken);
+                    uid = thumbFile.FileUniqueId;
+
+                    await TelegramPictureToBlob("thumbnails", thumbFile, uid, username, cancellationToken, doc.MimeType);
+                }
+
+                Telegram.Bot.Types.File file = await _client.GetFileAsync(doc.FileId, cancellationToken: cancellationToken);
+                await TelegramPictureToBlob("pics", file, uid, username, cancellationToken, doc.MimeType);
             }
         }
 
@@ -166,19 +199,25 @@ namespace functions.TelegramBot
                     document.FileSize,
                     document.MimeType,
                     message.Chat.Id);
+                try
+                {
+                    await SendDocumentToStorage(message, cancellationToken);
 
-                //using MemoryStream stream = new();
-                //                    Telegram.Bot.Types.File file = await botClient.GetFileAsync(document.FileId, cancellationToken: cancellationToken);
-
-                // if (file.FilePath != null)
-                // {
-                //     await botClient.DownloadFileAsync(file.FilePath, stream, cancellationToken: cancellationToken);
-                // }
-                await botClient.SendTextMessageAsync(
-                    chatId: message.Chat.Id,
-                    parseMode: ParseMode.MarkdownV2,
-                    text: _localizer.GetString("PictureNotAdded"),
-                    cancellationToken: cancellationToken);
+                    await botClient.SendTextMessageAsync(
+                        chatId: message.Chat.Id,
+                        parseMode: ParseMode.MarkdownV2,
+                        text: _localizer.GetString("PictureAdded"),
+                        cancellationToken: cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error sending to storage");
+                    await botClient.SendTextMessageAsync(
+                        chatId: message.Chat.Id,
+                        parseMode: ParseMode.MarkdownV2,
+                        text: _localizer.GetString("PictureNotAdded"),
+                        cancellationToken: cancellationToken);
+                }
             }
             if (message.Photo is { } p)
             {
@@ -188,13 +227,13 @@ namespace functions.TelegramBot
                         message.Chat.Id);
                 try
                 {
-                    await SendToStorage(message, cancellationToken);
+                    await SendPhotoToStorage(message, cancellationToken);
 
                     await botClient.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         parseMode: ParseMode.MarkdownV2,
                         text: _localizer.GetString("PictureAdded"),
-                        cancellationToken: cancellationToken);
+                                                            cancellationToken: cancellationToken);
                 }
                 catch (Exception ex)
                 {
