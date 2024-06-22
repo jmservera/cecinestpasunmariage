@@ -1,6 +1,6 @@
 ---
-title: "Apúntate a la fiesta"
-weight: 10
+title: "Apúntate"
+weight: 6
 detailed_page_path: /registro
 header_menu: true
 ---

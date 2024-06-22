@@ -1,23 +1,34 @@
 ---
-title: "Te party is on!"
+title: "The party"
 weight: 4
 header_menu: true
 ---
 
-**Date**: May the 3rd 2025 <br />
-**Time**: 1pm
+**Date**: May 3rd, 2025 <br />
+**Time**: 1:00 p.m.
 
-**The place**: [Jardines la clave](https://maps.app.goo.gl/234ycG7ryKviRH7V6)
+**Site**: [Jardines La Clave](https://maps.app.goo.gl/234ycG7ryKviRH7V6)
 
-**Dress code**: "Casual Cóctel" <br/>
-Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped. <br>
-¡Lo más importante para nostros es que tú estés a gusto! <br />
-(¡Puedes dejar los tacones y la corbata en casa!)
+![Jardines La Clave](/images/jardines3.jpeg)
 
-**Veggie food**. <br />
-Isa es vegetariana y en su concepto de celebración no incluye que se mate a ningún animal para festejar nada. <br />
-Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero no contendrá concarne ni pescado.
-For additional information about the menu… [click here](menu)
+In Granada:
 
-**Entnertainment for Kids (and for not so young people too)** <br />
-A disfrutar, grandes y peques! :)
+![Granada](/images/granada.jpeg)
+
+**Dress Code**: we have called it "Casual Cocktail" <br/>
+So, an informal party, or cocktail party will be OK. <br/>
+You don't need a tie, suits, or stilettos. <br />
+
+![Dresscode](/images/dresscode.jpg)
+
+Take it easy. Keep in mind that the party will be in a place with a garden and lawn. <br>
+The most important thing for us is that you are comfortable! <br />
+(You can leave your heels and tie at home!)
+
+**Vegetarian Menu**. <br />
+As you probably know, Isa is a vegetarian and her concept of celebration does not include killing any animals to celebrate anything. <br />
+Therefore, the food that will be served at the celebration will be delicious, but it will contain neither meat nor fish. <br />
+If you want to know more about the menu, [click here](menu)
+
+**Entertainment for children** <br />
+So that both adults and children can enjoy the party, we will have a group specialized in children's entertainment. With a lot of games, costumes and a Bounce Castle. We all going to enjoy a lot, young and adults! :)

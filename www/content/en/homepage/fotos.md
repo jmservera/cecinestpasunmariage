@@ -1,10 +1,11 @@
 ---
-title: "Pictures"
-weight: 7
-detailed_page_path: /en/fotos
+title: "Pics"
+weight: 8
+detailed_page_path: /fotos
 header_menu: true
 ---
 
-Find [here](/en/fotos) the pictures to the party.
 
-(You need to register to see the pictures)
+Here are the [photos](photos) of the party.
+
+(Remember that to see the photos of the party you have to be registered :)

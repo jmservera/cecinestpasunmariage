@@ -1,8 +1,7 @@
 ---
 title: "More about Granada"
-weight: 6
-detailed_page_path: /en/granada
+detailed_page_path: /granada
 header_menu: true
 ---
 
-Do you want to know more about this marvelous city? Visit the official [Granada](/en/granada) guide.
+If you want to go sightseeing in Granada, [here is some more information](/en/granada).

@@ -1,10 +1,10 @@
 ---
-title: "Register to the party"
-weight: 10
+title: "RSVP"
+weight: 6
 detailed_page_path: /en/registro
 header_menu: true
 ---
 
-You only need to fill the [following form](/en/registro) and we will send you a confirmation email.
+If you want to come to the party, fill out the [next form](/en/registro) and we will send you an email with the confirmation.
 
-Remember to log-in with this same email when you want to check the pictures.
+Remember that to access the photos (both of the photographer and of the guests who share theirs) you will have to register with this same email.

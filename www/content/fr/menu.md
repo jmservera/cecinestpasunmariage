@@ -2,8 +2,6 @@
 title: "Menú"
 ---
 
-# Menú
-
 ## Entrantes / Cóctel
 
 Cositas ricas.

@@ -17,10 +17,14 @@ other ="Partner Name (if you bring someone)"
 [Email]
 other="Email"
 [NoOfGuests]
-other="Number of guests (including you)"
+other="Number of adults"
 [NoOfChildren]
 other="Number of children (between 2 and 11)"
 [Alergies]
 other="Any allergies we should be aware of?"
 [Comments]
 other="Any other comment"
+[Bus]
+other="Will you use the bus for the journey between the hotel and the party?"
+[Photo]
+other="I give my consent for my photos to be published on this website (only the guests will have access to them)"

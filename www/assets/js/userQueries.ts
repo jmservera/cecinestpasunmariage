@@ -10,6 +10,8 @@ export class UserInput {
   partnerName?: string;
   alergies?: string;
   comments?: string;
+  bus?: boolean;
+  consphoto?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }

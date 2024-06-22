@@ -9,15 +9,26 @@ header_menu: true
 
 **Sitio**: [Jardines la clave](https://maps.app.goo.gl/234ycG7ryKviRH7V6)
 
-**Dress code**: "Casual Cóctel" <br/>
+![Jardines la clave](/images/jardines3.jpeg)
+
+En Granada:
+
+![Dresscode](/images/granada.jpeg)
+
+**Código de vestimenta**: Llamémosle "Casual Cóctel" <br/>
+Vamos, una fiesta informal o fiesta de cóctel.  <br/>
+No hacen falta corbata, ni trajes, ni tacones de aguja. <br />
+
+![Dresscode](/images/dresscode.jpg)
+
 Ven cómodo. Ten en cuenta que la fiesta será en una finca con jardín y cesped. <br>
-¡Lo más importante para nostros es que tú estés a gusto! <br />
+¡Lo más importante para nosotros es que tú estés a gusto! <br />
 (¡Puedes dejar los tacones y la corbata en casa!)
 
 **Menú Vegetariano**. <br />
 Isa es vegetariana y en su concepto de celebración no incluye que se mate a ningún animal para festejar nada. <br />
-Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero no contendrá concarne ni pescado. <br />
+Por lo tanto, la comida que se servirá en la celebración será deliciosa, pero no contendrá ni carne ni pescado. <br />
 Si quieres saber más sobre el menú, [haz click aquí](menu)
 
 **Animación para los niños** <br />
-A disfrutar, grandes y peques! :)
+Para que tanto grandes como pequeños puedan disfrutar de la fiesta, tendremos un grupo especializado en animación infantil. A disfrutar, grandes y peques! :)

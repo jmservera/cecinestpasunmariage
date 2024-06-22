@@ -1,6 +1,9 @@
 {
-  "trailingSlash": "always",
   "routes": [
+    {
+      "route": "/api/Cecinestpasunbot",
+      "allowedRoles": ["anonymous"]
+    },
     {
       "route": "/data-api/*",
       "allowedRoles": [
