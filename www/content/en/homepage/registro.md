@@ -5,6 +5,6 @@ detailed_page_path: /en/registro
 header_menu: true
 ---
 
-You only need to fill the [following form](registro) and we will send you a confirmation email.
+You only need to fill the [following form](/en/registro) and we will send you a confirmation email.
 
 Remember to log-in with this same email when you want to check the pictures.
