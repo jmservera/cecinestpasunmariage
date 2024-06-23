@@ -23,3 +23,44 @@ $opts | fingerprint }}
   defer
 ></script>
 {{ end }} {{ end }} {{ end }}
+
+<!-- Add this inside your existing HTML, possibly under the <div id="mygallery"> -->
+  <form id="uploadForm">
+    <input type="file" id="imageInput" name="image" accept="image/*" capture="camera">
+    <button type="submit">Upload Picture</button>
+  </form>
+  
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+      const fileInput = document.getElementById('imageInput');
+      const file = fileInput.files[0]; // Get the file from the input
+  
+      if (file) {
+        const formData = new FormData();
+        formData.append('image', file); // Append the file to the FormData object
+  
+        // Use fetch API to send the file to the server
+        fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json(); // or response.text() if the server responds with text
+          }
+          throw new Error('Upload failed');
+        })
+        .then(result => {
+          console.log('Success:', result);
+          alert('Picture uploaded successfully!');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error uploading picture.');
+        });
+      } else {
+        alert('Please select a file to upload.');
+      }
+    });
+  </script>
