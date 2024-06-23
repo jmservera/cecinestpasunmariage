@@ -90,3 +90,55 @@ async function gallery(page: number = 1): Promise<void> {
 $(async () => {
   await gallery();
 });
+
+function showStatus(message, className) {
+  const statusElement = document.getElementById('uploadStatus');
+  statusElement.textContent = message;
+  statusElement.className = `status ${className}`; // Apply success styling
+  statusElement.style.display = 'block';
+  setTimeout(() => {
+    statusElement.textContent = '';
+    statusElement.className = ''; // Clear the status styling
+    statusElement.style.display = 'none'; // Hide the status element
+  }, 5000);
+}
+document.getElementById('customFileUpload').addEventListener('click', function () {
+  document.getElementById('imageInput').click(); // Trigger the file input click
+});
+document.getElementById('customFileUpload').addEventListener('keydown', function (event) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault(); // Prevent the default action to ensure it works as expected
+    document.getElementById('imageInput').click();
+  }
+});
+document.getElementById('imageInput').addEventListener('change', function (event) {
+  event.preventDefault(); // Prevent the default form submission
+  const file = this.files[0]; // Get the file from the input      
+  if (file) {
+
+    // Use fetch API to send the file to the server
+    fetch('/api/upload', {
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type, // Set the Content-Type header to the file's MIME type
+      },
+      body: file, // Send the file directly as the body of the request
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.text(); // or response.text() if the server responds with text
+        }
+        throw new Error('Upload failed');
+      })
+      .then(result => {
+        console.log('Success:', result);
+        showStatus('✔ Picture uploaded successfully.', 'success');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        showStatus('⚠ Error uploading picture.', 'error');
+      });
+  } else {
+    showStatus('⚠ Please select a file to upload.', 'error');
+  }
+});
