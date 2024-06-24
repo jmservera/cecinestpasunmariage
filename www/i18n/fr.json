@@ -11,6 +11,7 @@
     "Title": "Ceci n'est pas un mariage",
     "Name": "Prénom",
     "Surname": "Nom",
+    "PartnerName": "Nom du partenaire (si vous venez accompagné)",
     "Email": "Courriel",
     "NoOfGuests": "Veuillez indiquer le nombre de personnes à inscrire",
     "NoOfChildren": "Nombre d'enfants (entre 2 et 11 ans)",
