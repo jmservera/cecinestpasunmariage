@@ -106,3 +106,16 @@ absURL }}" />
   }
 
 </style>
+
+<script>
+  window.translations={
+    {{ range $category, $translations := .Site.Data.translations }}
+  {{ $lang := $.Lang }}
+  {{ if eq $category $lang }}
+    {{ range $key, $value := $translations }}
+      "{{ $key }}": "{{ $value }}",
+    {{ end}}
+  {{ end }}
+{{ end }}
+  };
+</script>
