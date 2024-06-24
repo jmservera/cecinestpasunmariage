@@ -5,9 +5,14 @@ title = "Ceci n'est pas un mariage"
 theme = "hugo-scroll"
 copyright = '©️ 2023 Isa & Juanma'
 
-
 defaultContentLanguage = 'es'
 defaultContentLanguageInSubdir = false
+
+[module]
+ [[module.mounts]]
+  source = 'i18n'
+  target = 'data/translations'
+
 [languages]
   [languages.es]   
     title = 'La no boda de Isa y Juanma'
