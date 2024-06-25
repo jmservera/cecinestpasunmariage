@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Localization;
+using functions.Storage;
+using Microsoft.Extensions.Azure;
 
 [assembly: RootNamespace("functions")]
 
@@ -13,6 +15,7 @@ var host = new HostBuilder()
         services.AddLocalization();
 
         services.AddTransient<Bot>();
+        services.AddTransient<IFileUploader, FileUploader>();
 
         isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
         if (isDevelopment)

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Web;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using functions.Storage;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
@@ -22,12 +23,17 @@ namespace functions.TelegramBot
 
         private readonly IStringLocalizer<Bot> _localizer;
 
+        private readonly IFileUploader _uploader;
+
         private CancellationTokenSource? _cts;
 
-        public Bot(ILoggerFactory loggerFactory, IStringLocalizer<Bot> localizer)
+
+
+        public Bot(ILoggerFactory loggerFactory, IStringLocalizer<Bot> localizer, IFileUploader uploader)
         {
             _localizer = localizer;
             _logger = loggerFactory.CreateLogger<Bot>();
+            _uploader = uploader;
             string? token = Environment.GetEnvironmentVariable("TELEGRAM_TOKEN", EnvironmentVariableTarget.Process);
             _client = token == null ? throw new ArgumentNullException(nameof(token)) : new TelegramBotClient(token);
         }
@@ -93,20 +99,8 @@ namespace functions.TelegramBot
             await using var stream = new MemoryStream();
             await _client.DownloadFileAsync(file.FilePath, stream, cancellationToken);
             stream.Seek(0, SeekOrigin.Begin);
-
-            string fileName = $"{username}{file.FileUniqueId}{Path.GetExtension(file.FilePath)}";
-            string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new NoNullAllowedException($"Environment value STORAGE_CONNECTION_STRING cannot be null.");
-            }
-
-            var containerClient = new BlobContainerClient(connectionString, containerName);
-            var blobClient = containerClient.GetBlobClient(fileName);
-
-            _logger.LogInformation("Saving {FileName} to {ContainerName} container with type {MimeType}", fileName, containerName, mimeType);
-            await blobClient.UploadAsync(stream, new BlobHttpHeaders { ContentType = mimeType }, cancellationToken: cancellationToken);
-            _logger.LogInformation("{FileName} Saved", fileName);
+            string fileName = $"{file.FileUniqueId}{Path.GetExtension(file.FilePath)}";
+            await _uploader.UploadAsync(username, fileName, containerName, stream, mimeType, cancellationToken);
         }
 
         private async Task ProcessMessageAttachmentsAsync(Message message, CancellationToken cancellationToken)
@@ -114,7 +108,6 @@ namespace functions.TelegramBot
             try
             {
                 string username = HttpUtility.HtmlEncode(message.From?.Username ?? "");
-                if (!string.IsNullOrEmpty(username)) username += "/";
 
                 if (message.Photo != null)
                 {
@@ -205,9 +198,6 @@ namespace functions.TelegramBot
                 message.Chat.Username,
                 message.Chat.Id
                 );
-
-            string username = HttpUtility.HtmlEncode(message.From?.Username ?? "");
-            if (!string.IsNullOrEmpty(username)) username += "/";
 
             if (message.Document is { } document)
             {
