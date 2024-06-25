@@ -36,6 +36,8 @@ jobs:
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
           HUGO_VERSION: 0.127.0
+      - name: Print Translation Warnings
+        run: echo ::warning $(hugo --printI18nWarnings | grep i18n)
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

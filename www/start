@@ -1,7 +1,7 @@
 #!/bin/bash
 source .env
 
-hugo --printI18nWarnings | grep i18n
+>&2 echo $(hugo --printI18nWarnings | grep i18n)
 
 # check if first parameter is "prod"
 
