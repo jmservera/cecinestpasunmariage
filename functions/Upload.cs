@@ -1,10 +1,12 @@
 using System.Net;
-using System.Security.Claims;
 using functions.Claims;
 using functions.Storage;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
+using SixLabors.ImageSharp.Processing;
 
 namespace functions
 {
@@ -19,10 +21,8 @@ namespace functions
             _uploader = uploader;
         }
 
-        readonly string[] allowedContentTypes = ["image/jpeg", "image/png", "image/gif"];
-
         [Function("Upload")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.User, "post")] HttpRequestData req, FunctionContext context)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req, FunctionContext context)
         {
             var contentType = req.Headers.GetValues("Content-Type").FirstOrDefault();
 
@@ -35,13 +35,6 @@ namespace functions
 
             _logger.LogInformation("Content-Type: {contentType}", contentType);
 
-            if (!allowedContentTypes.Contains(contentType))
-            {
-                var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badRequestResponse.WriteStringAsync("Content-Type not allowed.");
-                return badRequestResponse;
-            }
-
             var username = ClaimsPrincipalParser.Parse(req).Identity?.Name;
 
             if (string.IsNullOrEmpty(username))
@@ -51,9 +44,34 @@ namespace functions
                 return unauthorizedResponse;
             }
 
-            //TODO: GENERATE NAME and EXTENSION
-            var name = Path.GetTempFileName();
-            await _uploader.UploadAsync(username, $"{name}.jpg", "pics", req.Body, contentType, context.CancellationToken);
+            using (var image = Image.Load(req.Body))
+            {
+                image.Configuration.ImageFormatsManager.TryFindFormatByMimeType(contentType, out IImageFormat? format);
+                if (format is null)
+                {
+                    var badRequestResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                    await badRequestResponse.WriteStringAsync("Unsupported format.");
+                    return badRequestResponse;
+                }
+
+                var name = $"{Path.GetRandomFileName()}.{format.FileExtensions.First()}";
+                req.Body.Position = 0;
+                await _uploader.UploadAsync(username, name, "pics", req.Body, contentType, context.CancellationToken);
+                // Resize the image to create a thumbnail
+                ResizeOptions resizeOptions = new()
+                {
+                    Mode = ResizeMode.Max,
+                    Size = new Size(320, 320)
+                };
+
+                image.Mutate(o => o.Resize(resizeOptions));
+
+                await using var thumb = new MemoryStream();
+                image.Save(thumb, format);
+                thumb.Position = 0;
+                await _uploader.UploadAsync(username, name, "thumbnails", thumb, contentType, context.CancellationToken);
+            }
+
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             return response;

@@ -18,7 +18,7 @@ namespace functions
         }
 
         [Function("GetPhotos")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.User, "get", "post")] HttpRequestData req, int page = 1)
+        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
