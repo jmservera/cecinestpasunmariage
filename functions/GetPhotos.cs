@@ -36,7 +36,7 @@ namespace functions
             PhotosResponse photosResponse = new();
 
 
-            var allTumbThePics = containerThumbnailsClient.GetBlobs().ToList().OrderBy(b => b.Name);
+            var allTumbThePics = containerThumbnailsClient.GetBlobs().ToList().OrderBy(b => b.Properties.LastModified);
             photosResponse.NumPictures = allTumbThePics.Count();
             var allPics = containerPicsClient.GetBlobs();
 

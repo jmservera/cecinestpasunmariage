@@ -1,3 +1,4 @@
+using System.Buffers.Text;
 using System.Net;
 using functions.Claims;
 using functions.Storage;
@@ -25,6 +26,7 @@ namespace functions
         public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req, FunctionContext context)
         {
             var contentType = req.Headers.GetValues("Content-Type").FirstOrDefault();
+            var originalFileName = req.Query["name"];
 
             if (string.IsNullOrEmpty(contentType))
             {
@@ -54,9 +56,9 @@ namespace functions
                     return badRequestResponse;
                 }
 
-                var name = $"{Path.GetRandomFileName()}.{format.FileExtensions.First()}";
+                var name = $"{_uploader.GenerateUniqueName()}.{format.FileExtensions.First()}";
                 req.Body.Position = 0;
-                await _uploader.UploadAsync(username, name, "pics", req.Body, contentType, context.CancellationToken);
+                await _uploader.UploadAsync(username, name, "pics", req.Body, contentType, originalFileName, context.CancellationToken);
                 // Resize the image to create a thumbnail
                 ResizeOptions resizeOptions = new()
                 {
@@ -69,7 +71,7 @@ namespace functions
                 await using var thumb = new MemoryStream();
                 image.Save(thumb, format);
                 thumb.Position = 0;
-                await _uploader.UploadAsync(username, name, "thumbnails", thumb, contentType, context.CancellationToken);
+                await _uploader.UploadAsync(username, name, "thumbnails", thumb, contentType, originalFileName, context.CancellationToken);
             }
 
 

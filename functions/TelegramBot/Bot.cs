@@ -92,15 +92,15 @@ namespace functions.TelegramBot
             return;
         }
 
-        private async Task UploadFileToBlobAsync(string containerName, Telegram.Bot.Types.File file, string username, CancellationToken cancellationToken, string mimeType = "image/jpeg")
+        private async Task UploadFileToBlobAsync(string containerName, Telegram.Bot.Types.File file, string fileName, string username, CancellationToken cancellationToken, string mimeType = "image/jpeg")
         {
             if (file?.FilePath == null) return;
 
             await using var stream = new MemoryStream();
             await _client.DownloadFileAsync(file.FilePath, stream, cancellationToken);
             stream.Seek(0, SeekOrigin.Begin);
-            string fileName = $"{file.FileUniqueId}{Path.GetExtension(file.FilePath)}";
-            await _uploader.UploadAsync(username, fileName, containerName, stream, mimeType, cancellationToken);
+            string fileNameExt = $"{fileName}{Path.GetExtension(file.FilePath)}";
+            await _uploader.UploadAsync(username, fileNameExt, containerName, stream, mimeType, file.FilePath, cancellationToken);
         }
 
         private async Task ProcessMessageAttachmentsAsync(Message message, CancellationToken cancellationToken)
@@ -138,17 +138,18 @@ namespace functions.TelegramBot
         private async Task ProcessPhotosAsync(IEnumerable<PhotoSize> photos, string username, CancellationToken cancellationToken)
         {
             var thumb = photos.Skip(1).FirstOrDefault();
+            var fileName = _uploader.GenerateUniqueName();
             if (thumb != null)
             {
                 var file = await _client.GetFileAsync(thumb.FileId, cancellationToken);
-                await UploadFileToBlobAsync("thumbnails", file, username, cancellationToken);
+                await UploadFileToBlobAsync("thumbnails", file, fileName, username, cancellationToken);
             }
 
             var photo = photos.LastOrDefault();
             if (photo != null)
             {
                 var file = await _client.GetFileAsync(photo.FileId, cancellationToken);
-                await UploadFileToBlobAsync("pics", file, username, cancellationToken);
+                await UploadFileToBlobAsync("pics", file, fileName, username, cancellationToken);
             }
         }
 
@@ -161,14 +162,16 @@ namespace functions.TelegramBot
 
             ValidateMimeType(document.MimeType);
 
+            var fileName = _uploader.GenerateUniqueName();
+
             var thumbFile = document.Thumbnail != null ? await _client.GetFileAsync(document.Thumbnail.FileId, cancellationToken) : null;
             if (thumbFile != null)
             {
-                await UploadFileToBlobAsync("thumbnails", thumbFile, username, cancellationToken, document.MimeType);
+                await UploadFileToBlobAsync("thumbnails", thumbFile, fileName, username, cancellationToken, document.MimeType);
             }
 
             var file = await _client.GetFileAsync(document.FileId, cancellationToken);
-            await UploadFileToBlobAsync("pics", file, username, cancellationToken, document.MimeType);
+            await UploadFileToBlobAsync("pics", file, fileName, username, cancellationToken, document.MimeType);
         }
 
         private static void ValidateMimeType(string mimeType)

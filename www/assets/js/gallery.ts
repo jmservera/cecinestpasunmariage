@@ -124,7 +124,7 @@ document.querySelector<HTMLInputElement>('#imageInput').addEventListener('change
     if (file) {
 
       // Use fetch API to send the file to the server
-      fetch('/api/upload', {
+      fetch(`/api/upload?name=${file.name}`, {
         method: 'POST',
         headers: {
           'Content-Type': file.type, // Set the Content-Type header to the file's MIME type
