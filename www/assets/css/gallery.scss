@@ -15,7 +15,7 @@ $warning-color: black;
 .grid-container {
   columns: 5 200px;
   column-gap: 1.5rem;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 
   div {
@@ -55,7 +55,7 @@ $warning-color: black;
 
 #pages2,
 #pages {
-  width: 90%;
+  width: 100%;
   margin: 10px auto;
 }
 
@@ -132,7 +132,8 @@ button.selected {
   /* Black text color for better contrast */
 }
 
-#imageInput {
+#imageInput,
+#imageUpload {
   display: none;
   /* Hide the file input */
 }
