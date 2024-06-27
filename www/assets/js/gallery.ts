@@ -107,77 +107,62 @@ function showStatus(message: string, className: string) {
   }, 5000);
 }
 
-document.getElementById('customFileUpload').addEventListener('click', function () {
-  document.getElementById('imageInput').click(); // Trigger the file input click
-});
-document.getElementById('customFileUpload').addEventListener('keydown', function (event) {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault(); // Prevent the default action to ensure it works as expected
-    document.getElementById('imageInput').click();
-  }
-});
-
-document.getElementById('customPictureUpload').addEventListener('click', function () {
-  document.getElementById('imageUpload').click(); // Trigger the file input click
-});
-document.getElementById('customPictureUpload').addEventListener('keydown', function (event) {
-  if (event.key === 'Enter' || event.key === ' ') {
-    event.preventDefault(); // Prevent the default action to ensure it works as expected
-    document.getElementById('imageUpload').click();
-  }
-});
-
-async function uploadFiles(event) {
-  event.preventDefault(); // Prevent the default form submission
-  //const file = this.files[0]; // Get the file from the input  
-
-  //loop for multiple files with a foreach
-  const files = this.files;
-  for (const file of files) {
-    if (file) {
-
-      showLoading();
-      try {
-        // Use fetch API to send the file to the server
-        await fetch(`/api/upload?name=${file.name}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': file.type, // Set the Content-Type header to the file's MIME type
-          },
-          body: file, // Send the file directly as the body of the request
-        })
-          .then(response => {
-            if (response.ok) {
-              return response.text(); // or response.text() if the server responds with text
-            }
-            throw new Error('Upload failed');
-          })
-          .then(result => {
-            console.log('Success:', result);
-            showStatus(getTranslation('uploadSuccess'), 'success');
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            showStatus(getTranslation('uploadError'), 'error');
-          })
-          .finally(() => {
-
-          });
-      } finally {
-        hideLoading();
-        gallery(current_page);
-      }
-    } else {
-      showStatus(getTranslation('uploadInvalid'), 'error');
+function triggerFileInputClick(elementId: string, fileInputId: string): void {
+  document.getElementById(elementId).addEventListener('click', function () {
+    document.getElementById(fileInputId).click(); // Trigger the file input click
+  });
+  document.getElementById(elementId).addEventListener('keydown', function (event) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault(); // Prevent the default action to ensure it works as expected
+      document.getElementById(fileInputId).click();
     }
-  }
+  });
+
+  document.getElementById(fileInputId).addEventListener('change',
+    uploadFiles
+  );
+
 }
 
-// get the file input element using typescript
-document.querySelector<HTMLInputElement>('#imageInput').addEventListener('change',
-  uploadFiles
-);
+triggerFileInputClick('cameraUpload', 'imageInput');
+triggerFileInputClick('customPictureUpload', 'imageUpload');
 
-document.querySelector<HTMLInputElement>('#imageUpload').addEventListener('change',
-  uploadFiles
-);
+async function uploadFiles(event: Event): Promise<void> {
+  event.preventDefault(); // Prevent the default form submission
+  const files: FileList = (event.target as HTMLInputElement).files; // Get the files from the input
+
+  //loop for multiple files with a foreach
+  showLoading();
+  try {
+    for (const file of Array.from(files)) {
+      if (file) {
+        try {
+          // Use fetch API to send the file to the server
+          const response = await fetch(`/api/upload?name=${file.name}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': file.type, // Set the Content-Type header to the file's MIME type
+            },
+            body: file, // Send the file directly as the body of the request
+          });
+          if (response.ok) {
+            const result: string = await response.text(); // or response.text() if the server responds with text
+            console.log('Success:', result);
+            showStatus(getTranslation('uploadSuccess'), 'success');
+          } else {
+            throw new Error('Upload failed');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          showStatus(getTranslation('uploadError'), 'error');
+        }
+      } else {
+        showStatus(getTranslation('uploadInvalid'), 'error');
+      }
+    }
+  }
+  finally {
+    hideLoading();
+    gallery(current_page);
+  }
+}
