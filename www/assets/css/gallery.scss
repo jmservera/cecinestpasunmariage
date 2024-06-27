@@ -1,6 +1,7 @@
 $accent-color: #893f40;
 $accent-color-light: #f0dac8;
-$active-border: coral;
+$accent-color-light-light: #f0f0f0;
+$active-border: #897071;
 
 .grid-container {
   columns: 5 200px;
@@ -46,18 +47,42 @@ $active-border: coral;
 
 button {
   background-color: $accent-color-light;
-  border: 1px solid $accent-color;
+  color: $accent-color;
+  border: 2px solid $accent-color;
   padding: 5px;
   margin: 0 1px 0 1px;
   width: auto;
+  cursor: pointer;  
+  align-items: center;
+  justify-content: center;
+}
+button:hover {
+  color: $accent-color-light-light;
+  stroke: $accent-color-light-light;
+  background-color: $accent-color;
+  border: 2px solid $active-border;
+}
+
+.file-upload-btn {
+  @extend button;
+  stroke: $accent-color;
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button.selected {
   background-color: $accent-color;
   color: $accent-color-light;
 }
+button.selected:hover {
+  @extend button.selected;
+  color: $accent-color-light-light;
+  stroke: $accent-color-light-light;
+  border: 2px solid $active-border;
+}
 
-/* upload button */
 .status {
   position: fixed;
   display: none;
@@ -81,29 +106,6 @@ button.selected {
 }
 #imageInput {
   display: none; /* Hide the file input */
-}
-.file-upload-btn {
-  font-size: 24px; /* Adjust icon size */
-padding: 10px;
-background-color: $accent-color; /* Green */
-color: $accent-color-light;
-cursor: pointer;
-border-radius: 5px;
-display: inline-flex;
-align-items: center;
-justify-content: center;
-stroke: $accent-color-light;
-}
-
-.file-upload-btn:hover {
-  stroke: $accent-color;
-  background-color: $accent-color-light;
-  border: 1px solid $accent-color;
-}
-
-.file-upload-btn:active {
-  border:1px solid $active-border;
-  stroke: $active-border;
 }
 
 .visually-hidden {

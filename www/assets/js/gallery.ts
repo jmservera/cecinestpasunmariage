@@ -1,14 +1,15 @@
 import { hideLoading, showLoading } from "./loading";
 import { getTranslation } from "./i18n";
 
+let current_page: number = 1; // the current page
 
-async function gallery(page: number = 1): Promise<void> {
+async function gallery(page: number = current_page): Promise<void> {
   showLoading();
   try {
-    const current_page: number = page; // the current page
     const pictures_per_page: number = 10; // 2 pictures per page
     const max_num_of_pages: number = 5; // max number of pages to show in the pagination bar
 
+    current_page = page; // the current page
     const response = await fetch(`/api/GetPhotos?page=${current_page}`); // replace with your API endpoint
     const data = await response.json();
 
@@ -123,6 +124,7 @@ document.querySelector<HTMLInputElement>('#imageInput').addEventListener('change
     const file = this.files[0]; // Get the file from the input      
     if (file) {
 
+      showLoading();
       // Use fetch API to send the file to the server
       fetch(`/api/upload?name=${file.name}`, {
         method: 'POST',
@@ -144,6 +146,10 @@ document.querySelector<HTMLInputElement>('#imageInput').addEventListener('change
         .catch(error => {
           console.error('Error:', error);
           showStatus(getTranslation('uploadError'), 'error');
+        })
+        .finally(() => {
+          hideLoading();
+          gallery(current_page);
         });
     } else {
       showStatus(getTranslation('uploadInvalid'), 'error');
