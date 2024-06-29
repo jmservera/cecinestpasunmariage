@@ -8,6 +8,8 @@ namespace functions.Storage
     public class FileUploader : IFileUploader
     {
 
+        public const string UploadedByMetadataKey = "uploadedBy";
+        public const string OriginalFilenameMetadataKey = "originalFilename";
         private readonly ILogger<FileUploader> _logger;
         public FileUploader(ILogger<FileUploader> logger)
         {
@@ -52,11 +54,11 @@ namespace functions.Storage
             BlobUploadOptions options = new()
             {
                 HttpHeaders = new BlobHttpHeaders { ContentType = contentType },
-                Metadata = new Dictionary<string, string> { { "uploadedBy", username } }
+                Metadata = new Dictionary<string, string> { { UploadedByMetadataKey, username } }
             };
             if (!string.IsNullOrEmpty(originalFileName))
             {
-                options.Metadata.Add("originalFilename", originalFileName);
+                options.Metadata.Add(OriginalFilenameMetadataKey, originalFileName);
             }
             await blobClient.UploadAsync(stream, options: options, cancellationToken: cancellationToken);
             _logger.LogInformation("{fullPath} Saved", fullPath);

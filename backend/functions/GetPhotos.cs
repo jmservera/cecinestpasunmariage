@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.Security.Claims;
+using functions.Storage;
 
 namespace functions
 {
@@ -18,7 +19,7 @@ namespace functions
         }
 
         [Function("GetPhotos")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -47,6 +48,7 @@ namespace functions
             {
                 BlobClient blobThumbClient = containerThumbnailsClient.GetBlobClient(blobTumbItem.Name);
                 var blobSasUriThumb = blobThumbClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
+                var metadata = await blobThumbClient.GetPropertiesAsync();
 
                 // extensions may differ between the thumbnail and the picture
                 var noExtension = Path.Join(Path.GetDirectoryName(blobTumbItem.Name), Path.GetFileNameWithoutExtension(blobTumbItem.Name));
@@ -57,11 +59,18 @@ namespace functions
                     BlobClient blobPicsClient = containerPicsClient.GetBlobClient(pic.Name);
                     var blobSasUriPics = blobPicsClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
 
+                    string? author, description;
+                    metadata.Value.Metadata.TryGetValue(FileUploader.UploadedByMetadataKey, out author);
+                    metadata.Value.Metadata.TryGetValue(FileUploader.OriginalFilenameMetadataKey, out description);
+                    description ??= pic.Name;
+
                     photosResponse.Pictures.Add(new Photo()
                     {
                         Name = blobPicsClient.Name.ToString(),
                         Uri = blobSasUriPics.ToString(),
-                        ThumbnailUri = blobSasUriThumb.ToString()
+                        ThumbnailUri = blobSasUriThumb.ToString(),
+                        Author = author,
+                        Description = description
                     });
                 }
             }
@@ -89,6 +98,8 @@ namespace functions
             public string? Name { get; set; }
             public string? ThumbnailUri { get; set; }
             public string? Uri { get; set; }
+            public string? Author { get; set; }
+            public string? Description { get; set; }
         }
     }
 }

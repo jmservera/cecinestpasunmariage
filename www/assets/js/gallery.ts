@@ -77,10 +77,10 @@ async function gallery(page: number = current_page): Promise<void> {
       i++;
       //add elements to mygallery
       $("#mygallery").append(`<div>
-      <a href="${element.Uri}" target="_blank">
-      <img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Name}" />
-      </a>
-      <p>${element.Name}</p>
+        <a href="${element.Uri}" target="_blank">
+          <img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Description}" />
+        </a>
+        <p>${element.Author ? `${element.Author}: ` : ''}${element.Description}</p>
       </div>`);
     });
   } catch (error) {
