@@ -9,14 +9,9 @@ using functions.Storage;
 
 namespace functions
 {
-    public class GetPhotos
+    public class GetPhotos(ILoggerFactory loggerFactory)
     {
-        private readonly ILogger _logger;
-
-        public GetPhotos(ILoggerFactory loggerFactory)
-        {
-            _logger = loggerFactory.CreateLogger<GetPhotos>();
-        }
+        private readonly ILogger _logger = loggerFactory.CreateLogger<GetPhotos>();
 
         [Function("GetPhotos")]
         public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1)
