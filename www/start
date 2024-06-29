@@ -1,5 +1,5 @@
 #!/bin/bash
-source .env
+. .env
 
 >&2 echo $(hugo --printI18nWarnings | grep i18n)
 
@@ -13,4 +13,4 @@ else
     run="hugo server -e development -D -p 1313"
 fi
 
-swa start http://localhost:1313 --run "$run" -V --data-api-location "../swa-db-connections" --api-location ../functions
+AzureWebJobsStorage=$STORAGE_CONNECTION_STRING swa start http://localhost:1313 --run "$run" -V --data-api-location "../swa-db-connections" --api-location ../backend/functions

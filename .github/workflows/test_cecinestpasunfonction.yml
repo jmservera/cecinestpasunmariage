@@ -1,0 +1,45 @@
+name: Test dotnet core project
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+  workflow_dispatch:
+
+env:
+  SRC_PATH: "./backend" # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: "8.0.x" # set this to the dotnet version to use
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout GitHub Action"
+        uses: actions/checkout@v4
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore
+        run: dotnet restore
+        working-directory: ${{ env.SRC_PATH }}
+
+      - name: Build
+        run: dotnet restore
+        working-directory: ${{ env.SRC_PATH }}
+
+      - name: Test
+        run: dotnet test --logger trx --results-directory "TestResults-${{ env.DOTNET_VERSION }}"
+        working-directory: ${{ env.SRC_PATH }}
+
+      - name: Upload dotnet test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: dotnet-results-${{ env.DOTNET_VERSION }}
+          path: TestResults-${{ env.DOTNET_VERSION }}
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
