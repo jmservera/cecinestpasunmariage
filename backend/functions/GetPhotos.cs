@@ -39,7 +39,7 @@ namespace functions
             // todo: use https://learn.microsoft.com/en-us/azure/architecture/web-apps/guides/security/secure-single-page-application-authorization
             // to secure the access to the blob storage
 
-            foreach (BlobItem blobTumbItem in allTumbThePics.Skip((page - 1) * 10).Take(10))
+            await Parallel.ForEachAsync(allTumbThePics.Skip((page - 1) * 10).Take(10), async (blobTumbItem, token) =>
             {
                 BlobClient blobThumbClient = containerThumbnailsClient.GetBlobClient(blobTumbItem.Name);
                 var blobSasUriThumb = blobThumbClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
@@ -64,36 +64,39 @@ namespace functions
                         Uri = blobSasUriPics.ToString(),
                         ThumbnailUri = blobSasUriThumb.ToString(),
                         Author = author,
-                        Description = description
+                        Description = description,
+                        LastModified = blobTumbItem.Properties.LastModified
                     });
                 }
-            }
+            });
 
+            photosResponse.Pictures.Sort((a, b) => b.LastModified?.CompareTo(a.LastModified ?? DateTimeOffset.MinValue) ?? 0);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
 
             var json = System.Text.Json.JsonSerializer.Serialize(photosResponse);
-            _logger.LogInformation(json);
+            _logger.LogInformation("Generated value: {json}", json);
             response.WriteString(json);
             return response;
         }
 
-        protected class PhotosResponse
+        struct PhotosResponse
         {
-
-            public List<Photo> Pictures { get; set; } = new List<Photo>();
+            public PhotosResponse() { }
+            public List<Photo> Pictures { get; set; } = [];
 
             public int NumPictures { get; set; }
         }
 
-        public class Photo
+        struct Photo
         {
             public string? Name { get; set; }
             public string? ThumbnailUri { get; set; }
             public string? Uri { get; set; }
             public string? Author { get; set; }
             public string? Description { get; set; }
+            public DateTimeOffset? LastModified { get; set; }
         }
     }
 }
