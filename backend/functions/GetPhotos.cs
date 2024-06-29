@@ -55,6 +55,7 @@ namespace functions
                     var blobSasUriPics = blobPicsClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
 
                     metadata.Value.Metadata.TryGetValue(FileUploader.UploadedByMetadataKey, out string? author);
+                    author = author?.Split('@')[0];
                     metadata.Value.Metadata.TryGetValue(FileUploader.OriginalFilenameMetadataKey, out string? description);
                     description ??= pic.Name;
 
