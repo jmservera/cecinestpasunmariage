@@ -40,6 +40,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dotnet-results-${{ env.DOTNET_VERSION }}
-          path: TestResults-${{ env.DOTNET_VERSION }}
+          path: ${{ env.SRC_PATH }}/TestResults-${{ env.DOTNET_VERSION }}
         # Use always() to always run this step to publish test results when there are test failures
         if: ${{ always() }}
