@@ -1,21 +1,28 @@
 using functions.TelegramBot;
+using Microsoft.Extensions.Configuration; // Add this using directive
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Localization;
 using functions.Storage;
-using Microsoft.Extensions.Azure;
+using Microsoft.Azure.CognitiveServices.Vision.Face;
 
 [assembly: RootNamespace("functions")]
 
 bool isDevelopment = false;
 var host = new HostBuilder()
-.ConfigureServices((hostContext, services) =>
+    .ConfigureServices((hostContext, services) =>
     {
         services.AddLocalization();
 
         services.AddTransient<Bot>();
         services.AddTransient<IFileUploader, FileUploader>();
+        services.AddTransient<IFaceClient, FaceClient>(provider =>
+        {            
+            var key = Environment.GetEnvironmentVariable("VISION_KEY");
+            var endpoint = Environment.GetEnvironmentVariable("VISION_ENDPOINT");
+            return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
+        });
 
         isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
         if (isDevelopment)
