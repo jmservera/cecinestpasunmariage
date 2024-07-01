@@ -14,9 +14,9 @@ namespace functions
     public class Upload
     {
         private readonly ILogger<Upload> _logger;
-        private readonly IFileUploader _uploader;
+        private readonly IStorageManager _uploader;
 
-        public Upload(ILogger<Upload> logger, IFileUploader uploader)
+        public Upload(ILogger<Upload> logger, IStorageManager uploader)
         {
             _logger = logger;
             _uploader = uploader;

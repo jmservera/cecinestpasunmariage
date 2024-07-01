@@ -17,7 +17,7 @@ var host = new HostBuilder()
         services.AddLocalization();
 
         services.AddTransient<Bot>();
-        services.AddTransient<IFileUploader, FileUploader>();
+        services.AddTransient<IStorageManager, StorageManager>();
         services.AddTransient<IFaceClient, FaceClient>(provider =>
         {            
             var key = Environment.GetEnvironmentVariable("VISION_KEY");

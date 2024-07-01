@@ -23,13 +23,13 @@ namespace functions.TelegramBot
 
         private readonly IStringLocalizer<Bot> _localizer;
 
-        private readonly IFileUploader _uploader;
+        private readonly IStorageManager _uploader;
 
         private CancellationTokenSource? _cts;
 
 
 
-        public Bot(ILoggerFactory loggerFactory, IStringLocalizer<Bot> localizer, IFileUploader uploader)
+        public Bot(ILoggerFactory loggerFactory, IStringLocalizer<Bot> localizer, IStorageManager uploader)
         {
             _localizer = localizer;
             _logger = loggerFactory.CreateLogger<Bot>();

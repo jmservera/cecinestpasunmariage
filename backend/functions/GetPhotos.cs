@@ -17,7 +17,7 @@ namespace functions
         private readonly ILogger _logger = loggerFactory.CreateLogger<GetPhotos>();
 
         [Function("GetPhotos")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1, string lang="en")
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -53,11 +53,17 @@ namespace functions
                     BlobClient blobPicsClient = containerPicsClient.GetBlobClient(pic.Name);
                     var blobSasUriPics = blobPicsClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
 
-                    metadata.Value.Metadata.TryGetValue(FileUploader.UploadedByMetadataKey, out string? author);
+                    metadata.Value.Metadata.TryGetValue(StorageManager.UploadedByMetadataKey, out string? author);
                     author = author?.Split('@')[0];
-                    metadata.Value.Metadata.TryGetValue(FileUploader.DescriptionMetadataKey, out string? description);
+                    metadata.Value.Metadata.TryGetValue(StorageManager.DescriptionMetadataKey+lang, out string? description);
                     if(string.IsNullOrEmpty(description)){
-                        metadata.Value.Metadata.TryGetValue(FileUploader.OriginalFilenameMetadataKey, out description);
+                        metadata.Value.Metadata.TryGetValue(StorageManager.DescriptionMetadataKey, out description);
+                    }
+                    if(string.IsNullOrEmpty(description)){
+                        metadata.Value.Metadata.TryGetValue(StorageManager.OriginalFilenameMetadataKey, out description);
+                    }
+                    if(!string.IsNullOrEmpty(description)){
+                        description = Uri.UnescapeDataString(description);
                     }
                     description ??= pic.Name;
 

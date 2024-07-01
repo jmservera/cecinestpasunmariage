@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace functions.Storage
 {
-    public class FileUploader : IFileUploader
+    public class StorageManager(ILogger<StorageManager> logger) : IStorageManager
     {
 
         public const string UploadedByMetadataKey = "uploadedBy";
@@ -14,11 +14,7 @@ namespace functions.Storage
         public const string DescriptionMetadataKey = "description";
 
         public const string PeopleMetadataKey = "people";
-        private readonly ILogger<FileUploader> _logger;
-        public FileUploader(ILogger<FileUploader> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<StorageManager> _logger = logger;
 
         public string GenerateUniqueName()
         {

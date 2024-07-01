@@ -10,7 +10,7 @@ async function gallery(page: number = current_page): Promise<void> {
     const max_num_of_pages: number = 5; // max number of pages to show in the pagination bar
 
     current_page = page; // the current page
-    const response = await fetch(`/api/GetPhotos?page=${current_page}`); // replace with your API endpoint
+    const response = await fetch(`/api/GetPhotos?page=${current_page}&lang=${window.lang}`); // replace with your API endpoint
     const data = await response.json();
 
     const total_num_of_pictures: number = data.NumPictures; // total number of pictures
