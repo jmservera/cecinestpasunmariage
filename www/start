@@ -1,16 +1,16 @@
 #!/bin/bash
 . .env
 
->&2 echo $(hugo --printI18nWarnings | grep i18n)
+>&2 echo $(hugo -M --printI18nWarnings | grep i18n)
 
 # check if first parameter is "prod"
 
 if [ "$1" == "prod" ]; then
     echo "Starting staging server"
-    run="hugo server -e staging -p 1313 --disableFastRender"
+    run="hugo server -M -e staging -p 1313 --disableFastRender"
 else
     echo "Starting development server"
-    run="hugo server -e development -D -p 1313"
+    run="hugo server -M -e development -D -p 1313"
 fi
 
 AzureWebJobsStorage=$STORAGE_CONNECTION_STRING swa start http://localhost:1313 --run "$run" -V --data-api-location "../swa-db-connections" --api-location ../backend/functions

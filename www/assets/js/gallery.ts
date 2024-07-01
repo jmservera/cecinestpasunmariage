@@ -15,9 +15,7 @@ async function gallery(page: number = current_page): Promise<void> {
 
     const total_num_of_pictures: number = data.NumPictures; // total number of pictures
     $("#pages2").html("");
-    $("#pages2").append(
-      `<div style="width: 100%;"> Número total de fotos: ${total_num_of_pictures} </div>`
-    );
+    $("#pages2").append(`<div style="width: 100%;"> Número total de fotos: ${total_num_of_pictures} </div>`);
 
     $("#pages").html("");
     const num_of_pages: number = Math.ceil(
@@ -45,13 +43,9 @@ async function gallery(page: number = current_page): Promise<void> {
 
     for (let i = inicial; i <= final; i++) {
       if (i == current_page) {
-        $("#pages").append(
-          `<button class="pageNumber selected" id="${i}" >${i}</button>`
-        );
+        $("#pages").append(`<button class="pageNumber selected" id="${i}" >${i}</button>`);
       } else {
-        $("#pages").append(
-          `<button class="pageNumber" id="${i}" >${i}</button>`
-        );
+        $("#pages").append(`<button class="pageNumber" id="${i}" >${i}</button>`);
       }
     }
 
@@ -76,12 +70,7 @@ async function gallery(page: number = current_page): Promise<void> {
     data.Pictures.forEach((element: any) => {
       i++;
       //add elements to mygallery
-      $("#mygallery").append(`<div>
-        <a href="${element.Uri}" target="_blank">
-          <img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Description}" />
-        </a>        
-        <p>${element.Description}</p>
-      </div>`);
+      $("#mygallery").append(`<div><a href="${element.Uri}" target="_blank"><img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Description}" /></a><p>${element.Description}</p></div>`);
     });
   } catch (error) {
     console.error("Error:", error);
