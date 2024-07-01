@@ -34,9 +34,14 @@ namespace functions
         {
             var properties = await client.GetPropertiesAsync();
             var metadata = properties.Value.Metadata;
-            if (metadata.ContainsKey("people"))
+            if (metadata.ContainsKey(StorageManager.PeopleMetadataKey))
             {
                 _logger.LogInformation("Blob {name} already has people metadata", name);
+                return;
+            }
+            if(metadata.ContainsKey(StorageManager.DescriptionMetadataKey))
+            {
+                _logger.LogInformation("Blob {name} already has description metadata", name);
                 return;
             }
 
@@ -65,6 +70,7 @@ namespace functions
             {
                 metadata[StorageManager.DescriptionMetadataKey + lang] = description;
             }
+            metadata[StorageManager.DescriptionMetadataKey] = descriptions["en"];
 
             await client.SetMetadataAsync(metadata);
             await _fileUploader.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, GetPhotos.ThumbnailsContainerName);
