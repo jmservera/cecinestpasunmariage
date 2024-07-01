@@ -1,10 +1,11 @@
 ---
-title: "Apúntate"
+title: "Inscrivez-vous"
 weight: 10
-detailed_page_path: /fr/registro
+detailed_page_path: /fr/inscription
 header_menu: true
 ---
 
-Si quieres venir a la fiesta, rellena el [siguiente formulario](registro) y te enviaremos un correo con la confirmación.
+Si vous souhaitez venir à la fête, veuillez remplir le [formulaire suivant](inscription) et nous vous enverrons un courrier électronique de confirmation.
 
-Recuerda que para acceder a las fotos (tanto del fotógrafo como de los invitados que compartan las suyas) tendrás que registrarte con este mismo correo electrónico.
+N'oubliez pas que pour accéder aux photos (à la fois du photographe et des invités qui les partagent), vous devrez vous inscrire avec cette même adresse e-mail.
+
