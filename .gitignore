@@ -140,3 +140,4 @@ __azurite_db_*.json
 # C#
 .mono
 .fake
+cecidata/
