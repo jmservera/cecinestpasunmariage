@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Localization;
 using functions.Storage;
 using Microsoft.Azure.CognitiveServices.Vision.Face;
+using Microsoft.SemanticKernel;
 
 [assembly: RootNamespace("functions")]
 
@@ -24,12 +25,19 @@ var host = new HostBuilder()
             return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
         });
 
+        services.AddKernel();
+        services.AddAzureOpenAIChatCompletion(
+            Environment.GetEnvironmentVariable("AOAI_DEPLOYMENT_NAME") ?? throw new InvalidOperationException("AOAI_DEPLOYMENT_NAME is not set."),
+            Environment.GetEnvironmentVariable("AOAI_ENDPOINT") ?? throw new InvalidOperationException("AOAI_ENDPOINT is not set."),
+            Environment.GetEnvironmentVariable("AOAI_KEY") ?? throw new InvalidOperationException("AOAI_KEY is not set.")
+        );
+
         isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
         if (isDevelopment)
         {
             services.AddLogging(configure => configure.AddConsole());
         }
-    })
+    })    
     .ConfigureFunctionsWorkerDefaults()
     .Build();
 

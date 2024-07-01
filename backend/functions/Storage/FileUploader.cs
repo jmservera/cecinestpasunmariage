@@ -10,6 +10,10 @@ namespace functions.Storage
 
         public const string UploadedByMetadataKey = "uploadedBy";
         public const string OriginalFilenameMetadataKey = "originalFilename";
+
+        public const string DescriptionMetadataKey = "description";
+
+        public const string PeopleMetadataKey = "people";
         private readonly ILogger<FileUploader> _logger;
         public FileUploader(ILogger<FileUploader> logger)
         {
@@ -62,6 +66,38 @@ namespace functions.Storage
             }
             await blobClient.UploadAsync(stream, options: options, cancellationToken: cancellationToken);
             _logger.LogInformation("{fullPath} Saved", fullPath);
+        }
+
+        public async Task ReplicateMetadataAsync(string fileName, string originalContainer, string destContainer){
+
+            if (string.IsNullOrEmpty(fileName))
+            {
+                throw new ArgumentNullException(nameof(fileName));
+            }
+            if (string.IsNullOrEmpty(originalContainer))
+            {
+                throw new ArgumentNullException(nameof(originalContainer));
+            }
+            if (string.IsNullOrEmpty(destContainer))
+            {
+                throw new ArgumentNullException(nameof(destContainer));
+            }
+
+            string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new NoNullAllowedException($"Environment value STORAGE_CONNECTION_STRING cannot be null.");
+            }
+            _logger.LogInformation("Replicating metadata from {originalContainer}/{fileName} to {destContainer}/{fileName}", originalContainer, fileName, destContainer, fileName);            
+            var containerClient = new BlobContainerClient(connectionString, originalContainer);
+            var originalBlobClient = containerClient.GetBlobClient(fileName);
+            var properties=await originalBlobClient.GetPropertiesAsync();
+            var metadata=properties.Value.Metadata;
+
+            _logger.LogInformation("Setting metadata to {destContainer}/{fileName}", destContainer, fileName);
+            var destContainerClient = new BlobContainerClient(connectionString, destContainer);
+            var destBlobClient = destContainerClient.GetBlobClient(fileName);
+            await destBlobClient.SetMetadataAsync(metadata);
         }
     }
 }

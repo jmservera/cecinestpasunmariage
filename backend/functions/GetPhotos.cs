@@ -11,6 +11,9 @@ namespace functions
 {
     public class GetPhotos(ILoggerFactory loggerFactory)
     {
+        public const string PicsContainerName = "pics";
+        public const string ThumbnailsContainerName = "thumbnails";
+
         private readonly ILogger _logger = loggerFactory.CreateLogger<GetPhotos>();
 
         [Function("GetPhotos")]
@@ -22,12 +25,8 @@ namespace functions
             //get connection string from environment variable
             string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
 
-            string containerName = "pics";
-            string thumbnailContainerName = "thumbnails";
-
-
-            BlobContainerClient containerPicsClient = new(connectionString, containerName);
-            BlobContainerClient containerThumbnailsClient = new(connectionString, thumbnailContainerName);
+            BlobContainerClient containerPicsClient = new(connectionString, PicsContainerName);
+            BlobContainerClient containerThumbnailsClient = new(connectionString, ThumbnailsContainerName);
 
             PhotosResponse photosResponse = new();
 
@@ -56,7 +55,10 @@ namespace functions
 
                     metadata.Value.Metadata.TryGetValue(FileUploader.UploadedByMetadataKey, out string? author);
                     author = author?.Split('@')[0];
-                    metadata.Value.Metadata.TryGetValue(FileUploader.OriginalFilenameMetadataKey, out string? description);
+                    metadata.Value.Metadata.TryGetValue(FileUploader.DescriptionMetadataKey, out string? description);
+                    if(string.IsNullOrEmpty(description)){
+                        metadata.Value.Metadata.TryGetValue(FileUploader.OriginalFilenameMetadataKey, out description);
+                    }
                     description ??= pic.Name;
 
                     photosResponse.Pictures.Add(new Photo()

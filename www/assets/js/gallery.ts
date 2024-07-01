@@ -79,8 +79,8 @@ async function gallery(page: number = current_page): Promise<void> {
       $("#mygallery").append(`<div>
         <a href="${element.Uri}" target="_blank">
           <img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Description}" />
-        </a>
-        <p>${element.Author ? `${element.Author}: ` : ''}${element.Description}</p>
+        </a>        
+        <p>${element.Description}</p>
       </div>`);
     });
   } catch (error) {

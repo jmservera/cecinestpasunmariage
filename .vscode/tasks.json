@@ -12,7 +12,7 @@
       "type": "process",
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/functions"
+        "cwd": "${workspaceFolder}/backend/functions"
       }
     },
     {
@@ -31,7 +31,7 @@
       },
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/functions"
+        "cwd": "${workspaceFolder}/backend/functions"
       }
     },
     {
@@ -47,7 +47,7 @@
       "type": "process",
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/functions"
+        "cwd": "${workspaceFolder}/backend/functions"
       }
     },
     {
@@ -64,14 +64,14 @@
       "dependsOn": "clean release (functions)",
       "problemMatcher": "$msCompile",
       "options": {
-        "cwd": "${workspaceFolder}/functions"
+        "cwd": "${workspaceFolder}/backend/functions"
       }
     },
     {
       "type": "func",
       "dependsOn": "build (functions)",
       "options": {
-        "cwd": "${workspaceFolder}/functions/bin/Debug/net8.0"
+        "cwd": "${workspaceFolder}/backend/functions/bin/Debug/net8.0"
       },
       "command": "host start",
       "isBackground": true,

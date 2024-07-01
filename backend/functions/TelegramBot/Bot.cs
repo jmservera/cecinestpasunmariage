@@ -142,14 +142,14 @@ namespace functions.TelegramBot
             if (thumb != null)
             {
                 var file = await _client.GetFileAsync(thumb.FileId, cancellationToken);
-                await UploadFileToBlobAsync("thumbnails", file, fileName, username, cancellationToken);
+                await UploadFileToBlobAsync(GetPhotos.ThumbnailsContainerName, file, fileName, username, cancellationToken);
             }
 
             var photo = photos.LastOrDefault();
             if (photo != null)
             {
                 var file = await _client.GetFileAsync(photo.FileId, cancellationToken);
-                await UploadFileToBlobAsync("pics", file, fileName, username, cancellationToken);
+                await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken);
             }
         }
 
@@ -167,11 +167,11 @@ namespace functions.TelegramBot
             var thumbFile = document.Thumbnail != null ? await _client.GetFileAsync(document.Thumbnail.FileId, cancellationToken) : null;
             if (thumbFile != null)
             {
-                await UploadFileToBlobAsync("thumbnails", thumbFile, fileName, username, cancellationToken, document.MimeType);
+                await UploadFileToBlobAsync(GetPhotos.ThumbnailsContainerName, thumbFile, fileName, username, cancellationToken, document.MimeType);
             }
 
             var file = await _client.GetFileAsync(document.FileId, cancellationToken);
-            await UploadFileToBlobAsync("pics", file, fileName, username, cancellationToken, document.MimeType);
+            await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken, document.MimeType);
         }
 
         private static void ValidateMimeType(string mimeType)

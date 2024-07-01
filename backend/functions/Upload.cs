@@ -58,7 +58,7 @@ namespace functions
 
                 var name = $"{_uploader.GenerateUniqueName()}.{format.FileExtensions.First()}";
                 req.Body.Position = 0;
-                await _uploader.UploadAsync(username, name, "pics", req.Body, contentType, originalFileName, context.CancellationToken);
+                await _uploader.UploadAsync(username, name, GetPhotos.PicsContainerName, req.Body, contentType, originalFileName, context.CancellationToken);
                 // Resize the image to create a thumbnail
                 ResizeOptions resizeOptions = new()
                 {
@@ -71,7 +71,7 @@ namespace functions
                 await using var thumb = new MemoryStream();
                 image.Save(thumb, format);
                 thumb.Position = 0;
-                await _uploader.UploadAsync(username, name, "thumbnails", thumb, contentType, originalFileName, context.CancellationToken);
+                await _uploader.UploadAsync(username, name, GetPhotos.ThumbnailsContainerName, thumb, contentType, originalFileName, context.CancellationToken);
             }
 
 
