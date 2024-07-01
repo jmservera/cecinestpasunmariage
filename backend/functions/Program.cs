@@ -19,10 +19,12 @@ var host = new HostBuilder()
         services.AddTransient<Bot>();
         services.AddTransient<IStorageManager, StorageManager>();
         services.AddTransient<IFaceClient, FaceClient>(provider =>
-        {            
-            var key = Environment.GetEnvironmentVariable("VISION_KEY");
-            var endpoint = Environment.GetEnvironmentVariable("VISION_ENDPOINT");
-            return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
+        {
+            return new FaceClient(new ApiKeyServiceClientCredentials(
+                                            Environment.GetEnvironmentVariable("VISION_KEY") ?? throw new InvalidOperationException("VISION_KEY is not set.")))
+            {
+                Endpoint = Environment.GetEnvironmentVariable("VISION_ENDPOINT") ?? throw new InvalidOperationException("VISION_ENDPOINT is not set.")
+            };
         });
 
         services.AddKernel();
@@ -37,7 +39,7 @@ var host = new HostBuilder()
         {
             services.AddLogging(configure => configure.AddConsole());
         }
-    })    
+    })
     .ConfigureFunctionsWorkerDefaults()
     .Build();
 
