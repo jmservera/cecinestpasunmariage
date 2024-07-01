@@ -42,11 +42,16 @@ foreach (var sourceImageFileName in images)
     Console.WriteLine($"Check whether image is of sufficient quality for recognition");
     using var stream = new FileStream(Path.Combine(baseDirectory, sourceImageFileName), FileMode.Open);
 
-    List<Guid> sourceFaceIds = new List<Guid>();
+    List<Guid> sourceFaceIds = [];
     List<DetectedFace> detectedFaces = await DetectFaceRecognize(client, stream, recognitionModel);
 
+
     // Add detected faceId to sourceFaceIds.
-    foreach (var detectedFace in detectedFaces) { sourceFaceIds.Add(detectedFace.FaceId.Value); }
+    foreach (var detectedFace in detectedFaces)
+    {
+        if (detectedFace.FaceId == null) { continue; }
+        sourceFaceIds.Add(detectedFace.FaceId.Value);
+    }
 
     // Identify the faces in a person group. 
     var identifyResults = await client.Face.IdentifyAsync(sourceFaceIds, personGroupId);
