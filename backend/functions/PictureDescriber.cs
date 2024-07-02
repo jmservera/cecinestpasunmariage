@@ -1,9 +1,11 @@
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization.Metadata;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Azure;
+using Azure.AI.Vision.ImageAnalysis;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using functions.AI;
@@ -14,11 +16,12 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using SixLabors.ImageSharp;
 using Telegram.Bot.Types;
 
 namespace functions
 {
-    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient, IStorageManager fileUploader,
+    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient, ImageAnalysisClient imageClient, IStorageManager fileUploader,
     IChatCompletionService chatCompletionService)
     {
         [GeneratedRegex("^\"|\"$")]
@@ -28,6 +31,8 @@ namespace functions
 
         private readonly IStorageManager _fileUploader = fileUploader;
         private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
+
+        private readonly ImageAnalysisClient _imageClient = imageClient;
 
         [Function(nameof(PictureDescriber))]
         public async Task Run([BlobTrigger(GetPhotos.PicsContainerName + "/{name}", Connection = "")] BlobClient client, string name)
@@ -96,54 +101,94 @@ namespace functions
                 ),
                 imageContent
             };
-                var history = new ChatHistory();
-                history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester.");
-                history.AddUserMessage(items);
-                var result = await _chatCompletionService.GetChatMessageContentsAsync(history);
-                var description = result[^1].Content;
-                if (description != null)
+                try
                 {
-                    var dict = new Dictionary<string, string> { { "en", description } };
-                    history.Clear();
-                    if (people.Count > 0)
+                    var history = new ChatHistory();
+                    history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester.");
+                    history.AddUserMessage(items);
+                    var result = await _chatCompletionService.GetChatMessageContentsAsync(history);
+                    var description = result[^1].Content;
+                    if (description != null)
                     {
-                        history.AddSystemMessage($"You are an AI assistant that helps people translate funny English sentences into Spanish and French, considering the destination language characteristics and do not translate the names for the people in the picture: {string.Join(',', people)} . The output should be a json file with \"es\" and \"fr\" as keys for the translations. Here is the output schema:\n"
-                                                + "{\n\"es\": \"Spanish translation\",\n\"fr\": \"French translation\"\n}");
+                        var dict = new Dictionary<string, string> { { "en", description } };
+                        history.Clear();
+                        if (people.Count > 0)
+                        {
+                            history.AddSystemMessage($"You are an AI assistant that helps people translate funny English sentences into Spanish and French, considering the destination language characteristics and do not translate the names for the people in the picture: {string.Join(',', people)} . The output should be a json file with \"es\" and \"fr\" as keys for the translations. Here is the output schema:\n"
+                                                    + "{\n\"es\": \"Spanish translation\",\n\"fr\": \"French translation\"\n}");
+                        }
+                        else
+                        {
+                            history.AddSystemMessage($"You are an AI assistant that helps people translate funny English sentences into Spanish and French, considering the destination language characteristics. The output should be a json file with \"es\" and \"fr\" as keys for the translations. Here is the output schema:\n"
+                                                    + "{\n\"es\": \"Spanish translation\",\n\"fr\": \"French translation\"\n}");
+                        }
+                        history.AddUserMessage(description);
+
+                        _logger.LogInformation("Getting translations for blob {name}: {descrition}", name, result[^1].Content);
+
+
+                        // encode result[^1].Content to ascii
+                        var translations = await _chatCompletionService.GetChatMessageContentsAsync(history);
+                        // read json dictionary from translations[^1].Content
+                        var json = translations[^1].Content ?? throw new InvalidOperationException("No translations found");
+                        _logger.LogInformation("Translations for blob {name}: {translations}", name, json);
+                        // transform the json to a dictionary
+                        var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                        if (translationsDict != null)
+                        {
+                            // add translationsDict to dict
+                            foreach (var (key, value) in translationsDict)
+                            {
+                                dict.Add(key, value);
+                            }
+                        }
+
+                        var descriptions = dict.Select(s => new KeyValuePair<string, string>(s.Key,
+                            //url encode string to be stored in metadata
+                            Uri.EscapeDataString(
+                                //remove double quotes
+                                RemoveDoubleQuotes().Replace(s.Value, "")
+                            ))).ToDictionary();
+
+                        return descriptions;
                     }
-                    else
+                }
+                catch (HttpOperationException ex)
+                {
+                    _logger.LogError(ex, "Error while generating description for blob {name}", name);
+                    if (ex.ResponseContent != null)
                     {
-                        history.AddSystemMessage($"You are an AI assistant that helps people translate funny English sentences into Spanish and French, considering the destination language characteristics. The output should be a json file with \"es\" and \"fr\" as keys for the translations. Here is the output schema:\n"
-                                                + "{\n\"es\": \"Spanish translation\",\n\"fr\": \"French translation\"\n}");
+                        var error = JsonSerializer.Deserialize<ContentFilterResponse>(ex.ResponseContent);
+                        _logger.LogError("Error details: {error}", error.Error.Message);
                     }
-                    history.AddUserMessage(description);
 
-                    _logger.LogInformation("Getting translations for blob {name}: {descrition}", name, result[^1].Content);
-
-
-                    // encode result[^1].Content to ascii
-                    var translations = await _chatCompletionService.GetChatMessageContentsAsync(history);
-                    // read json dictionary from translations[^1].Content
-                    var json = translations[^1].Content ?? throw new InvalidOperationException("No translations found");
-                    _logger.LogInformation("Translations for blob {name}: {translations}", name, json);
-                    // transform the json to a dictionary
-                    var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                    var analysisResult = await _imageClient.AnalyzeAsync(BinaryData.FromBytes(image), VisualFeatures.DenseCaptions);
+                    var caption = string.Join(", ",analysisResult.Value.DenseCaptions.Values.Select(v=>v.Text));
+                    var dict = new Dictionary<string, string> { { "en", caption } };
+                    var descriptions = await _chatCompletionService.GetChatMessageContentAsync("You are an AI assistant that based on a picture description you transform it to a funny sentence in English, French and Spanish.\n" +
+                    "The output should be a json file with \"en\", \"fr\" and \"es\" as keys for the translations. Here is the output schema:\n" +
+                    "{\n\"en\":\"English description\",\n\"fr\": \"French translation\"\n,\n\"es\": \"Spanish translation\"}\n" +
+                    $"Here is the description for the picture: {caption}\n" +
+                    $"Here's the people that appear in the picture: {string.Join(',', people)}\n" +
+                    "Please provide a funny sentence for this description.");
+                    var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(descriptions.Content);
                     if (translationsDict != null)
                     {
                         // add translationsDict to dict
                         foreach (var (key, value) in translationsDict)
                         {
-                            dict.Add(key, value);
+                            dict[key] = value;
                         }
                     }
+                    var finalResult = dict.Select(s => new KeyValuePair<string, string>(s.Key,
+                            //url encode string to be stored in metadata
+                            Uri.EscapeDataString(
+                                //remove double quotes
+                                RemoveDoubleQuotes().Replace(s.Value, "")
+                            ))).ToDictionary();
 
-                    var descriptions = dict.Select(s => new KeyValuePair<string, string>(s.Key,
-                        //url encode string to be stored in metadata
-                        Uri.EscapeDataString(
-                            //remove double quotes
-                            RemoveDoubleQuotes().Replace(s.Value, "")
-                        ))).ToDictionary();
+                    return finalResult;
 
-                    return descriptions;
                 }
             }
             return [];

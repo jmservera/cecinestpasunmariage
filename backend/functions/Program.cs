@@ -7,6 +7,8 @@ using Microsoft.Extensions.Localization;
 using functions.Storage;
 using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.SemanticKernel;
+using Azure.AI.Vision.ImageAnalysis;
+using Azure;
 
 [assembly: RootNamespace("functions")]
 
@@ -25,6 +27,12 @@ var host = new HostBuilder()
             {
                 Endpoint = Environment.GetEnvironmentVariable("VISION_ENDPOINT") ?? throw new InvalidOperationException("VISION_ENDPOINT is not set.")
             };
+        });
+
+        services.AddTransient<ImageAnalysisClient>(provider=>{
+            return new ImageAnalysisClient(
+                new Uri(Environment.GetEnvironmentVariable("COMPUTER_VISION_ENDPOINT") ?? throw new InvalidOperationException("COMPUTER_VISION_ENDPOINT is not set.")),
+                new AzureKeyCredential(Environment.GetEnvironmentVariable("COMPUTER_VISION_KEY") ?? throw new InvalidOperationException("COMPUTER_VISION_KEY is not set.")));
         });
 
         services.AddKernel();
