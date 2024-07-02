@@ -5,7 +5,7 @@ document.cookie.split(";").forEach(function(cookie) {
     cookieLang=cookie.split("=")[1].trim();
   }
 });
-
+if(cookieLang){
 if(window.lang !== cookieLang ) {  
   let path:string = document.location.pathname;
   let newpath:string = path;
@@ -21,4 +21,4 @@ if(window.lang !== cookieLang ) {
   if(document.location.pathname !== newpath){
     document.location.pathname=newpath;
   }
-}
+}}
