@@ -107,8 +107,18 @@ absURL }}" />
 
 </style>
 <script>
-  window.lang="{{ $.Lang }}";
-  window.translations={
-    {{ range $category, $translations := .Site.Data.translations }}{{ $lang := $.Lang }}{{ if eq $category $lang }}{{ range $key, $value := $translations }}"{{ $key }}": "{{ $value }}",
-    {{ end}}{{ end }}{{ end }} };
+  window.lang="{{ $.Lang }}";window.translations={ {{ range $category, $translations := .Site.Data.translations }}{{ $lang := $.Lang }}{{ if eq $category $lang }}{{ range $key, $value := $translations }}"{{ $key }}": "{{ $value }}",{{ end}}{{ end }}{{ end }} };
 </script>
+
+{{ with resources.Get "js/languageCookie.ts" }} {{ if eq hugo.Environment
+  "development" }} {{ with . | js.Build }}
+  <script src="{{ .RelPermalink }}" defer></script>
+  {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+  $opts | fingerprint }}
+  <script
+    src="{{ .RelPermalink }}"
+    integrity="{{ .Data.Integrity }}"
+    crossorigin="anonymous"
+    defer
+  ></script>
+  {{ end }} {{ end }} {{ end }}
