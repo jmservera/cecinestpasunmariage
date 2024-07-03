@@ -6,8 +6,8 @@ body {
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
-    color: #893e3e;
-    --color-text: #893e3e;
+    color: $button-color;
+    --color-text: $button-color;
   }
 
   #site-head,
@@ -19,7 +19,7 @@ body {
 
   #site-head a.btn:hover,
   #site-head.withCenteredImage a.btn:hover {
-    background-color: #893e3e !important;
+    background-color: $button-color !important;
   }
 
   .post {
@@ -32,13 +32,13 @@ body {
   }
 
   .post-content h3 {
-    color: #f19888;
-    --color-text: #f19888;
+    color: $button-color-5;
+    --color-text: $button-color-5;
   }
 
   .post-content h4 {
-    color: #f0d9c7;
-    --color-text: #f0d9c7;
+    color: $button-color-10;
+    --color-text: $button-color-10;
   }
 
   :root {

@@ -86,6 +86,7 @@ namespace functions
             // now get a nice description
             var connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process); //TODO: use config instead
 
+            //use the related thumbnail to make it faster and save some tokens
             BlobContainerClient containerThumbnailsClient = new(connectionString, GetPhotos.ThumbnailsContainerName);
             var thumbnailClient = containerThumbnailsClient.GetBlobClient(name);
             var thumbnail = await thumbnailClient.OpenReadAsync();
@@ -93,21 +94,20 @@ namespace functions
             {
                 byte[] image = new byte[thumbnail.Length];
                 await thumbnail.ReadAsync(image);
-                ImageContent imageContent = new(new ReadOnlyMemory<byte>(image), contentType);
-
-                var items = new ChatMessageContentItemCollection{
-                new TextContent(people.Count>0?$"In this picture you see the following people: {string.Join(',',people)}. Please find a funny title for this picture that includes the provided names.":
-                "Please find a funny title for this picture."
-                ),
-                imageContent
-            };
                 try
                 {
                     var history = new ChatHistory();
+                    
                     history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester.");
+
+                    ImageContent imageContent = new(new ReadOnlyMemory<byte>(image), contentType);
+                    var items = new ChatMessageContentItemCollection{
+                        new TextContent(people.Count>0?$"In this picture you see the following people: {string.Join(',',people)}. Please find a funny title for this picture that includes the provided names.":
+                        "Please find a funny title for this picture."), imageContent};
                     history.AddUserMessage(items);
-                    var result = await _chatCompletionService.GetChatMessageContentsAsync(history);
-                    var description = result[^1].Content;
+
+                    var result = await _chatCompletionService.GetChatMessageContentAsync(history);
+                    var description = result.Content;
                     if (description != null)
                     {
                         var dict = new Dictionary<string, string> { { "en", description } };
@@ -124,16 +124,14 @@ namespace functions
                         }
                         history.AddUserMessage(description);
 
-                        _logger.LogInformation("Getting translations for blob {name}: {descrition}", name, result[^1].Content);
-
-
-                        // encode result[^1].Content to ascii
-                        var translations = await _chatCompletionService.GetChatMessageContentsAsync(history);
-                        // read json dictionary from translations[^1].Content
-                        var json = translations[^1].Content ?? throw new InvalidOperationException("No translations found");
-                        _logger.LogInformation("Translations for blob {name}: {translations}", name, json);
+                        _logger.LogInformation("Getting translations for blob {name}: {descrition}", name, result.Content);
+                        
+                        var translations = await _chatCompletionService.GetChatMessageContentAsync(history);
+                        
+                        var translationsJsonText = translations.Content ?? throw new InvalidOperationException("No translations found");
+                        _logger.LogInformation("Translations for blob {name}: {translations}", name, translationsJsonText);
                         // transform the json to a dictionary
-                        var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+                        var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(translationsJsonText);
                         if (translationsDict != null)
                         {
                             // add translationsDict to dict
@@ -161,9 +159,10 @@ namespace functions
                         var error = JsonSerializer.Deserialize<ContentFilterResponse>(ex.ResponseContent);
                         _logger.LogError("Error details: {error}", error.Error.Message);
                     }
-
+                    _logger.LogInformation("Trying to generate description using Azure Cognitive Services for blob {name}", name);
                     var analysisResult = await _imageClient.AnalyzeAsync(BinaryData.FromBytes(image), VisualFeatures.DenseCaptions);
-                    var caption = string.Join(", ",analysisResult.Value.DenseCaptions.Values.Select(v=>v.Text));
+                    var caption = string.Join(", ", analysisResult.Value.DenseCaptions.Values.Select(v => v.Text).Distinct());
+                    _logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
                     var dict = new Dictionary<string, string> { { "en", caption } };
                     var descriptions = await _chatCompletionService.GetChatMessageContentAsync("You are an AI assistant that based on a picture description you transform it to a funny sentence in English, French and Spanish.\n" +
                     "The output should be a json file with \"en\", \"fr\" and \"es\" as keys for the translations. Here is the output schema:\n" +

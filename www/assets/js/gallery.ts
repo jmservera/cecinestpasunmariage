@@ -153,5 +153,10 @@ async function uploadFiles(event: Event): Promise<void> {
   finally {
     hideLoading();
     gallery(current_page);
+    try{
+      (event.target as HTMLInputElement).value=""; // Clear the file input
+    } catch (error) {
+      console.error('Error clearing files:', error);
+    }
   }
 }

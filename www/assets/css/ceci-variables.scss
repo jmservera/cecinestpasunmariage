@@ -2,8 +2,12 @@
 $accent-background:rgba(255,255,255,0.4);
 $no-accent-background: transparent;
 
-$button-color: #893f40;
+$button-color: #893e3e;
+$button-color-5: lighten($button-color, 5%);
+$button-color-10: lighten($button-color, 10%);
+
 $button-color-lightness: lightness($button-color);
+
 $button-bg-color-hover: desaturate($button-color, 15%);
 $button-bg-color: change-color($button-color, $lightness: $button-color-lightness + 30,
     $hue: 15);
