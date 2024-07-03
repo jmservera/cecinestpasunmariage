@@ -1,10 +1,5 @@
-{{ with resources.Get "css/gallery.scss" | resources.ToCSS | resources.Minify |
-resources.Fingerprint }}
-<link
-  rel="stylesheet"
-  href="{{ .RelPermalink }}"
-  integrity="{{ .Data.Integrity }}"
-/>
+{{ with resources.Get "css/gallery.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" />
 {{ end }}
 
 <svg title="Send a picture" tabindex="0" role="button" id="cameraUpload" class="file-upload-btn" aria-controls="imageInput" aria-label="Upload image from camera" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none">
@@ -27,16 +22,9 @@ resources.Fingerprint }}
 </div>
 <div id="pages2"></div>
 
-{{ with resources.Get "js/gallery.ts" }} {{ if eq hugo.Environment
-"development" }} {{ with . | js.Build }}
+{{ with resources.Get "js/gallery.ts" }} {{ if eq hugo.Environment "development" }} {{ with . | js.Build }}
 <script src="{{ .RelPermalink }}" defer></script>
-{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
-$opts | fingerprint }}
-<script
-  src="{{ .RelPermalink }}"
-  integrity="{{ .Data.Integrity }}"
-  crossorigin="anonymous"
-  defer
-></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build $opts | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer ></script>
 {{ end }} {{ end }} {{ end }}
 

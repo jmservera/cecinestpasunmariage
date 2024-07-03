@@ -1,29 +1,7 @@
-<div
-  id="i18nList"
-  style="
-    position: absolute;
-    display: block;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    margin: 0.5rem;
-  "
->
+<div   id="i18nList" class="i18nList">
   {{- partial "i18nList.html" . -}}
 </div>
-
-<div
-  id="user"
-  style="
-    position: absolute;
-    display: block;
-    top: 0;
-    right: 0;
-    z-index: 10;
-    margin: 0.5rem;
-  "
->
+<div id="user" class="login">
   {{- partial "loggedUser.html" . -}}
 </div>
-
 {{- partial "loading.html" . -}}

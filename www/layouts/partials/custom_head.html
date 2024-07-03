@@ -43,82 +43,16 @@ sizes="32x32" href="{{ "/images/favicon-32x32.png" | absURL }}" /> <link
 rel="icon" type="image/png" sizes="16x16" href="{{ "/images/favicon-16x16.png" |
 absURL }}" />
 
-<style>
-  body {
-    background-image: url("/images/background.png");
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: #893e3e;
-    --color-text: #893e3e;
-  }
-
-  #site-head,
-  #site-head.withCenteredImage {
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: 800px;
-  }
-
-  #site-head a.btn:hover,
-  #site-head.withCenteredImage a.btn:hover {
-    background-color: #893e3e !important;
-  }
-
-  .post {
-    max-width: none;
-  }
-
-  .post-content {
-    color: black;
-    --color-text: black;
-  }
-
-  .post-content h3 {
-    color: #f19888;
-    --color-text: #f19888;
-  }
-
-  .post-content h4 {
-    color: #f0d9c7;
-    --color-text: #f0d9c7;
-  }
-
-  :root {
-    /* see variables.scss for more variables*/
-    --section-light-text-color: #893f40 !important;
-    --section-light-bg-color: transparent !important;
-    --section-dark-text-color: #893f40 !important;
-    --section-dark-bg-color: transparent !important;
-
-    /* define list element for unnumbered lists, leave empty for default list element */
-    /* fa-asterisk is the default icon if this variable definition is missing completely */
-    --ul-li-icon: fa-dashcube; /* this sets fa-dashcube as list icon */
-    --ul-li-icon: ; /* this sets the default html list icon */
-    --cover-text-color: var(--color-text);
-    --highlight: #f0dac8;
-    --sticky-menu-text-color: #edad53;
-  }
-
-  /* fix overlapping header arrow */
-  #site-head #header-arrow,#site-head.withCenteredImage #header-arrow {
-    margin: -24px auto;
-  }
-
-</style>
+{{ with resources.Get "css/header.scss" | resources.ToCSS | resources.Minify |
+resources.Fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"/>
+{{ end }}
 <script>
-  window.lang="{{ $.Lang }}";window.translations={ {{ range $category, $translations := .Site.Data.translations }}{{ $lang := $.Lang }}{{ if eq $category $lang }}{{ range $key, $value := $translations }}"{{ $key }}": "{{ $value }}",{{ end}}{{ end }}{{ end }} };
+window.lang="{{ $.Lang }}";window.translations={ {{ range $category, $translations := .Site.Data.translations }}{{ $lang := $.Lang }}{{ if eq $category $lang }}{{ range $key, $value := $translations }}"{{ $key }}": "{{ $value }}",{{ end}}{{ end }}{{ end }} };
 </script>
 
-{{ with resources.Get "js/languageCookie.ts" }} {{ if eq hugo.Environment
-  "development" }} {{ with . | js.Build }}
-  <script src="{{ .RelPermalink }}" defer></script>
-  {{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
-  $opts | fingerprint }}
-  <script
-    src="{{ .RelPermalink }}"
-    integrity="{{ .Data.Integrity }}"
-    crossorigin="anonymous"
-    defer
-  ></script>
-  {{ end }} {{ end }} {{ end }}
+{{ with resources.Get "js/languageCookie.ts" }} {{ if eq hugo.Environment "development" }} {{ with . | js.Build }}
+<script src="{{ .RelPermalink }}" defer></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build $opts | fingerprint }}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer></script>
+{{ end }} {{ end }} {{ end }}
