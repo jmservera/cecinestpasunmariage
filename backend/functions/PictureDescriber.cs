@@ -21,17 +21,15 @@ using Telegram.Bot.Types;
 
 namespace functions
 {
-    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient, ImageAnalysisClient imageClient, IStorageManager fileUploader,
+    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient, ImageAnalysisClient imageClient, IStorageManager storageManager,
     IChatCompletionService chatCompletionService)
     {
         [GeneratedRegex("^\"|\"$")]
         private static partial Regex RemoveDoubleQuotes();
         private readonly ILogger<PictureDescriber> _logger = logger;
         private readonly IFaceClient _faceClient = faceClient;
-
-        private readonly IStorageManager _fileUploader = fileUploader;
+        private readonly IStorageManager _storageManager = storageManager;
         private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
-
         private readonly ImageAnalysisClient _imageClient = imageClient;
 
         [Function(nameof(PictureDescriber))]
@@ -78,7 +76,7 @@ namespace functions
             metadata[StorageManager.DescriptionMetadataKey] = descriptions["en"];
 
             await client.SetMetadataAsync(metadata);
-            await _fileUploader.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, GetPhotos.ThumbnailsContainerName);
+            await _storageManager.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, GetPhotos.ThumbnailsContainerName);
         }
 
         private async Task<Dictionary<string, string>> GenerateDescriptionsAsync(string name, string contentType, IReadOnlyList<string> people)
