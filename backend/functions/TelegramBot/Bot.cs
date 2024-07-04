@@ -5,6 +5,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using functions.Storage;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -29,13 +30,12 @@ namespace functions.TelegramBot
 
 
 
-        public Bot(ILoggerFactory loggerFactory, IStringLocalizer<Bot> localizer, IStorageManager uploader)
+        public Bot(ILogger<Bot> logger, IStringLocalizer<Bot> localizer, IStorageManager uploader, IConfiguration configuration)
         {
             _localizer = localizer;
-            _logger = loggerFactory.CreateLogger<Bot>();
+            _logger = logger;
             _uploader = uploader;
-            string? token = Environment.GetEnvironmentVariable("TELEGRAM_TOKEN", EnvironmentVariableTarget.Process);
-            _client = token == null ? throw new ArgumentNullException(nameof(token)) : new TelegramBotClient(token);
+            _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN")?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
         }
 
         public async Task Register(string handleUpdateFunctionUrl)

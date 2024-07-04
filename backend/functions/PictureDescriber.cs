@@ -13,6 +13,7 @@ using functions.Storage;
 using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -21,8 +22,11 @@ using Telegram.Bot.Types;
 
 namespace functions
 {
-    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient, ImageAnalysisClient imageClient, IStorageManager storageManager,
-    IChatCompletionService chatCompletionService)
+    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient,
+     ImageAnalysisClient imageClient,
+     IStorageManager storageManager,
+    IChatCompletionService chatCompletionService,
+    IConfiguration configuration)
     {
         [GeneratedRegex("^\"|\"$")]
         private static partial Regex RemoveDoubleQuotes();
@@ -31,6 +35,7 @@ namespace functions
         private readonly IStorageManager _storageManager = storageManager;
         private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
         private readonly ImageAnalysisClient _imageClient = imageClient;
+        private readonly IConfiguration _configuration = configuration;
 
         [Function(nameof(PictureDescriber))]
         public async Task Run([BlobTrigger(GetPhotos.PicsContainerName + "/{name}", Connection = "")] BlobClient client, string name)
@@ -82,7 +87,7 @@ namespace functions
         private async Task<Dictionary<string, string>> GenerateDescriptionsAsync(string name, string contentType, IReadOnlyList<string> people)
         {
             // now get a nice description
-            var connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process); //TODO: use config instead
+            var connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING")?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
             //use the related thumbnail to make it faster and save some tokens
             BlobContainerClient containerThumbnailsClient = new(connectionString, GetPhotos.ThumbnailsContainerName);

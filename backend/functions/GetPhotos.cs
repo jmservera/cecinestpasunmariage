@@ -6,15 +6,17 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using System.Security.Claims;
 using functions.Storage;
+using Microsoft.Extensions.Configuration;
 
 namespace functions
 {
-    public class GetPhotos(ILoggerFactory loggerFactory)
+    public class GetPhotos(ILogger<GetPhotos> logger, IConfiguration configuration)
     {
         public const string PicsContainerName = "pics";
         public const string ThumbnailsContainerName = "thumbnails";
 
-        private readonly ILogger _logger = loggerFactory.CreateLogger<GetPhotos>();
+        private readonly ILogger<GetPhotos> _logger = logger;
+        private readonly IConfiguration _configuration = configuration;
 
         [Function("GetPhotos")]
         public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1, string lang="en")
@@ -23,7 +25,7 @@ namespace functions
 
             //access to blob storage
             //get connection string from environment variable
-            string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            string connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING")?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
             BlobContainerClient containerPicsClient = new(connectionString, PicsContainerName);
             BlobContainerClient containerThumbnailsClient = new(connectionString, ThumbnailsContainerName);
