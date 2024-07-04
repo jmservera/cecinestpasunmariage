@@ -1,11 +1,12 @@
 using System.Data;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace functions.Storage
 {
-    public class StorageManager(ILogger<StorageManager> logger) : IStorageManager
+    public class StorageManager(ILogger<StorageManager> logger, IConfiguration configuration) : IStorageManager
     {
 
         public const string UploadedByMetadataKey = "uploadedBy";
@@ -15,6 +16,8 @@ namespace functions.Storage
 
         public const string PeopleMetadataKey = "people";
         private readonly ILogger<StorageManager> _logger = logger;
+
+        private readonly IConfiguration _configuration = configuration;
 
         public string GenerateUniqueName()
         {
@@ -39,11 +42,7 @@ namespace functions.Storage
                 throw new ArgumentNullException(nameof(containerName));
             }
 
-            string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new NoNullAllowedException($"Environment value STORAGE_CONNECTION_STRING cannot be null.");
-            }
+            string connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
             var containerClient = new BlobContainerClient(connectionString, containerName);
             var user = username.Split('@')[0];
@@ -64,7 +63,8 @@ namespace functions.Storage
             _logger.LogInformation("{fullPath} Saved", fullPath);
         }
 
-        public async Task ReplicateMetadataAsync(string fileName, string originalContainer, string destContainer){
+        public async Task ReplicateMetadataAsync(string fileName, string originalContainer, string destContainer)
+        {
 
             if (string.IsNullOrEmpty(fileName))
             {
@@ -79,16 +79,13 @@ namespace functions.Storage
                 throw new ArgumentNullException(nameof(destContainer));
             }
 
-            string? connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process);
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new NoNullAllowedException($"Environment value STORAGE_CONNECTION_STRING cannot be null.");
-            }
-            _logger.LogInformation("Replicating metadata from {originalContainer}/{fileName} to {destContainer}/{fileName}", originalContainer, fileName, destContainer, fileName);            
+            string connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
+
+            _logger.LogInformation("Replicating metadata from {originalContainer}/{fileName} to {destContainer}/{fileName}", originalContainer, fileName, destContainer, fileName);
             var containerClient = new BlobContainerClient(connectionString, originalContainer);
             var originalBlobClient = containerClient.GetBlobClient(fileName);
-            var properties=await originalBlobClient.GetPropertiesAsync();
-            var metadata=properties.Value.Metadata;
+            var properties = await originalBlobClient.GetPropertiesAsync();
+            var metadata = properties.Value.Metadata;
 
             _logger.LogInformation("Setting metadata to {destContainer}/{fileName}", destContainer, fileName);
             var destContainerClient = new BlobContainerClient(connectionString, destContainer);

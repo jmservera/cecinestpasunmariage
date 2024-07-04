@@ -13,6 +13,7 @@ using functions.Storage;
 using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Azure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -21,18 +22,20 @@ using Telegram.Bot.Types;
 
 namespace functions
 {
-    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient, ImageAnalysisClient imageClient, IStorageManager fileUploader,
-    IChatCompletionService chatCompletionService)
+    public partial class PictureDescriber(ILogger<PictureDescriber> logger, IFaceClient faceClient,
+     ImageAnalysisClient imageClient,
+     IStorageManager storageManager,
+    IChatCompletionService chatCompletionService,
+    IConfiguration configuration)
     {
         [GeneratedRegex("^\"|\"$")]
         private static partial Regex RemoveDoubleQuotes();
         private readonly ILogger<PictureDescriber> _logger = logger;
         private readonly IFaceClient _faceClient = faceClient;
-
-        private readonly IStorageManager _fileUploader = fileUploader;
+        private readonly IStorageManager _storageManager = storageManager;
         private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
-
         private readonly ImageAnalysisClient _imageClient = imageClient;
+        private readonly IConfiguration _configuration = configuration;
 
         [Function(nameof(PictureDescriber))]
         public async Task Run([BlobTrigger(GetPhotos.PicsContainerName + "/{name}", Connection = "")] BlobClient client, string name)
@@ -78,13 +81,13 @@ namespace functions
             metadata[StorageManager.DescriptionMetadataKey] = descriptions["en"];
 
             await client.SetMetadataAsync(metadata);
-            await _fileUploader.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, GetPhotos.ThumbnailsContainerName);
+            await _storageManager.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, GetPhotos.ThumbnailsContainerName);
         }
 
         private async Task<Dictionary<string, string>> GenerateDescriptionsAsync(string name, string contentType, IReadOnlyList<string> people)
         {
             // now get a nice description
-            var connectionString = Environment.GetEnvironmentVariable("STORAGE_CONNECTION_STRING", EnvironmentVariableTarget.Process); //TODO: use config instead
+            var connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
             //use the related thumbnail to make it faster and save some tokens
             BlobContainerClient containerThumbnailsClient = new(connectionString, GetPhotos.ThumbnailsContainerName);
@@ -97,7 +100,7 @@ namespace functions
                 try
                 {
                     var history = new ChatHistory();
-                    
+
                     history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester.");
 
                     ImageContent imageContent = new(new ReadOnlyMemory<byte>(image), contentType);
@@ -125,9 +128,9 @@ namespace functions
                         history.AddUserMessage(description);
 
                         _logger.LogInformation("Getting translations for blob {name}: {descrition}", name, result.Content);
-                        
+
                         var translations = await _chatCompletionService.GetChatMessageContentAsync(history);
-                        
+
                         var translationsJsonText = translations.Content ?? throw new InvalidOperationException("No translations found");
                         _logger.LogInformation("Translations for blob {name}: {translations}", name, translationsJsonText);
                         // transform the json to a dictionary
@@ -164,12 +167,14 @@ namespace functions
                     var caption = string.Join(", ", analysisResult.Value.DenseCaptions.Values.Select(v => v.Text).Distinct());
                     _logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
                     var dict = new Dictionary<string, string> { { "en", caption } };
-                    var descriptions = await _chatCompletionService.GetChatMessageContentAsync("You are an AI assistant that based on a picture description you transform it to a funny sentence in English, French and Spanish.\n" +
-                    "The output should be a json file with \"en\", \"fr\" and \"es\" as keys for the translations. Here is the output schema:\n" +
-                    "{\n\"en\":\"English description\",\n\"fr\": \"French translation\"\n,\n\"es\": \"Spanish translation\"}\n" +
-                    $"Here is the description for the picture: {caption}\n" +
+                    var history = new ChatHistory();
+                    history.AddSystemMessage("You are an AI assistant that based on a picture description you transform it to a funny sentence in English, French and Spanish.\n" +
+                    "The output should be a json file with \"en\", \"fr\" and \"es\" as keys for the translations without any Markdown, just plain json. Here is the output schema:\n" +
+                    "{\n\"en\":\"English description\",\n\"fr\": \"French translation\"\n,\n\"es\": \"Spanish translation\"}\n");
+                    history.AddUserMessage($"Here is the description for the picture: {caption}\n" +
                     $"Here's the people that appear in the picture: {string.Join(',', people)}\n" +
                     "Please provide a funny sentence for this description.");
+                    var descriptions = await _chatCompletionService.GetChatMessageContentAsync(history);
                     var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(descriptions.Content);
                     if (translationsDict != null)
                     {
