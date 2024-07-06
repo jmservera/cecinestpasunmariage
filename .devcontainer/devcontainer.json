@@ -16,7 +16,10 @@
 		},
 		"ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
 			"version": "latest"
-		}
+		},
+		"ghcr.io/devcontainers/features/dotnet:2": {
+        	"additionalVersions": "6.0"
+    	}
 	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -34,7 +37,8 @@
 				"esbenp.prettier-vscode",
 				"ms-dotnettools.csdevkit",
 				"GitHub.copilot",
-				"GitHub.vscode-github-actions"
+				"GitHub.vscode-github-actions",
+				"ms-semantic-kernel.semantic-kernel"
 			]
 		}
 	},
