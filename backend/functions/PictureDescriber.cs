@@ -101,7 +101,11 @@ namespace functions
                 {
                     var history = new ChatHistory();
 
-                    history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester.");
+                    history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester, in English, French and Spanish, " +
+                    "considering the destination language characteristics" +
+                    (people.Count > 0 ? "and do not translate the names for the people in the picture. " : "") +
+                    "The output should be a json file with \"en\", \"fr\" and \"es\" as keys for the translations without any Markdown, just plain json. Here is the output schema:\n" +
+                    "{\n\"en\":\"English description\",\n\"fr\": \"French translation\"\n,\n\"es\": \"Spanish translation\"}\n");
 
                     ImageContent imageContent = new(new ReadOnlyMemory<byte>(image), contentType);
                     var items = new ChatMessageContentItemCollection{
@@ -110,48 +114,17 @@ namespace functions
                     history.AddUserMessage(items);
 
                     var result = await _chatCompletionService.GetChatMessageContentAsync(history);
-                    var description = result.Content;
-                    if (description != null)
+                    var description = result.Content ?? throw new InvalidOperationException("No translations found");
+                    var translationsd = JsonSerializer.Deserialize<Dictionary<string, string>>(description) ?? throw new InvalidOperationException("No translations found");
+                    if (translationsd != null)
                     {
-                        var dict = new Dictionary<string, string> { { "en", description } };
-                        history.Clear();
-                        if (people.Count > 0)
-                        {
-                            history.AddSystemMessage($"You are an AI assistant that helps people translate funny English sentences into Spanish and French, considering the destination language characteristics and do not translate the names for the people in the picture: {string.Join(',', people)} . The output should be a json file with \"es\" and \"fr\" as keys for the translations. Here is the output schema:\n"
-                                                    + "{\n\"es\": \"Spanish translation\",\n\"fr\": \"French translation\"\n}");
-                        }
-                        else
-                        {
-                            history.AddSystemMessage($"You are an AI assistant that helps people translate funny English sentences into Spanish and French, considering the destination language characteristics. The output should be a json file with \"es\" and \"fr\" as keys for the translations. Here is the output schema:\n"
-                                                    + "{\n\"es\": \"Spanish translation\",\n\"fr\": \"French translation\"\n}");
-                        }
-                        history.AddUserMessage(description);
-
-                        _logger.LogInformation("Getting translations for blob {name}: {descrition}", name, result.Content);
-
-                        var translations = await _chatCompletionService.GetChatMessageContentAsync(history);
-
-                        var translationsJsonText = translations.Content ?? throw new InvalidOperationException("No translations found");
-                        _logger.LogInformation("Translations for blob {name}: {translations}", name, translationsJsonText);
-                        // transform the json to a dictionary
-                        var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(translationsJsonText);
-                        if (translationsDict != null)
-                        {
-                            // add translationsDict to dict
-                            foreach (var (key, value) in translationsDict)
-                            {
-                                dict.Add(key, value);
-                            }
-                        }
-
-                        var descriptions = dict.Select(s => new KeyValuePair<string, string>(s.Key,
-                            //url encode string to be stored in metadata
-                            Uri.EscapeDataString(
-                                //remove double quotes
-                                RemoveDoubleQuotes().Replace(s.Value, "")
-                            ))).ToDictionary();
-
-                        return descriptions;
+                        return translationsd.Select(
+                            s => new KeyValuePair<string, string>(s.Key,
+                                //url encode string to be stored in metadata
+                                Uri.EscapeDataString(
+                                    //remove double quotes
+                                    RemoveDoubleQuotes().Replace(s.Value, "")
+                                ))).ToDictionary();
                     }
                 }
                 catch (HttpOperationException ex)
@@ -174,7 +147,7 @@ namespace functions
                     history.AddUserMessage($"Here is the description for the picture: {caption}\n" +
                     $"Here's the people that appear in the picture: {string.Join(',', people)}\n" +
                     "Please provide a funny sentence for this description.");
-                    var descriptions = await _chatCompletionService.GetChatMessageContentAsync(history);
+                    var descriptions = await _chatCompletionService.GetChatMessageContentAsync(history)?? throw new InvalidOperationException("No translations found");
                     var translationsDict = JsonSerializer.Deserialize<Dictionary<string, string>>(descriptions.Content);
                     if (translationsDict != null)
                     {
