@@ -93,7 +93,7 @@ namespace functions
                 await thumbnail.ReadAsync(image);
                 try
                 {
-                    return await GenerateDescritptionCoreAsync(contentType, image, people);
+                    return await GenerateDescriptionsFromImageOrCaptionsAsync(contentType, image, people);
                 }
                 catch (HttpOperationException ex)
                 {
@@ -108,14 +108,14 @@ namespace functions
                     var caption = string.Join(", ", analysisResult.Value.DenseCaptions.Values.Select(v => v.Text).Distinct());
                     _logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
 
-                    return await GenerateDescritptionCoreAsync(contentType, null, people, caption);
+                    return await GenerateDescriptionsFromImageOrCaptionsAsync(contentType, null, people, caption);
 
                 }
             }
             return [];
         }
 
-        private async Task<Dictionary<string, string>> GenerateDescritptionCoreAsync(string contentType, byte[]? image, IReadOnlyList<string> people, string? captions = null)
+        private async Task<Dictionary<string, string>> GenerateDescriptionsFromImageOrCaptionsAsync(string contentType, byte[]? image, IReadOnlyList<string> people, string? captions = null)
         {
 #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             OpenAIPromptExecutionSettings settings = new() { ResponseFormat = "json_object" };
@@ -143,10 +143,10 @@ namespace functions
             }
             history.AddUserMessage(items);
 
-            var result = await _chatCompletionService.GetChatMessageContentAsync(history, settings);
-            var description = result.Content ?? throw new InvalidOperationException("No translations found");
-            var translationsd = JsonSerializer.Deserialize<Dictionary<string, string>>(description) ?? throw new InvalidOperationException("No translations found");
-            return translationsd.Select(
+            var chatMessageContent = await _chatCompletionService.GetChatMessageContentAsync(history, settings);
+            var description = chatMessageContent.Content ?? throw new InvalidOperationException("No translations generated");
+            var localizedDescriptions = JsonSerializer.Deserialize<Dictionary<string, string>>(description) ?? throw new InvalidOperationException("No translations converted");
+            return localizedDescriptions.Select(
                 s => new KeyValuePair<string, string>(s.Key,
                     //url encode string to be stored in metadata
                     Uri.EscapeDataString(
