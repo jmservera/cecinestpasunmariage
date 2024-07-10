@@ -21,5 +21,6 @@
     "Photo": "Je donne mon consentement pour que mes photos soient publiées sur ce site web (seuls les invités y auront accès).",
     "uploadSuccess": "✔ Image téléchargée avec succès.",
     "uploadError": "⚠ Erreur lors du téléchargement de l'image.",
-    "uploadInvalid": "⚠ Veuillez sélectionner un fichier à télécharger."
+    "uploadInvalid": "⚠ Veuillez sélectionner un fichier à télécharger.",
+    "uploading": "Téléchargement en cours..."
 }
