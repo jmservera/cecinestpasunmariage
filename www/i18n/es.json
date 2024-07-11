@@ -21,5 +21,6 @@
     "Photo": "Doy mi consentimiento para que fotos mias aparezcan en esta web (sólo los invitados tendrán acceso a ellas)",
     "uploadSuccess": "✔ Imagen cargada con éxito.",
     "uploadError": "⚠ Error durante la carga de la imagen",
-    "uploadInvalid": "⚠ Por favor, seleccione una imagen a cargar."
+    "uploadInvalid": "⚠ Por favor, seleccione una imagen a cargar.",
+    "uploading": "Cargando..."
 }

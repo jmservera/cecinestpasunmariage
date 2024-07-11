@@ -74,6 +74,7 @@ async function gallery(page: number = current_page): Promise<void> {
     });
   } catch (error) {
     console.error("Error:", error);
+    showStatus(error, "error");
   } finally {
     hideLoading();
   }
@@ -83,8 +84,7 @@ $(async () => {
   await gallery();
 });
 
-
-function showStatus(message: string, className: string) {
+function showStatus(message: string, className: string = '') {
   const statusElement = document.getElementById('uploadStatus');
   statusElement.textContent = message;
   statusElement.className = `status ${className}`; // Apply success styling
@@ -96,67 +96,77 @@ function showStatus(message: string, className: string) {
   }, 5000);
 }
 
-function triggerFileInputClick(elementId: string, fileInputId: string): void {
-  document.getElementById(elementId).addEventListener('click', function () {
-    document.getElementById(fileInputId).click(); // Trigger the file input click
+function bindFileInputClick(elementId: string, fileInputId: string): void {
+  const triggerElement = document.getElementById(elementId);
+  const fileInputElement = document.getElementById(fileInputId)
+
+  triggerElement.addEventListener('click', function (event) {
+    event.preventDefault();
+    fileInputElement.click(); // Trigger the file input click
   });
-  document.getElementById(elementId).addEventListener('keydown', function (event) {
+  triggerElement.addEventListener('keydown', function (event) {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault(); // Prevent the default action to ensure it works as expected
-      document.getElementById(fileInputId).click();
+      fileInputElement.click();
     }
   });
-
-  document.getElementById(fileInputId).addEventListener('change',
+  fileInputElement.addEventListener('change',
     uploadFiles
   );
-
 }
-
-triggerFileInputClick('cameraUpload', 'imageInput');
-triggerFileInputClick('customPictureUpload', 'imageUpload');
 
 async function uploadFiles(event: Event): Promise<void> {
   event.preventDefault(); // Prevent the default form submission
-  const files: FileList = (event.target as HTMLInputElement).files; // Get the files from the input
-
-  //loop for multiple files with a foreach
-  showLoading();
+  showStatus(getTranslation('uploading'));
   try {
-    for (const file of Array.from(files)) {
-      if (file) {
-        try {
-          // Use fetch API to send the file to the server
-          const response = await fetch(`/api/upload?name=${file.name}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': file.type, // Set the Content-Type header to the file's MIME type
-            },
-            body: file, // Send the file directly as the body of the request
-          });
-          if (response.ok) {
-            const result: string = await response.text(); // or response.text() if the server responds with text
-            console.log('Success:', result);
-            showStatus(getTranslation('uploadSuccess'), 'success');
-          } else {
-            throw new Error('Upload failed');
+    const files: FileList = (event.target as HTMLInputElement).files; // Get the files from the input
+
+    //loop for multiple files with a foreach
+    showLoading();
+    try {
+      for (const file of Array.from(files)) {
+        if (file) {
+          try {
+            // Use fetch API to send the file to the server
+            const response = await fetch(`/api/upload?name=${file.name}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': file.type, // Set the Content-Type header to the file's MIME type
+              },
+              body: file, // Send the file directly as the body of the request
+            });
+            if (response.ok) {
+              const result: string = await response.text(); // or response.text() if the server responds with text
+              console.log('Success:', result);
+              showStatus(getTranslation('uploadSuccess'), 'success');
+            } else {
+              throw new Error('Upload failed');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            showStatus(getTranslation('uploadError'), 'error');
           }
-        } catch (error) {
-          console.error('Error:', error);
-          showStatus(getTranslation('uploadError'), 'error');
+        } else {
+          showStatus(getTranslation('uploadInvalid'), 'error');
         }
-      } else {
-        showStatus(getTranslation('uploadInvalid'), 'error');
       }
     }
-  }
-  finally {
-    hideLoading();
-    gallery(current_page);
-    try{
-      (event.target as HTMLInputElement).value=""; // Clear the file input
-    } catch (error) {
-      console.error('Error clearing files:', error);
+    finally {
+      hideLoading();
+      gallery(current_page);
+      try {
+        (event.target as HTMLInputElement).value = ""; // Clear the file input
+      } catch (error) {
+        console.error('Error clearing files:', error);
+      }
     }
+  } catch (error) {
+    console.error('Error:', error);
+    showStatus(error, 'error');
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  bindFileInputClick('cameraUpload', 'imageInput');
+  bindFileInputClick('customPictureUpload', 'imageUpload');
+});

@@ -14,6 +14,7 @@
     "Photo": "I give my consent for my photos to be published on this website (only the guests will have access to them)",
     "uploadSuccess": "✔ Picture uploaded successfully.",
     "uploadError": "⚠ Error uploading picture.",
+    "uploading": "Uploading...",
     "uploadInvalid": "⚠ Please select a file to upload.",
     "days": {
         "one": "day",
