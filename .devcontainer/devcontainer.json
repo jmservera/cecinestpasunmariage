@@ -38,7 +38,8 @@
 				"ms-dotnettools.csdevkit",
 				"GitHub.copilot",
 				"GitHub.vscode-github-actions",
-				"ms-semantic-kernel.semantic-kernel"
+				"ms-semantic-kernel.semantic-kernel",
+				"budparr.language-hugo-vscode"
 			]
 		}
 	},

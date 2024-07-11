@@ -22,9 +22,16 @@
 </div>
 <div id="pages2"></div>
 
-{{ with resources.Get "js/gallery.ts" }} {{ if eq hugo.Environment "development" }} {{ with . | js.Build }}
-<script src="{{ .RelPermalink }}" defer></script>
-{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build $opts | fingerprint }}
-<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous" defer ></script>
-{{ end }} {{ end }} {{ end }}
+{{ $dev := (eq hugo.Environment "development") }}
+{{/* minify only in production  */}}
+{{ $opts := dict "minify" (not $dev) }}
+{{ $galleryScript := resources.Get "js/gallery.ts" }}
+{{/*  {{ $imgUpload := resources.Get "js/imgUpload.ts" }}  */}}
 
+{{ $name := cond $dev "gallery.ts" "gallery.min.ts" }}
+{{/* concat the Typescript so that it does not repeat imports  */}}
+{{ $js := slice $galleryScript | resources.Concat (printf "js/%s" $name) | js.Build $opts }}
+{{/* add Fingerprint only in production  */}}
+{{ $js := cond $dev $js (resources.Fingerprint $js) }}
+
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer ></script>
