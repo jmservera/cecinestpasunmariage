@@ -13,4 +13,7 @@ else
     run="hugo server -M -e development -D -p 1313"
 fi
 
+# Workaround until this issue is fixed: https://github.com/Azure/azure-functions-core-tools/issues/3594sw
+dotnet clean ../backend/functions
+
 AzureWebJobsStorage=$STORAGE_CONNECTION_STRING swa start http://localhost:1313 --run "$run" -V --data-api-location "../swa-db-connections" --api-location ../backend/functions
