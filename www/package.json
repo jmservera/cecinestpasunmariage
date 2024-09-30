@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "@azure/static-web-apps-cli": "^2.0.1",
-    "@types/jquery": "^3.5.30",
+    "@types/jquery": "^3.5.31",
     "prettier": "^3.3.3",
     "prettier-plugin-go-template": "0.0.15"
   }
