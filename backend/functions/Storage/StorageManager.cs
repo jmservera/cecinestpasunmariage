@@ -63,7 +63,7 @@ namespace functions.Storage
             _logger.LogInformation("{fullPath} Saved", fullPath);
         }
 
-        public async Task ReplicateMetadataAsync(string fileName, string originalContainer, string destContainer)
+        public async Task ReplicateMetadataAsync(string fileName, string originalContainer, string destName, string destContainer)
         {
 
             if (string.IsNullOrEmpty(fileName))
@@ -78,18 +78,22 @@ namespace functions.Storage
             {
                 throw new ArgumentNullException(nameof(destContainer));
             }
+            if (string.IsNullOrEmpty(destName))
+            {
+                throw new ArgumentNullException(nameof(destName));
+            }
 
             string connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
-            _logger.LogInformation("Replicating metadata from {originalContainer}/{fileName} to {destContainer}/{fileName}", originalContainer, fileName, destContainer, fileName);
+            _logger.LogInformation("Replicating metadata from {originalContainer}/{fileName} to {destContainer}/{fileName}", originalContainer, fileName, destContainer, destName);
             var containerClient = new BlobContainerClient(connectionString, originalContainer);
             var originalBlobClient = containerClient.GetBlobClient(fileName);
             var properties = await originalBlobClient.GetPropertiesAsync();
             var metadata = properties.Value.Metadata;
 
-            _logger.LogInformation("Setting metadata to {destContainer}/{fileName}", destContainer, fileName);
+            _logger.LogInformation("Setting metadata to {destContainer}/{destName}", destContainer, destName);
             var destContainerClient = new BlobContainerClient(connectionString, destContainer);
-            var destBlobClient = destContainerClient.GetBlobClient(fileName);
+            var destBlobClient = destContainerClient.GetBlobClient(destName);
             await destBlobClient.SetMetadataAsync(metadata);
         }
     }

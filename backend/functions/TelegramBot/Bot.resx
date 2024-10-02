@@ -26,4 +26,8 @@
         <value>Sorry, I couldn't add the picture to the [website](https://cecinestpasunmariage.org/en/fotos)</value>
         <comment>Message sent to the user when a picture is not added to the website</comment>
     </data>
+    <data name="InvalidFile">
+        <value>The file is not in an accepted format</value>
+        <comment>Message sent to the user when the file sent is not an image</comment>
+    </data>
 </root>
