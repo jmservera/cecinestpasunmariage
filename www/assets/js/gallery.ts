@@ -100,6 +100,10 @@ function bindFileInputClick(elementId: string, fileInputId: string): void {
   const triggerElement = document.getElementById(elementId);
   const fileInputElement = document.getElementById(fileInputId)
 
+  if(triggerElement === null || fileInputElement === null) {
+    console.log("Elements not found");
+    return;
+  }
   triggerElement.addEventListener('click', function (event) {
     event.preventDefault();
     fileInputElement.click(); // Trigger the file input click
