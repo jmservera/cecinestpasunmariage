@@ -4,7 +4,7 @@ namespace functions.Storage
     {
         Task UploadAsync(string userName, string fileName, string containerName, Stream stream, string contentType, string? originalFileName, CancellationToken cancellationToken);
 
-        Task ReplicateMetadataAsync(string fileName, string originalContainer, string destContainer);
+        Task ReplicateMetadataAsync(string fileName, string originalContainer, string destFileName, string destContainer);
 
         string GenerateUniqueName();
     }

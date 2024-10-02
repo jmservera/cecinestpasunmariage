@@ -22,4 +22,8 @@
         <value>Désolé, je n'ai pas pu ajouter l'image sur le [site web](https://cecinestpasunmariage.org/fr/fotos)</value>
         <comment>Message envoyé à l'utilisateur lorsqu'une image n'est pas ajoutée au site web</comment>
     </data>
+    <data name="InvalidFile">
+        <value>Le fichier n'est pas dans un format accepté</value>
+        <comment>Message envoyé à l'utilisateur lorsque le fichier envoyé n'est pas une image</comment>
+    </data>
 </root>

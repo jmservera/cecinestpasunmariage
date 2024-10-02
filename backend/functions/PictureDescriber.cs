@@ -31,6 +31,8 @@ namespace functions
         private readonly ImageAnalysisClient _imageClient = imageClient;
         private readonly IConfiguration _configuration = configuration;
 
+        static readonly HashSet<string> validMimeTypesForFace = ["image/jpeg", "image/png", "image/gif"];
+
         [Function(nameof(PictureDescriber))]
         public async Task Run([BlobTrigger(GetPhotos.PicsContainerName + "/{name}", Connection = "")] BlobClient client, string name)
         {
@@ -48,23 +50,28 @@ namespace functions
             }
 
             _logger.LogInformation("C# Blob trigger function processing blob\n Name: {name}", name);
-            IReadOnlyList<string> people = [];
-            try
-            {
-                FaceRecognition face = new(_logger, _faceClient);
-                var blob = await client.OpenReadAsync();
-                people = await face.IdentifyInPersonGroupAsync(blob);
-                foreach (var person in people)
-                {
-                    _logger.LogInformation("Person '{person}' is identified for the face in: {name}", person, name);
-                }
 
-                _logger.LogInformation("Adding people metadata to blob {name}", name);
-                metadata.Add(StorageManager.PeopleMetadataKey, string.Join(',', people));
-            }
-            catch (Exception ex)
+            IReadOnlyList<string> people = [];
+
+            if (validMimeTypesForFace.Contains(properties.Value.ContentType))
             {
-                _logger.LogError(ex, "Error while identifying people in blob {name}", name);
+                try
+                {
+                    FaceRecognition face = new(_logger, _faceClient);
+                    var blob = await client.OpenReadAsync();
+                    people = await face.IdentifyInPersonGroupAsync(blob);
+                    foreach (var person in people)
+                    {
+                        _logger.LogInformation("Person '{person}' is identified for the face in: {name}", person, name);
+                    }
+
+                    _logger.LogInformation("Adding people metadata to blob {name}", name);
+                    metadata.Add(StorageManager.PeopleMetadataKey, string.Join(',', people));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error while identifying people in blob {name}", name);
+                }
             }
 
             var descriptions = await GenerateDescriptionsAsync(name, properties.Value.ContentType, people);
@@ -75,7 +82,8 @@ namespace functions
             metadata[StorageManager.DescriptionMetadataKey] = descriptions["en"];
 
             await client.SetMetadataAsync(metadata);
-            await _storageManager.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, GetPhotos.ThumbnailsContainerName);
+            var destName=$"{Path.GetDirectoryName(name)}/{Path.GetFileNameWithoutExtension(name)}.jpg";
+            await _storageManager.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName,destName, GetPhotos.ThumbnailsContainerName);
         }
 
         private async Task<Dictionary<string, string>> GenerateDescriptionsAsync(string name, string contentType, IReadOnlyList<string> people)
@@ -85,7 +93,10 @@ namespace functions
 
             //use the related thumbnail to make it faster and save some tokens
             BlobContainerClient containerThumbnailsClient = new(connectionString, GetPhotos.ThumbnailsContainerName);
-            var thumbnailClient = containerThumbnailsClient.GetBlobClient(name);
+            
+            // thumbnail is always jpg
+            var thumbnailName = $"{Path.GetDirectoryName(name)}/{Path.GetFileNameWithoutExtension(name)}.jpg";
+            var thumbnailClient = containerThumbnailsClient.GetBlobClient(thumbnailName);            
             var thumbnail = await thumbnailClient.OpenReadAsync();
             if (thumbnail != null)
             {
@@ -93,7 +104,7 @@ namespace functions
                 await thumbnail.ReadAsync(image);
                 try
                 {
-                    return await GenerateDescriptionsFromImageOrCaptionsAsync(contentType, image, people);
+                    return await GenerateDescriptionsFromImageOrCaptionsAsync("image/jpg", image, people);
                 }
                 catch (HttpOperationException ex)
                 {
@@ -108,7 +119,7 @@ namespace functions
                     var caption = string.Join(", ", analysisResult.Value.DenseCaptions.Values.Select(v => v.Text).Distinct());
                     _logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
 
-                    return await GenerateDescriptionsFromImageOrCaptionsAsync(contentType, null, people, caption);
+                    return await GenerateDescriptionsFromImageOrCaptionsAsync("image/jpg", null, people, caption);
 
                 }
             }

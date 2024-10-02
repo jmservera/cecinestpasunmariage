@@ -22,4 +22,8 @@
         <value>Imagen no añadida a la [página web](https://cecinestpasunmariage.org/es/fotos)</value>
         <comment>Mensaje enviado al usuario cuando no se puede añadir una imagen al sitio web</comment>
     </data>
+    <data name="InvalidFile">
+        <value>El archivo no es de ningún formato aceptado</value>
+        <comment>Mensaje enviado al usuario cuando el archivo enviado no es una imagen</comment>
+    </data>
 </root>

@@ -117,6 +117,14 @@ namespace functions.TelegramBot
                 {
                     await ProcessDocumentAsync(message.Document, username, cancellationToken);
                 }
+                else if (message.Video != null)
+                {
+                    await ProcessVideoAsync(message.Video, username, cancellationToken);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Unsupported file type");
+                }
 
                 await _client.SendTextMessageAsync(
                     chatId: message.Chat.Id,
@@ -133,6 +141,30 @@ namespace functions.TelegramBot
                     text: _localizer.GetString("PictureNotAdded"),
                     cancellationToken: cancellationToken);
             }
+        }
+
+        private async Task ProcessVideoAsync(Video video, string username, CancellationToken cancellationToken)
+        {
+            if (video.MimeType == null)
+            {
+                throw new InvalidOperationException("Document has no mime type");
+            }
+
+            ValidateMimeType(video.MimeType);
+            
+            var fileName = _uploader.GenerateUniqueName();
+            if (video.Thumbnail != null)
+            {
+                var file = await _client.GetFileAsync(video.Thumbnail.FileId, cancellationToken);
+                await UploadFileToBlobAsync(GetPhotos.ThumbnailsContainerName, file, fileName, username, cancellationToken);
+            }
+
+            if (video != null)
+            {
+                var file = await _client.GetFileAsync(video.FileId, cancellationToken);
+                await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken, video.MimeType);
+            }
+
         }
 
         private async Task ProcessPhotosAsync(IEnumerable<PhotoSize> photos, string username, CancellationToken cancellationToken)
@@ -174,9 +206,9 @@ namespace functions.TelegramBot
             await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken, document.MimeType);
         }
 
+        static readonly HashSet<string> validMimeTypes = ["image/jpeg", "image/png", "image/gif", "video/mp4"];
         private static void ValidateMimeType(string mimeType)
         {
-            var validMimeTypes = new HashSet<string> { "image/jpeg", "image/png", "image/gif" };
             if (!validMimeTypes.Contains(mimeType))
             {
                 throw new InvalidOperationException($"Invalid file type {mimeType}");
@@ -191,6 +223,7 @@ namespace functions.TelegramBot
             if (update.Message is not { } message)
                 return;
 
+            bool somethingWasSent = false;
             var language = update.Message.From?.LanguageCode ?? "en";
             CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
 
@@ -210,6 +243,7 @@ namespace functions.TelegramBot
                     document.MimeType,
                     message.Chat.Id);
                 await ProcessMessageAttachmentsAsync(message, cancellationToken);
+                somethingWasSent=true;
             }
             if (message.Photo is { } p)
             {
@@ -218,13 +252,34 @@ namespace functions.TelegramBot
                         p.LastOrDefault()?.FileSize,
                         message.Chat.Id);
                 await ProcessMessageAttachmentsAsync(message, cancellationToken);
+                somethingWasSent=true;
+            }
+            if(message.Video is { } v)
+            {
+                _logger.LogInformation("Received a video '{Caption}' of size {FileSize} in chat {ChatId}",
+                        message.Caption,
+                        v.FileSize,
+                        message.Chat.Id);
+                await ProcessMessageAttachmentsAsync(message, cancellationToken);
+                somethingWasSent=true;
             }
 
             // Only process text messages
             if (message.Text is not { } messageText)
+            {
+                if (!somethingWasSent)
+                {
+                    _logger.LogError("Didn't have a handler for a '{MessageType}' message in chat {ChatId}.", message.Type, message.Chat.Id);
+                    await _client.SendTextMessageAsync(
+                        chatId: message.Chat.Id,
+                        parseMode: ParseMode.MarkdownV2,
+                        text: _localizer.GetString("InvalidFile"),
+                        cancellationToken: cancellationToken);
+                }
                 return;
+            }
 
-            if (messageText.StartsWith("/"))
+            if (messageText.StartsWith('/'))
             {
                 await HandleCommand(message, cancellationToken);
             }
@@ -234,6 +289,7 @@ namespace functions.TelegramBot
 
                 _logger.LogInformation("Received a '{MessageText}' message in chat {ChatId}.", messageText, chatId);
 
+                // TODO: send it to AOAI
                 // Echo received message text
                 Message sentMessage = await _client.SendTextMessageAsync(
                     chatId: chatId,
