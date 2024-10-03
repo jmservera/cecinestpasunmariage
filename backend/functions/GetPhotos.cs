@@ -33,21 +33,24 @@ namespace functions
             PhotosResponse photosResponse = new();
 
 
-            var allTumbThePics = containerThumbnailsClient.GetBlobs().ToList().OrderBy(b => b.Properties.LastModified);
+            var allTumbThePics = containerThumbnailsClient.GetBlobs().ToList().OrderByDescending(b => b.Properties.LastModified);
             photosResponse.NumPictures = allTumbThePics.Count();
             var allPics = containerPicsClient.GetBlobs();
 
             // todo: use https://learn.microsoft.com/en-us/azure/architecture/web-apps/guides/security/secure-single-page-application-authorization
             // to secure the access to the blob storage
 
-            await Parallel.ForEachAsync(allTumbThePics.Skip((page - 1) * 10).Take(10), async (blobTumbItem, token) =>
+            
+            List<Photo> pictures = [];
+
+            await Parallel.ForEachAsync(allTumbThePics.Skip((page - 1) * 10).Take(10), async (thumbItem, token) =>
             {
-                BlobClient blobThumbClient = containerThumbnailsClient.GetBlobClient(blobTumbItem.Name);
+                BlobClient blobThumbClient = containerThumbnailsClient.GetBlobClient(thumbItem.Name);
                 var blobSasUriThumb = blobThumbClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
-                var metadata = await blobThumbClient.GetPropertiesAsync();
+                var metadata = await blobThumbClient.GetPropertiesAsync(cancellationToken: token);
 
                 // extensions may differ between the thumbnail and the picture
-                var noExtension = Path.Join(Path.GetDirectoryName(blobTumbItem.Name), Path.GetFileNameWithoutExtension(blobTumbItem.Name));
+                var noExtension = Path.Join(Path.GetDirectoryName(thumbItem.Name), Path.GetFileNameWithoutExtension(thumbItem.Name));
                 // find the original picture for the thumbnail
                 var pic = allPics.Where(b => Path.Join(Path.GetDirectoryName(b.Name), Path.GetFileNameWithoutExtension(b.Name)) == noExtension).FirstOrDefault();
                 if (pic is { })
@@ -69,19 +72,19 @@ namespace functions
                     }
                     description ??= pic.Name;
 
-                    photosResponse.Pictures.Add(new Photo()
+                    pictures.Add(new Photo()
                     {
                         Name = blobPicsClient.Name.ToString(),
                         Uri = blobSasUriPics.ToString(),
                         ThumbnailUri = blobSasUriThumb.ToString(),
                         Author = author,
                         Description = description,
-                        LastModified = blobTumbItem.Properties.LastModified
+                        LastModified = thumbItem.Properties.LastModified
                     });
                 }
             });
 
-            photosResponse.Pictures.Sort((a, b) => b.LastModified?.CompareTo(a.LastModified ?? DateTimeOffset.MinValue) ?? 0);
+            photosResponse.Pictures=pictures.OrderByDescending(p=>p.LastModified);
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -95,7 +98,7 @@ namespace functions
         struct PhotosResponse
         {
             public PhotosResponse() { }
-            public List<Photo> Pictures { get; set; } = [];
+            public IEnumerable<Photo>? Pictures { get; set; }
 
             public int NumPictures { get; set; }
         }
