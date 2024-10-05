@@ -26,7 +26,8 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm install -g @azure/static-web-apps-cli@latest && cd www && npm install && cd ../backend/functions && echo '{\"IsEncrypted\":false,\"Values\":{\"FUNCTIONS_WORKER_RUNTIME\":\"dotnet-isolated\"}}' > local.settings.json && cd ../../www && cp -u .env.file .env",
+	// run the postCreateCommand.sh script
+	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
 	// Configure tool-specific properties.
 
 	"customizations": {
