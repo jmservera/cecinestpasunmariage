@@ -1,7 +1,29 @@
 import { hideLoading, showLoading } from "./loading";
 import { getTranslation } from "./i18n";
 
+// import Swiper JS
+import Swiper from 'swiper';
+import {Manipulation, Navigation, Pagination, Autoplay} from 'swiper/modules';
+
+const swiper = new Swiper('.swiper', {modules:[Manipulation, Navigation, Pagination, Autoplay], loop: false, autoplay: {delay: 5000}});
+let lastIndex:number=-1;
+function playSlide(){
+  if(lastIndex!=-1){
+    const video = swiper.slides[lastIndex].querySelector('video');
+    if(video){
+      video.pause();
+    }
+    lastIndex=-1;
+  }
+  swiper.slides[swiper.activeIndex].querySelectorAll('video').forEach((video:HTMLVideoElement)=>{
+    video.play();
+    lastIndex=swiper.activeIndex;
+  });
+}
+swiper.on('activeIndexChange', playSlide);
+
 let current_page: number = 1; // the current page
+
 
 async function gallery(page: number = current_page): Promise<void> {
   showLoading();
@@ -65,13 +87,34 @@ async function gallery(page: number = current_page): Promise<void> {
       gallery(next_page);
     });
 
-    let i: number = 0;
-    $("#mygallery").html("");
+    swiper.autoplay.stop();
+    swiper.removeAllSlides();
     data.Pictures.forEach((element: any) => {
-      i++;
-      //add elements to mygallery
-      $("#mygallery").append(`<div><a href="${element.Uri}" target="_blank"><img class="grid-item grid-item-${i}" src="${element.ThumbnailUri}" alt="${element.Description}" /></a><p>${element.Description}</p></div>`);
+      const slide = document.createElement('div') as HTMLDivElement;
+      slide.className = "swiper-slide";
+      const title = document.createElement('p') as HTMLParagraphElement;
+      title.textContent=element.Description;
+      slide.appendChild(title);
+      if(element.Uri.includes(".mp4")){
+        const item = document.createElement('video') as HTMLVideoElement;
+        item.autoplay=false;
+        item.src=element.Uri;
+        item.title=element.Description;
+        slide.appendChild(item);      }
+      else{
+        const item = document.createElement('img') as HTMLImageElement;
+        item.src=element.Uri;
+        item.title=element.Description;
+        item.alt=element.Description;
+        slide.appendChild(item);
+      }
+      swiper.addSlide(1,slide);
     });
+    swiper.update();
+    swiper.autoplay.start();
+    playSlide();
+
+
   } catch (error) {
     console.error("Error:", error);
     showStatus(error, "error");

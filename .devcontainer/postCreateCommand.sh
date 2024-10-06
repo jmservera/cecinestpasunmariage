@@ -10,7 +10,7 @@ popd
 
 echo "## Generate local settings"
 pushd backend/functions 
-echo '{\"IsEncrypted\":false,\"Values\":{\"FUNCTIONS_WORKER_RUNTIME\":\"dotnet-isolated\"}}' > local.settings.json
+echo '{"IsEncrypted":false,"Values":{"FUNCTIONS_WORKER_RUNTIME":"dotnet-isolated"}}' > local.settings.json
 popd
 
 

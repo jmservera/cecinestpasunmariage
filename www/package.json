@@ -14,5 +14,8 @@
     "@types/jquery": "^3.5.31",
     "prettier": "^3.3.3",
     "prettier-plugin-go-template": "0.0.15"
+  },
+  "dependencies": {
+    "swiper": "^11.1.14"
   }
 }

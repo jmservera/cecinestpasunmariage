@@ -1,3 +1,10 @@
+@use "../../node_modules/swiper/swiper.scss";
+@use "../../node_modules/swiper/modules/manipulation.scss";
+@use "../../node_modules/swiper/modules/navigation.scss";
+@use "../../node_modules/swiper/modules/pagination.scss";
+@use "../../node_modules/swiper/modules/scrollbar.scss";
+@use "../../node_modules/swiper/modules/autoplay.scss";
+
 @import "ceci-variables.scss";
 
 .grid-container {

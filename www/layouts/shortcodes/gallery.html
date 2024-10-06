@@ -1,4 +1,5 @@
-{{ with resources.Get "css/gallery.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+{{ $opts := dict "transpiler" "dartsass" }}
+{{ with resources.Get "css/gallery.scss" | toCSS $opts  | resources.Minify | resources.Fingerprint }}
 <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" />
 {{ end }}
 
@@ -17,9 +18,26 @@
 <input type="file" id="imageUpload" multiple="multiple" name="image" accept="image/*" text="" aria-hidden="true" tabindex="-1"> <!-- This one works in firefox and allows rear/front camera + open from file, it is needed in chrome to allow uploading a file -->
 
 <div id="pages"></div>
-<div id="mygallery" class="grid-container">
-  <!-- https://codepen.io/rperry1886/pen/KKwbQNP -->
+<!-- Slider main container -->
+<div class="swiper">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    {{/*  <div class="swiper-slide">Slide 1</div>
+    <div class="swiper-slide">Slide 2</div>
+    <div class="swiper-slide">Slide 3</div>  */}}
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- If we need scrollbar -->
+  <div class="swiper-scrollbar"></div>
 </div>
+
 <div id="pages2"></div>
 
 {{ $dev := (eq hugo.Environment "development") }}
