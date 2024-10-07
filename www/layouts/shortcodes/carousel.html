@@ -1,0 +1,41 @@
+{{ $opts := dict "transpiler" "dartsass" }}
+{{ with resources.Get "css/carousel.scss" | toCSS $opts  | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" />
+{{ end }}
+
+<div id="pages"></div>
+<!-- Slider main container -->
+<div class="swiper">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    {{/*  <div class="swiper-slide">Slide 1</div>
+    <div class="swiper-slide">Slide 2</div>
+    <div class="swiper-slide">Slide 3</div>  */}}
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- If we need scrollbar -->
+  <div class="swiper-scrollbar"></div>
+</div>
+
+<div id="pages2"></div>
+
+{{ $dev := (eq hugo.Environment "development") }}
+{{/* minify only in production  */}}
+{{ $opts := dict "minify" (not $dev) }}
+{{ $galleryScript := resources.Get "js/carousel.ts" }}
+{{/*  {{ $imgUpload := resources.Get "js/imgUpload.ts" }}  */}}
+
+{{ $name := cond $dev "carousel.ts" "carousel.min.ts" }}
+{{/* concat the Typescript so that it does not repeat imports  */}}
+{{ $js := slice $galleryScript | resources.Concat (printf "js/%s" $name) | js.Build $opts }}
+{{/* add Fingerprint only in production  */}}
+{{ $js := cond $dev $js (resources.Fingerprint $js) }}
+
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" crossorigin="anonymous" defer ></script>
