@@ -1,5 +1,5 @@
 {{ $opts := dict "transpiler" "dartsass" }}
-{{ with resources.Get "css/carousel.scss" | toCSS $opts  | resources.Minify | resources.Fingerprint }}
+{{ with resources.Get "css/carousel.scss" | css.Sass $opts  | resources.Minify | resources.Fingerprint }}
 <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" />
 {{ end }}
 
