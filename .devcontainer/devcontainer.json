@@ -40,7 +40,8 @@
 				"GitHub.copilot",
 				"GitHub.vscode-github-actions",
 				"ms-semantic-kernel.semantic-kernel",
-				"budparr.language-hugo-vscode"
+				"budparr.language-hugo-vscode",
+				"GitHub.vscode-pull-request-github"
 			]
 		}
 	},

@@ -35,6 +35,15 @@
       }
     },
     {
+      "route": "/carousel/",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
       "route": "/en/registro/",
       "allowedRoles": [
         "authenticated"
@@ -45,6 +54,14 @@
     },
     {
       "route": "/en/fotos/",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },{
+      "route": "/en/carousel/",
       "allowedRoles": [
         "authenticated"
       ],
@@ -63,6 +80,15 @@
     },
     {
       "route": "/fr/fotos/",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/fr/carousel/",
       "allowedRoles": [
         "authenticated"
       ],
