@@ -48,20 +48,14 @@
   }
 }
 
-.imgbox {
-  display: grid;
-  height: 100%;
-}
-.center-fit {
-  max-width: 100%;
-  max-height: 100vh;
-  margin: auto;
-}
-
-#pages2,
-#pages {
+// make .swiper full screen
+.swiper.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  margin: 10px auto;
+  height: 100%;
+  z-index: 1000;
 }
 
 button {
@@ -104,10 +98,25 @@ button.selected {
   }
 }
 
-.file-upload-btn {
-  @extend button;
-  stroke: $button-color;
-  display: inline-flex;
+.imgbox {
+  display: grid;
+  height: 100%;
+}
+.center {
+  max-width: 100%;
+  margin:auto;
+  background-color: white;
+}
+.center-fit {
+  max-width: 100%;
+  max-height: 90vh;
+  margin: auto;
+}
+
+#pages2,
+#pages {
+  width: 100%;
+  margin: 10px auto;
 }
 
 .status {
@@ -135,12 +144,6 @@ button.selected {
   /* Yellow */
   color: $error-color;
   /* Black text color for better contrast */
-}
-
-#imageInput,
-#imageUpload {
-  display: none;
-  /* Hide the file input */
 }
 
 .visually-hidden {

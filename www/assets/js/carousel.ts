@@ -5,6 +5,17 @@ import { getTranslation } from "./i18n";
 import Swiper from 'swiper';
 import {Manipulation, Navigation, Pagination, Autoplay} from 'swiper/modules';
 
+// bind esc key to close fullscreen
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    document.getElementsByClassName('fullscreen')[0].classList.remove('fullscreen');
+  }
+});
+
+document.getElementById('fullScreen').addEventListener('click', (event) => {
+  document.getElementsByClassName('swiper')[0].classList.add('fullscreen');
+});
+
 // use https://swiperjs.com/swiper-api
 const swiper = new Swiper('.swiper', {modules:[Manipulation, Navigation, Pagination, Autoplay], loop: false, autoplay: {delay: 5000},
   navigation: {
@@ -98,6 +109,7 @@ async function carousel(page: number = current_page): Promise<void> {
       const slide = document.createElement('div') as HTMLDivElement;
       slide.className = "swiper-slide imgbox";
       const title = document.createElement('p') as HTMLParagraphElement;
+      title.className="center";
       title.textContent=element.Description;
       slide.appendChild(title);
       if(element.Uri.includes(".mp4")){
@@ -128,6 +140,18 @@ async function carousel(page: number = current_page): Promise<void> {
   } finally {
     hideLoading();
   }
+}
+
+function showStatus(message: string, className: string = '') {
+  const statusElement = document.getElementById('uploadStatus');
+  statusElement.textContent = message;
+  statusElement.className = `status ${className}`; // Apply success styling
+  statusElement.style.display = 'block';
+  setTimeout(() => {
+    statusElement.textContent = '';
+    statusElement.className = ''; // Clear the status styling
+    statusElement.style.display = 'none'; // Hide the status element
+  }, 5000);
 }
 
 $(async () => {
