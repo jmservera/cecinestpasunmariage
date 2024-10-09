@@ -6,11 +6,11 @@ let current_page: number = 1; // the current page
 async function gallery(page: number = current_page): Promise<void> {
   showLoading();
   try {
-    const pictures_per_page: number = 10; // 2 pictures per page
+    const pictures_per_page: number = 16; // 2 pictures per page
     const max_num_of_pages: number = 5; // max number of pages to show in the pagination bar
 
     current_page = page; // the current page
-    const response = await fetch(`/api/GetPhotos?page=${current_page}&lang=${window.lang}`); // replace with your API endpoint
+    const response = await fetch(`/api/GetPhotos?page=${current_page}&n=${pictures_per_page}&lang=${window.lang}`); // replace with your API endpoint
     const data = await response.json();
 
     const total_num_of_pictures: number = data.NumPictures; // total number of pictures
