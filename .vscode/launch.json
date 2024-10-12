@@ -11,6 +11,14 @@
       "type": "coreclr",
       "request": "attach",
       "processId": "${command:azureFunctions.pickProcess}"
+    },
+    {
+      "name": "Launch and Attach to Function App",
+      "type": "coreclr",
+      "request": "attach",
+      "preLaunchTask": "startFunctionApp",
+      "postDebugTask": "taskKill",
+      "processId": "${command:azureFunctions.pickProcess}"
     }
   ]
 }

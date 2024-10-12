@@ -76,6 +76,25 @@
       "command": "host start",
       "isBackground": true,
       "problemMatcher": "$func-dotnet-watch"
+    },
+        {
+          "label": "startFunctionApp",
+          "type": "shell",
+          "command": "./start",
+          "isBackground": true,
+          "problemMatcher": [],
+          "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "taskKill",
+      "type": "shell",
+      "command": "pkill -f start",
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
     }
   ]
 }

@@ -40,22 +40,23 @@ swiper.on('activeIndexChange', playSlide);
 
 let current_page: number = 1; // the current page
 
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("zoom-in");
+    } else {
+      entry.target.classList.remove("zoom-in");
+    }
+  });
+});
 
 async function carousel(page: number = current_page): Promise<void> {
   showLoading();
   try {
     const pictures_per_page: number = 50; // 2 pictures per page
     current_page = page; // the current page
-    const response = await fetch(`/api/GetPhotos?page=${current_page}&n=${pictures_per_page}&lang=${window.lang}`); // replace with your API endpoint
+    const response: Response = await fetch(`/api/GetPhotos?page=${current_page}&n=${pictures_per_page}&lang=${window.lang}`); // replace with your API endpoint
     const data = await response.json();
-
-    const total_num_of_pictures: number = data.NumPictures; // total number of pictures
-    const num_of_pages: number = Math.ceil(
-      total_num_of_pictures / pictures_per_page
-    );
-
-    let inicial: number = 1;
-    let final: number = num_of_pages;
 
     swiper.autoplay.stop();
     swiper.removeAllSlides();
@@ -76,6 +77,8 @@ async function carousel(page: number = current_page): Promise<void> {
         img.src = element.Uri;
         img.title = element.Description;
         img.alt = element.Description;
+        // adds zoom-in when visible
+        observer.observe(img);
       }
       
       swiper.appendSlide(slide.firstElementChild as HTMLElement);
