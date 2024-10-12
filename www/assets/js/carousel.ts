@@ -5,6 +5,10 @@ import { getTranslation } from "./i18n";
 import Swiper from 'swiper';
 import {Manipulation, Navigation, Pagination, Autoplay} from 'swiper/modules';
 
+
+const pictures_per_page: number = 20;
+const pictures_delay: number = 5000;
+
 // bind esc key to close fullscreen
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape') {
@@ -17,28 +21,11 @@ document.getElementById('fullScreen').addEventListener('click', (event) => {
 });
 
 // use https://swiperjs.com/swiper-api
-const swiper = new Swiper('.swiper', {modules:[Manipulation, Navigation, Pagination, Autoplay], loop: false, autoplay: {delay: 5000},
+const swiper = new Swiper('.swiper', {modules:[Manipulation, Navigation, Pagination, Autoplay], loop: false, autoplay: {delay: pictures_delay},
   navigation: {
     nextEl: '.swiper-button-next',
     prevEl: '.swiper-button-prev',
   }});
-let lastIndex:number=-1;
-function playSlide(){
-  if(lastIndex!=-1){
-    const video = swiper.slides[lastIndex].querySelector('video');
-    if(video){
-      video.pause();
-    }
-    lastIndex=-1;
-  }
-  swiper.slides[swiper.activeIndex].querySelectorAll('video').forEach((video:HTMLVideoElement)=>{
-    video.play();
-    lastIndex=swiper.activeIndex;
-  });
-}
-swiper.on('activeIndexChange', playSlide);
-
-let current_page: number = 1; // the current page
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -50,18 +37,27 @@ const observer = new IntersectionObserver((entries) => {
   });
 });
 
-async function carousel(page: number = current_page): Promise<void> {
+const videoObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    var video=entry.target as HTMLVideoElement;
+    if(video){
+      if (entry.isIntersecting) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+  });
+});
+
+async function loadPics(page:string): Promise<any> {
+  let data:any={};
   showLoading();
   try {
-    const pictures_per_page: number = 50; // 2 pictures per page
-    current_page = page; // the current page
-    const response: Response = await fetch(`/api/GetPhotos?page=${current_page}&n=${pictures_per_page}&lang=${window.lang}`); // replace with your API endpoint
-    const data = await response.json();
-
-    swiper.autoplay.stop();
-    swiper.removeAllSlides();
+    const response: Response = await fetch(`/api/GetPhotos${page}`); // replace with your API endpoint
+    data = await response.json();
     const template = document.getElementById('slide-template') as HTMLTemplateElement;
-    data.Pictures.forEach((element: any) => {      
+    data.Pictures.forEach((element: any) => {
       const slide = template.content.cloneNode(true) as DocumentFragment;
       const title = slide.querySelector('p') as HTMLParagraphElement;
       title.textContent = element.Description;
@@ -71,22 +67,57 @@ async function carousel(page: number = current_page): Promise<void> {
         video.style.display = 'block';
         video.src = element.Uri;
         video.title = element.Description;
+        videoObserver.observe(video);
       } else {
         const img = slide.querySelector('img') as HTMLImageElement;
         img.style.display = 'block';
         img.src = element.Uri;
         img.title = element.Description;
-        img.alt = element.Description;
-        // adds zoom-in when visible
         observer.observe(img);
       }
-      
       swiper.appendSlide(slide.firstElementChild as HTMLElement);
     });
     swiper.update();
-    swiper.autoplay.start();
-    playSlide();
+  } catch (error) {
+    console.error("Error:", error);
+    showStatus(error, "error");
+  } finally {
+    hideLoading();
+  }
+  return data;
+}
 
+async function carousel(): Promise<void> {
+  showLoading();
+  try {
+    let data={Next:null};
+    data=await loadPics(`?page=0&n=${pictures_per_page}&lang=${window.lang}`);
+    swiper.autoplay.start();
+
+    swiper.on('reachEnd', async () => {
+      if(data.Next){
+        swiper.autoplay.pause();
+        data=await loadPics(data.Next);
+        swiper.autoplay.resume();
+      }
+      else{
+        swiper.autoplay.stop();
+        setTimeout(async () => {
+
+        //unobserve all images  
+        swiper.slides.forEach((slide:HTMLElement)=>{
+          const img=slide.querySelector('img');
+          observer.unobserve(img);
+          const video=slide.querySelector('video');
+          videoObserver.unobserve(video);
+        });
+        swiper.removeAllSlides();
+        data=await loadPics(`?page=0&n=${pictures_per_page}&lang=${window.lang}`);
+        swiper.autoplay.start();
+        },1000);
+      }
+    });
+    
 
   } catch (error) {
     console.error("Error:", error);

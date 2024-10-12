@@ -1,12 +1,12 @@
 import { hideLoading, showLoading } from "./loading";
 import { getTranslation } from "./i18n";
 
-let current_page: number = 1; // the current page
+let current_page: number = 0; // the current page
 
 async function gallery(page: number = current_page): Promise<void> {
   showLoading();
   try {
-    const pictures_per_page: number = 16; // 2 pictures per page
+    const pictures_per_page: number = 10; // 2 pictures per page
     const max_num_of_pages: number = 5; // max number of pages to show in the pagination bar
 
     current_page = page; // the current page
@@ -22,12 +22,12 @@ async function gallery(page: number = current_page): Promise<void> {
       total_num_of_pictures / pictures_per_page
     );
 
-    let inicial: number = 1;
+    let inicial: number = 0;
     let final: number = num_of_pages;
 
     if (num_of_pages > max_num_of_pages) {
-      if (current_page > 1) {
-        $("#pages").append(`<button class="page" id="0" ><</button>`);
+      if (current_page > 0) {
+        $("#pages").append(`<button class="page" id="-1" ><</button>`);
       }
 
       if (current_page > Math.floor(max_num_of_pages / 2)) {
@@ -41,25 +41,25 @@ async function gallery(page: number = current_page): Promise<void> {
       }
     }
 
-    for (let i = inicial; i <= final; i++) {
+    for (let i = inicial; i < final; i++) {
       if (i == current_page) {
-        $("#pages").append(`<button class="pageNumber selected" id="${i}" >${i}</button>`);
+        $("#pages").append(`<button class="pageNumber selected" id="${i}" >${i+1}</button>`);
       } else {
-        $("#pages").append(`<button class="pageNumber" id="${i}" >${i}</button>`);
+        $("#pages").append(`<button class="pageNumber" id="${i}" >${i+1}</button>`);
       }
     }
 
     if (num_of_pages > max_num_of_pages && current_page < num_of_pages) {
-      $("#pages").append(`<button class="page" id="1000" >></button>`);
+      $("#pages").append(`<button class="page" id="10000" >></button>`);
     }
 
     // Add click event listeners to the page buttons
     $(".pageNumber").on("click", function () {
       $(".pageNumber").off("click"); // remove all the clicks before starting anew
       let next_page: number = parseInt($(this).attr("id"));
-      if (next_page === 0) {
+      if (next_page === -1) {
         next_page = current_page - 1;
-      } else if (next_page == 1000) {
+      } else if (next_page == 10000) {
         next_page = current_page + 1;
       }
       gallery(next_page);
