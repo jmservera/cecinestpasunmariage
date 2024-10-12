@@ -19,7 +19,7 @@ namespace functions
         private readonly IConfiguration _configuration = configuration;
 
         [Function("GetPhotos")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 1, string lang="en")
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 0, int n=10, string lang="en")
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -43,7 +43,7 @@ namespace functions
             
             List<Photo> pictures = [];
 
-            await Parallel.ForEachAsync(allTumbThePics.Skip((page - 1) * 10).Take(10), async (thumbItem, token) =>
+            await Parallel.ForEachAsync(allTumbThePics.Skip(page * n).Take(n), async (thumbItem, token) =>
             {
                 BlobClient blobThumbClient = containerThumbnailsClient.GetBlobClient(thumbItem.Name);
                 var blobSasUriThumb = blobThumbClient.GenerateSasUri(Azure.Storage.Sas.BlobSasPermissions.Read, DateTimeOffset.UtcNow.AddMinutes(15));
@@ -85,6 +85,9 @@ namespace functions
             });
 
             photosResponse.Pictures=pictures.OrderByDescending(p=>p.LastModified);
+            string langn="";
+            if(lang!="en"){langn=$"&lang={lang}";}
+            photosResponse.Next = (page+1) * n < photosResponse.NumPictures ? $"?page={page + 1}&n={n}{langn}" : null;
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
@@ -101,6 +104,8 @@ namespace functions
             public IEnumerable<Photo>? Pictures { get; set; }
 
             public int NumPictures { get; set; }
+
+            public string? Next { get; set; }
         }
 
         struct Photo
