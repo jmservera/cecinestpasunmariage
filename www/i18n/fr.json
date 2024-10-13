@@ -22,5 +22,12 @@
     "uploadSuccess": "✔ Image téléchargée avec succès.",
     "uploadError": "⚠ Erreur lors du téléchargement de l'image.",
     "uploadInvalid": "⚠ Veuillez sélectionner un fichier à télécharger.",
-    "uploading": "Téléchargement en cours..."
+    "uploading": "Téléchargement en cours...",
+    "msgSendTitle": "Titre du message",
+    "msgSendTitlePlaceholder": "Titre du message",
+    "msgSendMessage": "Message",
+    "msgSendMessagePlaceholder": "Écrivez votre message",
+    "msgSendButton": "Envoyer le message",
+    "selectAll": "Tout sélectionner",
+    "selectUser": "Sélectionner l'utilisateur"
 }

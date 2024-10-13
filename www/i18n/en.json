@@ -23,5 +23,12 @@
     "hours": {
         "one": "hour",
         "other": "hours"
-    }
+    },
+    "msgSendTitle": "Message title",
+    "msgSendTitlePlaceholder": "Message title",
+    "msgSendMessage": "Message",
+    "msgSendMessagePlaceholder": "Write your message",
+    "msgSendButton": "Send message",
+    "selectAll": "Select all",
+    "selectUser": "Select user"
 }

@@ -1,0 +1,11 @@
+@import "ceci-variables.scss";
+@import "base-button.scss";
+
+#guestList {
+    td {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 200px; // Adjust the max-width as needed
+    }
+}
