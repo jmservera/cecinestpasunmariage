@@ -1,4 +1,20 @@
-<div id="guestList"></div>
+{{ with resources.Get "css/guestList.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" />
+{{ end }}
+
+<div id="guestList">
+  <table>
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+</div>
+<form id="messageForm" target="_self">
+  <label for="title">{{ i18n "msgSendTitle" }}</label>
+  <input type="text" id="title" name="title" placeholder="{{ i18n "msgSendTitlePlaceholder" }}" />
+  <label for="message">{{ i18n "msgSendMessage" }}</label>
+  <textarea id="message" name="message" placeholder="{{ i18n "msgSendMessagePlaceholder" }}"></textarea>
+  <button id="sendMessage">{{ i18n "msgSendButton" }}</button>
+</form>
 
 {{ with resources.Get "js/guestlist.ts" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build}}

@@ -22,5 +22,12 @@
     "uploadSuccess": "✔ Imagen cargada con éxito.",
     "uploadError": "⚠ Error durante la carga de la imagen",
     "uploadInvalid": "⚠ Por favor, seleccione una imagen a cargar.",
-    "uploading": "Cargando..."
+    "uploading": "Cargando...",
+    "msgSendTitle": "Título del mensaje",
+    "msgSendTitlePlaceholder": "Título del mensaje",
+    "msgSendMessage": "Mensaje",
+    "msgSendMessagePlaceholder": "Escribe tu mensaje",
+    "msgSendButton": "Enviar mensaje",
+    "selectAll": "Seleccionar todo",
+    "selectUser": "Seleccionar usuario"
 }

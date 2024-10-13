@@ -6,6 +6,7 @@
 @use "../../node_modules/swiper/modules/autoplay.scss";
 
 @import "ceci-variables.scss";
+@import "base-button.scss";
 
 .grid-container {
   columns: 5 200px;
@@ -57,46 +58,6 @@
   height: 100%;
   z-index: 1000;
   background-color: black;
-}
-
-button {
-  background-color: $button-bg-color;
-  color: $button-color;
-  border: 2px solid $button-color;
-  padding: 5px;
-  margin: 0 1px 0 1px;
-  width: auto;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  border-radius: 5px;
-
-  &:hover {
-    color: $button-color-hover;
-    stroke: $button-color-hover;
-    background-color: $button-bg-color-hover;
-    border: 2px solid $button-border-hover;
-  }
-
-  &:active {
-    stroke: white;
-    color: white;
-    background-color: $button-color;
-    border: 2px solid $button-border-active;
-  }
-}
-
-button.selected {
-  @extend button;
-  background-color: $button-color;
-  color: $button-bg-color;
-
-  &:hover {
-    background-color: $button-bg-color-hover;
-    color: $button-color-hover;
-    stroke: $button-color-hover;
-    border: 2px solid $button-border-hover;
-  }
 }
 
 .description-overlay {
