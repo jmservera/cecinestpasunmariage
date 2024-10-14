@@ -1,4 +1,4 @@
-using functions.TelegramBot;
+using functions.Messaging;
 using Microsoft.Extensions.Configuration; // Add this using directive
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +9,8 @@ using Microsoft.Azure.CognitiveServices.Vision.Face;
 using Microsoft.SemanticKernel;
 using Azure.AI.Vision.ImageAnalysis;
 using Azure;
-using System.Diagnostics;
+using functions.Audit;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 [assembly: RootNamespace("functions")]
 
@@ -17,7 +18,7 @@ bool isDevelopment = false;
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
     .ConfigureServices((hostContext, services) =>
-    {    
+    {
         isDevelopment = hostContext.HostingEnvironment.IsDevelopment();
         if (isDevelopment)
         {
@@ -25,28 +26,32 @@ var host = new HostBuilder()
         }
         services.AddLocalization();
         services.AddTransient<Bot>();
-        services.AddTransient<IStorageManager, StorageManager>();                
+        services.AddTransient<IStorageManager, StorageManager>();
 
-        services.AddTransient<IFaceClient, FaceClient>(provider =>
+        _ = services.AddTransient<IFaceClient, FaceClient>(provider =>
         {
-            var config=provider.GetRequiredService<IConfiguration>();
+            var config = provider.GetRequiredService<IConfiguration>();
             return new FaceClient(new ApiKeyServiceClientCredentials(
                                             config.GetValue<string>("VISION_KEY") ?? throw new InvalidOperationException("VISION_KEY is not set.")))
-            {                
+            {
                 Endpoint = config.GetValue<string>("VISION_ENDPOINT") ?? throw new InvalidOperationException("VISION_ENDPOINT is not set.")
             };
-        });
-
-        services.AddTransient<ImageAnalysisClient>(provider=>{
-            var config=provider.GetRequiredService<IConfiguration>();
+        })
+        .AddTransient<ImageAnalysisClient>(provider =>
+        {
+            var config = provider.GetRequiredService<IConfiguration>();
 
             return new ImageAnalysisClient(
                 new Uri(config.GetValue<string>("COMPUTER_VISION_ENDPOINT") ?? throw new InvalidOperationException("COMPUTER_VISION_ENDPOINT is not set.")),
                 new AzureKeyCredential(config.GetValue<string>("COMPUTER_VISION_KEY") ?? throw new InvalidOperationException("COMPUTER_VISION_KEY is not set.")));
-        });
+        })
+        .AddTransient<IEmailMessaging, EmailMessagingACS>();
+
+        services.TryAdd(ServiceDescriptor.Singleton<IAuditServiceFactory, AuditInCosmosServiceFactory>());
+        services.TryAdd(ServiceDescriptor.Singleton(typeof(IAuditService<>), typeof(AuditInCosmosService<>)));
 
         services.AddKernel();
-        var config=hostContext.Configuration;
+        var config = hostContext.Configuration;
         services.AddAzureOpenAIChatCompletion(
             config.GetValue<string>("AOAI_DEPLOYMENT_NAME") ?? throw new InvalidOperationException("AOAI_DEPLOYMENT_NAME is not set."),
             config.GetValue<string>("AOAI_ENDPOINT") ?? throw new InvalidOperationException("AOAI_ENDPOINT is not set."),

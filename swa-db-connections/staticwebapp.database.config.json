@@ -4,7 +4,7 @@
     "database-type": "cosmosdb_nosql",
     "connection-string": "@env('DATABASE_CONNECTION_STRING')",
     "options": {
-      "database": "registrations",
+      "database": "@env('DATABASE_NAME')",
       "schema": "staticwebapp.database.schema.gql"
     }
   },
@@ -30,7 +30,7 @@
   },
   "entities": {
     "User": {
-      "source": "users",
+      "source": "@env('DATABASE_CONTAINER_NAME')",
       "permissions": [
         {
           "actions": [

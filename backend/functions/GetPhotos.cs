@@ -19,13 +19,13 @@ namespace functions
         private readonly IConfiguration _configuration = configuration;
 
         [Function("GetPhotos")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 0, int n=10, string lang="en")
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req, int page = 0, int n = 10, string lang = "en")
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            _logger.LogInformation("C# HTTP trigger function request for {name}.", nameof(GetPhotos));
 
             //access to blob storage
             //get connection string from environment variable
-            string connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING")?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
+            string connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
             BlobContainerClient containerPicsClient = new(connectionString, PicsContainerName);
             BlobContainerClient containerThumbnailsClient = new(connectionString, ThumbnailsContainerName);
@@ -40,7 +40,7 @@ namespace functions
             // todo: use https://learn.microsoft.com/en-us/azure/architecture/web-apps/guides/security/secure-single-page-application-authorization
             // to secure the access to the blob storage
 
-            
+
             List<Photo> pictures = [];
 
             await Parallel.ForEachAsync(allTumbThePics.Skip(page * n).Take(n), async (thumbItem, token) =>
@@ -60,14 +60,17 @@ namespace functions
 
                     metadata.Value.Metadata.TryGetValue(StorageManager.UploadedByMetadataKey, out string? author);
                     author = author?.Split('@')[0];
-                    metadata.Value.Metadata.TryGetValue(StorageManager.DescriptionMetadataKey+lang, out string? description);
-                    if(string.IsNullOrEmpty(description)){
+                    metadata.Value.Metadata.TryGetValue(StorageManager.DescriptionMetadataKey + lang, out string? description);
+                    if (string.IsNullOrEmpty(description))
+                    {
                         metadata.Value.Metadata.TryGetValue(StorageManager.DescriptionMetadataKey, out description);
                     }
-                    if(string.IsNullOrEmpty(description)){
+                    if (string.IsNullOrEmpty(description))
+                    {
                         metadata.Value.Metadata.TryGetValue(StorageManager.OriginalFilenameMetadataKey, out description);
                     }
-                    if(!string.IsNullOrEmpty(description)){
+                    if (!string.IsNullOrEmpty(description))
+                    {
                         description = Uri.UnescapeDataString(description);
                     }
                     description ??= pic.Name;
@@ -84,10 +87,10 @@ namespace functions
                 }
             });
 
-            photosResponse.Pictures=pictures.OrderByDescending(p=>p.LastModified);
-            string langn="";
-            if(lang!="en"){langn=$"&lang={lang}";}
-            photosResponse.Next = (page+1) * n < photosResponse.NumPictures ? $"?page={page + 1}&n={n}{langn}" : null;
+            photosResponse.Pictures = pictures.OrderByDescending(p => p.LastModified);
+            string langn = "";
+            if (lang != "en") { langn = $"&lang={lang}"; }
+            photosResponse.Next = (page + 1) * n < photosResponse.NumPictures ? $"?page={page + 1}&n={n}{langn}" : null;
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "application/json; charset=utf-8");
