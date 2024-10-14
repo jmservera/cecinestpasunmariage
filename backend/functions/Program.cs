@@ -52,11 +52,21 @@ var host = new HostBuilder()
 
         services.AddKernel();
         var config = hostContext.Configuration;
+
         services.AddAzureOpenAIChatCompletion(
             config.GetValue<string>("AOAI_DEPLOYMENT_NAME") ?? throw new InvalidOperationException("AOAI_DEPLOYMENT_NAME is not set."),
             config.GetValue<string>("AOAI_ENDPOINT") ?? throw new InvalidOperationException("AOAI_ENDPOINT is not set."),
             config.GetValue<string>("AOAI_KEY") ?? throw new InvalidOperationException("AOAI_KEY is not set.")
         );
+
+        services.ConfigureHttpClientDefaults(c =>
+        {
+            c.ConfigureHttpClient((sp, cc) =>
+            {
+                cc.Timeout = TimeSpan.FromMinutes(4);
+            });
+        });
+
     })
     .Build();
 
