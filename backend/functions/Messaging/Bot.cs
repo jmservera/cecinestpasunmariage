@@ -1,8 +1,6 @@
 using System.Data;
 using System.Globalization;
 using System.Web;
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
 using functions.Storage;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +13,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace functions.TelegramBot
+namespace functions.Messaging
 {
     public class Bot : IDisposable
     {
@@ -35,7 +33,7 @@ namespace functions.TelegramBot
             _localizer = localizer;
             _logger = logger;
             _uploader = uploader;
-            _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN")?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
+            _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
         }
 
         public async Task Register(string handleUpdateFunctionUrl)
@@ -151,7 +149,7 @@ namespace functions.TelegramBot
             }
 
             ValidateMimeType(video.MimeType);
-            
+
             var fileName = _uploader.GenerateUniqueName();
             if (video.Thumbnail != null)
             {
@@ -243,7 +241,7 @@ namespace functions.TelegramBot
                     document.MimeType,
                     message.Chat.Id);
                 await ProcessMessageAttachmentsAsync(message, cancellationToken);
-                somethingWasSent=true;
+                somethingWasSent = true;
             }
             if (message.Photo is { } p)
             {
@@ -252,16 +250,16 @@ namespace functions.TelegramBot
                         p.LastOrDefault()?.FileSize,
                         message.Chat.Id);
                 await ProcessMessageAttachmentsAsync(message, cancellationToken);
-                somethingWasSent=true;
+                somethingWasSent = true;
             }
-            if(message.Video is { } v)
+            if (message.Video is { } v)
             {
                 _logger.LogInformation("Received a video '{Caption}' of size {FileSize} in chat {ChatId}",
                         message.Caption,
                         v.FileSize,
                         message.Chat.Id);
                 await ProcessMessageAttachmentsAsync(message, cancellationToken);
-                somethingWasSent=true;
+                somethingWasSent = true;
             }
 
             // Only process text messages
@@ -335,7 +333,7 @@ namespace functions.TelegramBot
 
             var me = await _client.GetMeAsync();
 
-            _logger.LogInformation($"Start listening for @{me.Username}");
+            _logger.LogInformation("Start listening for {user}", me.Username);
         }
 
         public void StopBot()

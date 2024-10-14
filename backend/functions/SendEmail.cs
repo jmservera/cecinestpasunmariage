@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text.Json;
 using Azure;
 using Azure.AI.OpenAI;
 using Azure.Communication.Email;
+using functions.Audit;
+using functions.Claims;
+using functions.Messaging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Azure;
@@ -13,15 +18,14 @@ using Microsoft.Extensions.Logging;
 
 namespace functions
 {
-    public class SendEmail(ILogger<SendEmail> logger, IConfiguration configuration)
+    public class SendEmail(ILogger<SendEmail> logger, IEmailMessaging emailMessaging, IAuditService<SendEmail> auditService)
     {
 
-        private readonly ILogger<SendEmail> _logger = logger;
-        private readonly IConfiguration _configuration = configuration;
-
         [Function(nameof(SendEmail))]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
         {
+            logger.LogInformation("Sending mail");
+            var principal = ClaimsPrincipalParser.Parse(req);
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var data = JsonSerializer.Deserialize<EmailRequest>(requestBody);
 
@@ -32,23 +36,23 @@ namespace functions
                 return badRequestResponse;
             }
 
-            string connectionString = _configuration.GetValue<string>("COMMUNICATION_SERVICES_CONNECTION_STRING") ?? throw new InvalidOperationException("COMMUNICATION_SERVICES_CONNECTION_STRING is not set.");
-            string sender = _configuration.GetValue<string>("COMMUNICATION_SERVICES_SENDER") ?? throw new InvalidOperationException("COMMUNICATION_SERVICES_SENDER is not set.");
-
-            var emailClient = new EmailClient(connectionString);
+            string response = "";
 
             foreach (var recipient in data.recipients)
             {
-                var emailMessage = new EmailMessage(
-                senderAddress: sender,
-                content: new EmailContent(data.title)
+                var emailSendOperation = await emailMessaging.SendEmailAsync(recipient, data.title, data.message);
+                if (emailSendOperation != "Succeeded")
                 {
-                    PlainText = data.message,
-                    Html = $"<html><body>{data.message.Replace("\n", "<br/>")}</body></html>"
-                },
-                recipients: new EmailRecipients([new EmailAddress(recipient)]));
-                var emailSendOperation = await emailClient.SendAsync(WaitUntil.Started, emailMessage);
-                //todo: handle the emailSendOperation
+                    response += $"Failed to send email to {recipient}: {emailSendOperation}." + Environment.NewLine;
+                }
+                auditService.Audit(principal.Identity?.Name ?? "system", "email", $"Sent email to {recipient} with result {emailSendOperation}");
+            }
+
+            if (!string.IsNullOrEmpty(response))
+            {
+                var reqResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
+                await reqResponse.WriteStringAsync(response);
+                return reqResponse;
             }
 
             return req.CreateResponse(HttpStatusCode.OK);
