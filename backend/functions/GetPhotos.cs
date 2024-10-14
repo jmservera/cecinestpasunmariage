@@ -19,7 +19,7 @@ namespace functions
         private readonly IConfiguration _configuration = configuration;
 
         [Function("GetPhotos")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequestData req, int page = 0, int n = 10, string lang = "en")
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, int page = 0, int n = 10, string lang = "en")
         {
             _logger.LogInformation("C# HTTP trigger function request for {name}.", nameof(GetPhotos));
 

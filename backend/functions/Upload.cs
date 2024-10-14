@@ -23,7 +23,7 @@ namespace functions
         }
 
         [Function("Upload")]
-        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext context)
+        public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req, FunctionContext context)
         {
             var contentType = req.Headers.GetValues("Content-Type").FirstOrDefault();
             var originalFileName = req.Query["name"];
