@@ -30,7 +30,7 @@
   },
   "entities": {
     "User": {
-      "source": "@env('DATABASE_CONTAINER_NAME')",
+      "source": "users",
       "permissions": [
         {
           "actions": [
