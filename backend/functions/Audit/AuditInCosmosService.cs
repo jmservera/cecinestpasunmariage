@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace functions.Audit;
 
+/// <summary>
+/// Service for auditing operations in CosmosDB.
+/// </summary>
 public class AuditInCosmosService : IAuditService
 {
     private readonly IConfiguration _configuration;
@@ -14,6 +17,14 @@ public class AuditInCosmosService : IAuditService
     private readonly string _className;
 
     private static bool _initialized = false;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AuditInCosmosService"/> class.
+    /// </summary>
+    /// <param name="configuration"> The configuration instance. </param>
+    /// <param name="logger"> The logger instance. </param>
+    /// <param name="className"> The name of the class being audited. </param>
+    /// <exception cref="InvalidOperationException"> Thrown when the DATABASE_CONNECTION_STRING is not set. </exception>
     public AuditInCosmosService(IConfiguration configuration, ILogger logger, string className)
     {
         _configuration = configuration;
@@ -24,6 +35,11 @@ public class AuditInCosmosService : IAuditService
         _className = className;
         _logger = logger;
     }
+
+    /// <summary>
+    /// Initializes the audit service.
+    /// </summary>
+    /// <returns> A task that represents the asynchronous operation. </returns>
     public async Task InitializeAsync()
     {
         try
@@ -38,11 +54,26 @@ public class AuditInCosmosService : IAuditService
             throw;
         }
     }
+
+    /// <summary>
+    /// Audits an operation performed by a user.
+    /// </summary>
+    /// <param name="user"> The user who performed the operation. </param>
+    /// <param name="operation"> The operation that was performed. </param>
+    /// <param name="result"> The result of the operation. </param>
     public void Audit(string user, string operation, string result)
     {
         //TODO: use a queue instead of fire and forget...
         _ = AuditAsync(user, operation, result);
     }
+
+    /// <summary>
+    /// Audits an operation performed by a user.
+    /// </summary>
+    /// <param name="user"> The user who performed the operation. </param>
+    /// <param name="operation"> The operation that was performed. </param>
+    /// <param name="result"> The result of the operation. </param>
+    /// <returns> A task that represents the asynchronous operation. </returns>
     private async Task AuditAsync(string user, string operation, string result)
     {
         try

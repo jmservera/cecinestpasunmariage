@@ -11,17 +11,8 @@ using SixLabors.ImageSharp.Processing;
 
 namespace functions
 {
-    public class Upload
+    public class Upload(ILogger<Upload> logger, IStorageManager uploader)
     {
-        private readonly ILogger<Upload> _logger;
-        private readonly IStorageManager _uploader;
-
-        public Upload(ILogger<Upload> logger, IStorageManager uploader)
-        {
-            _logger = logger;
-            _uploader = uploader;
-        }
-
         [Function("Upload")]
         public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req, FunctionContext context)
         {
@@ -35,7 +26,7 @@ namespace functions
                 return badRequestResponse;
             }
 
-            _logger.LogInformation("Content-Type: {contentType}", contentType);
+            logger.LogInformation("Content-Type: {contentType}", contentType);
 
             var username = ClaimsPrincipalParser.Parse(req).Identity?.Name;
 
@@ -56,9 +47,9 @@ namespace functions
                     return badRequestResponse;
                 }
 
-                var name = $"{_uploader.GenerateUniqueName()}.{format.FileExtensions.First()}";
+                var name = $"{uploader.GenerateUniqueName()}.{format.FileExtensions.First()}";
                 req.Body.Position = 0;
-                await _uploader.UploadAsync(username, name, GetPhotos.PicsContainerName, req.Body, contentType, originalFileName, context.CancellationToken);
+                await uploader.UploadAsync(username, name, GetPhotos.PicsContainerName, req.Body, contentType, originalFileName, context.CancellationToken);
                 // Resize the image to create a thumbnail
                 ResizeOptions resizeOptions = new()
                 {
@@ -71,7 +62,7 @@ namespace functions
                 await using var thumb = new MemoryStream();
                 image.Save(thumb, format);
                 thumb.Position = 0;
-                await _uploader.UploadAsync(username, name, GetPhotos.ThumbnailsContainerName, thumb, contentType, originalFileName, context.CancellationToken);
+                await uploader.UploadAsync(username, name, GetPhotos.ThumbnailsContainerName, thumb, contentType, originalFileName, context.CancellationToken);
             }
 
 

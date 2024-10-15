@@ -24,12 +24,6 @@ namespace functions
     {
         [GeneratedRegex("^\"|\"$")]
         private static partial Regex RemoveDoubleQuotes();
-        private readonly ILogger<PictureDescriber> _logger = logger;
-        private readonly IFaceClient _faceClient = faceClient;
-        private readonly IStorageManager _storageManager = storageManager;
-        private readonly IChatCompletionService _chatCompletionService = chatCompletionService;
-        private readonly ImageAnalysisClient _imageClient = imageClient;
-        private readonly IConfiguration _configuration = configuration;
 
         static readonly HashSet<string> validMimeTypesForFace = ["image/jpeg", "image/png", "image/gif"];
 
@@ -40,16 +34,16 @@ namespace functions
             var metadata = properties.Value.Metadata;
             if (metadata.ContainsKey(StorageManager.PeopleMetadataKey))
             {
-                _logger.LogInformation("Blob {name} already has people metadata", name);
+                logger.LogInformation("Blob {name} already has people metadata", name);
                 return;
             }
             if (metadata.ContainsKey(StorageManager.DescriptionMetadataKey))
             {
-                _logger.LogInformation("Blob {name} already has description metadata", name);
+                logger.LogInformation("Blob {name} already has description metadata", name);
                 return;
             }
 
-            _logger.LogInformation("C# Blob trigger function processing blob\n Name: {name}", name);
+            logger.LogInformation("C# Blob trigger function processing blob\n Name: {name}", name);
 
             IReadOnlyList<string> people = [];
 
@@ -57,20 +51,20 @@ namespace functions
             {
                 try
                 {
-                    FaceRecognition face = new(_logger, _faceClient);
+                    FaceRecognition face = new(logger, faceClient);
                     var blob = await client.OpenReadAsync();
                     people = await face.IdentifyInPersonGroupAsync(blob);
                     foreach (var person in people)
                     {
-                        _logger.LogInformation("Person '{person}' is identified for the face in: {name}", person, name);
+                        logger.LogInformation("Person '{person}' is identified for the face in: {name}", person, name);
                     }
 
-                    _logger.LogInformation("Adding people metadata to blob {name}", name);
+                    logger.LogInformation("Adding people metadata to blob {name}", name);
                     metadata.Add(StorageManager.PeopleMetadataKey, string.Join(',', people));
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Error while identifying people in blob {name}", name);
+                    logger.LogError(ex, "Error while identifying people in blob {name}", name);
                 }
             }
 
@@ -82,21 +76,21 @@ namespace functions
             metadata[StorageManager.DescriptionMetadataKey] = descriptions["en"];
 
             await client.SetMetadataAsync(metadata);
-            var destName=$"{Path.GetDirectoryName(name)}/{Path.GetFileNameWithoutExtension(name)}.jpg";
-            await _storageManager.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName,destName, GetPhotos.ThumbnailsContainerName);
+            var destName = $"{Path.GetDirectoryName(name)}/{Path.GetFileNameWithoutExtension(name)}.jpg";
+            await storageManager.ReplicateMetadataAsync(name, GetPhotos.PicsContainerName, destName, GetPhotos.ThumbnailsContainerName);
         }
 
         private async Task<Dictionary<string, string>> GenerateDescriptionsAsync(string name, string contentType, IReadOnlyList<string> people)
         {
             // now get a nice description
-            var connectionString = _configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
+            var connectionString = configuration.GetValue<string>("STORAGE_CONNECTION_STRING") ?? throw new InvalidOperationException("STORAGE_CONNECTION_STRING is not set.");
 
             //use the related thumbnail to make it faster and save some tokens
             BlobContainerClient containerThumbnailsClient = new(connectionString, GetPhotos.ThumbnailsContainerName);
-            
+
             // thumbnail is always jpg
             var thumbnailName = $"{Path.GetDirectoryName(name)}/{Path.GetFileNameWithoutExtension(name)}.jpg";
-            var thumbnailClient = containerThumbnailsClient.GetBlobClient(thumbnailName);            
+            var thumbnailClient = containerThumbnailsClient.GetBlobClient(thumbnailName);
             var thumbnail = await thumbnailClient.OpenReadAsync();
             if (thumbnail != null)
             {
@@ -108,16 +102,16 @@ namespace functions
                 }
                 catch (HttpOperationException ex)
                 {
-                    _logger.LogError(ex, "Error while generating description for blob {name}", name);
+                    logger.LogError(ex, "Error while generating description for blob {name}", name);
                     if (ex.ResponseContent != null)
                     {
                         var error = JsonSerializer.Deserialize<ContentFilterResponse>(ex.ResponseContent);
-                        _logger.LogError("Error details: {error}", error.Error.Message);
+                        logger.LogError("Error details: {error}", error.Error.Message);
                     }
-                    _logger.LogInformation("Trying to generate description using Azure Cognitive Services for blob {name}", name);
-                    var analysisResult = await _imageClient.AnalyzeAsync(BinaryData.FromBytes(image), VisualFeatures.DenseCaptions);
+                    logger.LogInformation("Trying to generate description using Azure Cognitive Services for blob {name}", name);
+                    var analysisResult = await imageClient.AnalyzeAsync(BinaryData.FromBytes(image), VisualFeatures.DenseCaptions);
                     var caption = string.Join(", ", analysisResult.Value.DenseCaptions.Values.Select(v => v.Text).Distinct());
-                    _logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
+                    logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
 
                     return await GenerateDescriptionsFromImageOrCaptionsAsync("image/jpg", null, people, caption);
 
@@ -154,7 +148,7 @@ namespace functions
             }
             history.AddUserMessage(items);
 
-            var chatMessageContent = await _chatCompletionService.GetChatMessageContentAsync(history, settings);
+            var chatMessageContent = await chatCompletionService.GetChatMessageContentAsync(history, settings);
             var description = chatMessageContent.Content ?? throw new InvalidOperationException("No translations generated");
             var localizedDescriptions = JsonSerializer.Deserialize<Dictionary<string, string>>(description) ?? throw new InvalidOperationException("No translations converted");
             return localizedDescriptions.Select(
