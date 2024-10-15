@@ -114,7 +114,6 @@ namespace functions
                     logger.LogInformation("Generated description using Azure Cognitive Services for blob {name}: {caption}", name, caption);
 
                     return await GenerateDescriptionsFromImageOrCaptionsAsync("image/jpg", null, people, caption);
-
                 }
             }
             return [];

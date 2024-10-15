@@ -1,5 +1,6 @@
 using System.Data;
 using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Web;
@@ -18,6 +19,7 @@ using Telegram.Bot.Types.Enums;
 
 namespace functions.Messaging
 {
+
     /// <summary>
     /// A bot that can receive and send messages.
     /// </summary>
@@ -25,7 +27,7 @@ namespace functions.Messaging
     /// <param name="localizer"> The localizer instance. </param>
     /// <param name="uploader"> The storage manager instance. </param>
     /// <param name="configuration"> The configuration instance. </param>
-    public class Bot(ILogger<Bot> logger, IStringLocalizer<Bot> localizer, IStorageManager uploader, IConfiguration configuration, IChatCompletionService chatCompletionService) : IDisposable
+    public class Bot(ILogger<Bot> logger, IStringLocalizer<Bot> localizer, IStorageManager uploader, IConfiguration configuration, IBotTextHandler chatService, IChatHistoryManager chatHistoryManager) : IDisposable
     {
         private ITelegramBotClient _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
 
@@ -102,7 +104,7 @@ namespace functions.Messaging
                         cancellationToken: cancellationToken);
                     break;
                 case "/clear":
-                    await ClearHistoryAsync(message.From?.Username ?? "", message.Chat.Id, cancellationToken);
+                    await chatHistoryManager.ClearHistoryAsync(message.From?.Username ?? "", message.Chat.Id, cancellationToken);
                     await _client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "History cleared",
@@ -365,113 +367,8 @@ namespace functions.Messaging
             }
             else
             {
-                string username = HttpUtility.HtmlEncode(message.From?.Username ?? "");
-                string fullName = HttpUtility.HtmlEncode($"{message.From?.FirstName} {message.From?.LastName}");
-                var chatId = message.Chat.Id;
-
-                logger.LogInformation("Received a '{MessageText}' message in chat {ChatId}.", messageText, chatId);
-
-                var history = await GetHistoryAsync(username, fullName, chatId);
-#pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-                ChatMessageContent messageContent = new(AuthorRole.User, messageText)
-                {
-                    AuthorName = message.From?.Username
-                };
-#pragma warning restore SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-
-                history.Add(messageContent);
-                try
-                {
-                    var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
-                    var msg = response.Content ?? "I'm sorry, I can't answer that.";
-                    try
-                    {
-                        Message sentMessage = await _client.SendTextMessageAsync(
-                            chatId: chatId,
-                            parseMode: ParseMode.Markdown,
-                            text: msg,
-                            cancellationToken: cancellationToken);
-                    }
-                    catch (Telegram.Bot.Exceptions.ApiRequestException ex)
-                    {
-                        logger.LogError(ex, "Error sending message to chat. Sending it again without format: {msg}", msg);
-                        Message sentMessage = await _client.SendTextMessageAsync(
-                            chatId: chatId,
-                            text: msg,
-                            cancellationToken: cancellationToken);
-                    }
-
-                    history.AddAssistantMessage(msg);
-                    await SaveHistoryAsync(username, chatId, history, cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Error getting chat message content from AOAI.");
-                    await _client.SendTextMessageAsync(
-                        chatId: chatId,
-                        text: "I'm sorry, there was an error, try later.",
-                        cancellationToken: cancellationToken);
-                }
+                await chatService.HandleChat(_client, message, messageText, cancellationToken);
             }
-        }
-
-        const string ChatHistoryContainerName = "chat-history";
-
-        const string validMarkdown = @"*bold text*
-_italic text_
-[inline URL](http://www.example.com/)
-[inline mention of a user](tg://user?id=123456789)
-`inline fixed-width code`
-```
-pre-formatted fixed-width code block
-```
-```python
-pre-formatted fixed-width code block written in the Python programming language
-```";
-
-        private async Task ClearHistoryAsync(string username, long chatId, CancellationToken cancellationToken)
-        {
-            await uploader.UploadAsync(username, $"{chatId}.json", ChatHistoryContainerName, Stream.Null, "application/json", null, cancellationToken);
-        }
-        private async Task SaveHistoryAsync(string username, long chatId, ChatHistory history, CancellationToken cancellationToken)
-        {
-            //remove system message
-            if (history.Count > 0) history.RemoveRange(0, 1);
-
-            //trim history to 60 messages
-            if (history.Count > 60)
-            {
-                history.RemoveRange(1, 60 - history.Count);
-            }
-            var value = JsonSerializer.Serialize(history);
-            using var stream = new MemoryStream(Encoding.UTF8.GetBytes(value));
-            await uploader.UploadAsync(username, $"{chatId}.json", ChatHistoryContainerName, stream, "application/json", null, cancellationToken);
-        }
-
-        private async Task<ChatHistory> GetHistoryAsync(string username, string fullName, long chatId)
-        {
-            var metaPrompt = localizer.GetString("MetaPrompt") +
-            $"\n The person you are talking with has username {username}, and their full name is {fullName}. When you start a new conversation with them, you can use this information to greet them.\n" +
-            $"Format the answer as markdown, the only supported markdown is:\n{validMarkdown}\nDo not use any other markdown tags, if you do, escape the tags with a backslash.";
-            try
-            {
-                using var stream = await uploader.DownloadAsync(username, $"{chatId}.json", ChatHistoryContainerName);
-                using StreamReader reader = new(stream);
-                var history = JsonSerializer.Deserialize<ChatHistory>(reader.ReadToEnd());
-                if (history is not null)
-                {
-                    // add system message
-                    var historywithsystem = new ChatHistory(metaPrompt);
-                    historywithsystem.AddRange(history);
-                    return historywithsystem;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error getting chat history");
-            }
-            ChatHistory newHistory = new(metaPrompt);
-            return newHistory;
         }
 
         Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

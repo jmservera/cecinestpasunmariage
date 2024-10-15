@@ -18,18 +18,15 @@
 			"version": "latest"
 		},
 		"ghcr.io/devcontainers/features/dotnet:2": {
-        	"additionalVersions": "6.0"
-    	}
+			"additionalVersions": "6.0"
+		}
 	},
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
-
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// run the postCreateCommand.sh script
 	"postCreateCommand": ".devcontainer/postCreateCommand.sh",
 	// Configure tool-specific properties.
-
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -45,12 +42,10 @@
 			]
 		}
 	},
-
 	// uncomment to mount a local folder
 	// "mounts": [
 	// 	"source=/mnt/c/source/cecidata,target=/cecidata,type=bind"
 	// ],
-
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
 }

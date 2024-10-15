@@ -45,7 +45,9 @@ var host = new HostBuilder()
                 new Uri(config.GetValue<string>("COMPUTER_VISION_ENDPOINT") ?? throw new InvalidOperationException("COMPUTER_VISION_ENDPOINT is not set.")),
                 new AzureKeyCredential(config.GetValue<string>("COMPUTER_VISION_KEY") ?? throw new InvalidOperationException("COMPUTER_VISION_KEY is not set.")));
         })
-        .AddTransient<IEmailMessaging, EmailMessagingACS>();
+        .AddTransient<IEmailMessaging, EmailMessagingACS>()
+        .AddTransient<IChatHistoryManager, BotHistoryManager>()
+        .AddTransient<IBotTextHandler, AzureOpenAIChatHandler>();
 
         services.TryAdd(ServiceDescriptor.Singleton<IAuditServiceFactory, AuditInCosmosServiceFactory>());
         services.TryAdd(ServiceDescriptor.Singleton(typeof(IAuditService<>), typeof(AuditInCosmosService<>)));
