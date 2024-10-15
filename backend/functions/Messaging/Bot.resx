@@ -7,7 +7,7 @@
         <value>2.0</value>
     </resheader>
     <data name="GreetingMessage">
-        <value>Welcome to the Isa &amp; Juanma's Picture Bot\. Send me a picture of the party and it will show up in the [website](https://cecinestpasunmariage.org/en/fotos)</value>
+        <value>Welcome to the Isa &amp; Juanma's Picture Bot\. Send me a picture of the party and it will show up in the [website](https://cecinestpasunmariage.org/en/fotos), or ask me anything about the party\.</value>
         <comment>Greeting message that includes the user's first name.</comment>
     </data>
     <data name="EchoMessage">

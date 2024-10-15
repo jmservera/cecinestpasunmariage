@@ -7,7 +7,7 @@
         <value>2.0</value>
     </resheader>
     <data name="GreetingMessage">
-        <value>Bienvenue sur le Bot de photos d'Isa &amp; Juanma\. Envoyez\-moi une photo de la fête et elle apparaîtra sur le [site web](https://cecinestpasunmariage.org/fr/fotos)</value>
+        <value>Bienvenue sur le Bot de photos d'Isa &amp; Juanma\. Envoyez\-moi une photo de la fête et elle apparaîtra sur le [site web](https://cecinestpasunmariage.org/fr/fotos), ou posez-moi des questions sur la fête\.</value>
         <comment>Message de bienvenue qui inclut le prénom de l'utilisateur.</comment>
     </data>
     <data name="Help">
