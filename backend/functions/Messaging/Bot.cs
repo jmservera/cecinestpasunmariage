@@ -51,11 +51,19 @@ namespace functions.Messaging
         {
             var request = await req.ReadAsStringAsync();
             if (string.IsNullOrEmpty(request))
+            {
+                logger.LogError("Received an empty request.");
                 return;
+            }
+
+            logger.LogInformation("Received a request: {Request}", request);
 
             var update = JsonSerializer.Deserialize<Telegram.Bot.Types.Update>(request);
             if (update is null)
+            {
+                logger.LogError("Failed to deserialize the update.");
                 return;
+            }
 
             await HandleUpdateAsync(_client, update, cancellationToken);
         }
