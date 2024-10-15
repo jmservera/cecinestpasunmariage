@@ -58,7 +58,8 @@ namespace functions.Messaging
 
             logger.LogInformation("Received a request: {Request}", request);
 
-            var update = JsonSerializer.Deserialize<Telegram.Bot.Types.Update>(request);
+            // Update is defined with Newtonsoft.Json attributes, so we need to deserialize it with Newtonsoft.Json
+            var update = Newtonsoft.Json.JsonConvert.DeserializeObject<Telegram.Bot.Types.Update>(request);
             if (update is null)
             {
                 logger.LogError("Failed to deserialize the update.");
@@ -98,6 +99,13 @@ namespace functions.Messaging
                     await _client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "Echo",
+                        cancellationToken: cancellationToken);
+                    break;
+                case "/clear":
+                    await ClearHistoryAsync(message.From?.Username ?? "", message.Chat.Id, cancellationToken);
+                    await _client.SendTextMessageAsync(
+                        chatId: message.Chat.Id,
+                        text: "History cleared",
                         cancellationToken: cancellationToken);
                     break;
                 default:
@@ -290,7 +298,10 @@ namespace functions.Messaging
             _client = botClient;
             // Only process Message updates: https://core.telegram.org/bots/api#message
             if (update.Message is not { } message)
+            {
+                logger.LogWarning("Received an update that is not a message.");
                 return;
+            }
 
             bool somethingWasSent = false;
             var language = update.Message.From?.LanguageCode ?? "en";
@@ -355,11 +366,12 @@ namespace functions.Messaging
             else
             {
                 string username = HttpUtility.HtmlEncode(message.From?.Username ?? "");
+                string fullName = HttpUtility.HtmlEncode($"{message.From?.FirstName} {message.From?.LastName}");
                 var chatId = message.Chat.Id;
 
                 logger.LogInformation("Received a '{MessageText}' message in chat {ChatId}.", messageText, chatId);
 
-                var history = await GetHistoryAsync(username, chatId);
+                var history = await GetHistoryAsync(username, fullName, chatId);
 #pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
                 ChatMessageContent messageContent = new(AuthorRole.User, messageText)
                 {
@@ -371,13 +383,25 @@ namespace functions.Messaging
                 try
                 {
                     var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
-                    // Echo received message text
-                    Message sentMessage = await _client.SendTextMessageAsync(
-                        chatId: chatId,
-                        text: response.Content ?? "I'm sorry, I can't answer that.",
-                        cancellationToken: cancellationToken);
+                    var msg = response.Content ?? "I'm sorry, I can't answer that.";
+                    try
+                    {
+                        Message sentMessage = await _client.SendTextMessageAsync(
+                            chatId: chatId,
+                            parseMode: ParseMode.Markdown,
+                            text: msg,
+                            cancellationToken: cancellationToken);
+                    }
+                    catch (Telegram.Bot.Exceptions.ApiRequestException ex)
+                    {
+                        logger.LogError(ex, "Error sending message to chat. Sending it again without format: {msg}", msg);
+                        Message sentMessage = await _client.SendTextMessageAsync(
+                            chatId: chatId,
+                            text: msg,
+                            cancellationToken: cancellationToken);
+                    }
 
-                    history.AddAssistantMessage(response.Content ?? "I'm sorry, I can't answer that.");
+                    history.AddAssistantMessage(msg);
                     await SaveHistoryAsync(username, chatId, history, cancellationToken);
                 }
                 catch (Exception ex)
@@ -393,10 +417,26 @@ namespace functions.Messaging
 
         const string ChatHistoryContainerName = "chat-history";
 
+        const string validMarkdown = @"*bold text*
+_italic text_
+[inline URL](http://www.example.com/)
+[inline mention of a user](tg://user?id=123456789)
+`inline fixed-width code`
+```
+pre-formatted fixed-width code block
+```
+```python
+pre-formatted fixed-width code block written in the Python programming language
+```";
+
+        private async Task ClearHistoryAsync(string username, long chatId, CancellationToken cancellationToken)
+        {
+            await uploader.UploadAsync(username, $"{chatId}.json", ChatHistoryContainerName, Stream.Null, "application/json", null, cancellationToken);
+        }
         private async Task SaveHistoryAsync(string username, long chatId, ChatHistory history, CancellationToken cancellationToken)
         {
             //remove system message
-            history.RemoveRange(0, 1);
+            if (history.Count > 0) history.RemoveRange(0, 1);
 
             //trim history to 60 messages
             if (history.Count > 60)
@@ -408,9 +448,11 @@ namespace functions.Messaging
             await uploader.UploadAsync(username, $"{chatId}.json", ChatHistoryContainerName, stream, "application/json", null, cancellationToken);
         }
 
-        private async Task<ChatHistory> GetHistoryAsync(string username, long chatId)
+        private async Task<ChatHistory> GetHistoryAsync(string username, string fullName, long chatId)
         {
-            var metaPrompt = localizer.GetString("MetaPrompt") + $" the username is {username}";
+            var metaPrompt = localizer.GetString("MetaPrompt") +
+            $"\n The person you are talking with has username {username}, and their full name is {fullName}. When you start a new conversation with them, you can use this information to greet them.\n" +
+            $"Format the answer as markdown, the only supported markdown is:\n{validMarkdown}\nDo not use any other markdown tags, if you do, escape the tags with a backslash.";
             try
             {
                 using var stream = await uploader.DownloadAsync(username, $"{chatId}.json", ChatHistoryContainerName);
