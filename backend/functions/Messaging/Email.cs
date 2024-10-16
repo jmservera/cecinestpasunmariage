@@ -2,6 +2,7 @@ using Azure;
 using Azure.Communication.Email;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Security.Cryptography;
 
 namespace functions.Messaging;
 
@@ -23,26 +24,25 @@ public class EmailMessagingACS(IConfiguration configuration, ILogger<EmailMessag
         },
         recipients: new EmailRecipients([new EmailAddress(to)]));
         var emailSendOperation = await emailClient.SendAsync(WaitUntil.Completed, emailMessage);
-        string maskedEmail = MaskEmail(to);
+        string hashedEmail = HashEmail(to);
         if (emailSendOperation.Value.Status == EmailSendStatus.Failed)
         {
-            logger.LogError("Failed to send email to {maskedEmail} with subject {subject} and result {result}", maskedEmail, subject, emailSendOperation.Value);
+            logger.LogError("Failed to send email to {hashedEmail} with subject {subject} and result {result}", hashedEmail, subject, emailSendOperation.Value);
         }
         else
         {
-            logger.LogInformation("Email sent to {maskedEmail} with subject {subject} and result {result}", maskedEmail, subject, emailSendOperation.Value.Status);
+            logger.LogInformation("Email sent to {hashedEmail} with subject {subject} and result {result}", hashedEmail, subject, emailSendOperation.Value.Status);
         }
 
         return emailSendOperation.Value.Status.ToString();
     }
 
-    private string MaskEmail(string email)
+    private string HashEmail(string email)
     {
-        var atIndex = email.IndexOf('@');
-        if (atIndex <= 1)
+        using (var sha256 = System.Security.Cryptography.SHA256.Create())
         {
-            return email; // Not enough characters to mask
+            var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(email));
+            return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
         }
-        return email.Substring(0, 1) + "****" + email.Substring(atIndex - 1);
     }
 }
