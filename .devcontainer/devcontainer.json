@@ -38,7 +38,8 @@
 				"GitHub.vscode-github-actions",
 				"ms-semantic-kernel.semantic-kernel",
 				"budparr.language-hugo-vscode",
-				"GitHub.vscode-pull-request-github"
+				"GitHub.vscode-pull-request-github",
+				"ms-azuretools.vscode-bicep"
 			]
 		}
 	},

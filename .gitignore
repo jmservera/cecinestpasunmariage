@@ -141,3 +141,5 @@ __azurite_db_*.json
 .mono
 .fake
 cecidata/
+
+main.parameters.bicepparam
