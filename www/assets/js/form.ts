@@ -69,7 +69,7 @@ async function createOrUpdate(): Promise<void> {
       const redirectUrl = redirectInput.value;
       if (redirectUrl) {
         try {
-          const url = new URL(redirectUrl);
+          const url = new URL(redirectUrl, window.location.href);
           window.location.href = url.href;
         } catch (e) {
           console.error("Invalid URL:", redirectUrl);
