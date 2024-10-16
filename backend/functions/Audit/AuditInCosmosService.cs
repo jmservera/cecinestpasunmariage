@@ -60,11 +60,14 @@ public class AuditInCosmosService : IAuditService
     /// </summary>
     /// <param name="user"> The user who performed the operation. </param>
     /// <param name="operation"> The operation that was performed. </param>
+    /// <param name="operationId">The id of the operation. Needs to be unique, if left empty Guid.NewGuid().ToString() will be used</param>
     /// <param name="result"> The result of the operation. </param>
-    public void Audit(string user, string operation, string result)
+    public void Audit(string user, string operation, string result, string? operationId)
     {
+        if (string.IsNullOrEmpty(operationId))
+            operationId = Guid.NewGuid().ToString();
         //TODO: use a queue instead of fire and forget...
-        _ = AuditAsync(user, operation, result);
+        _ = AuditAsync(user, operation, result, operationId);
     }
 
     /// <summary>
@@ -74,7 +77,7 @@ public class AuditInCosmosService : IAuditService
     /// <param name="operation"> The operation that was performed. </param>
     /// <param name="result"> The result of the operation. </param>
     /// <returns> A task that represents the asynchronous operation. </returns>
-    private async Task AuditAsync(string user, string operation, string result)
+    private async Task AuditAsync(string user, string operation, string result, string id)
     {
         try
         {
@@ -82,11 +85,11 @@ public class AuditInCosmosService : IAuditService
             {
                 await InitializeAsync();
             }
-            _logger.LogInformation("Auditing: {user}, {classname}, {operation}, {result}", user, _className, operation, result);
+            _logger.LogInformation("Auditing: {id} {user}, {classname}, {result}", id, user, _className, result);
 
             var auditLog = new
             {
-                id = Guid.NewGuid().ToString(),
+                id = id,
                 user,
                 _className,
                 operation,
@@ -98,7 +101,7 @@ public class AuditInCosmosService : IAuditService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error auditing");
+            _logger.LogError(ex, "Error auditing {id}", id);
             throw;
         }
     }
