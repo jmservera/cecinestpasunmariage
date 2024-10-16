@@ -12,5 +12,5 @@ public interface IAuditService<out T>
     /// <param name="user"> The user who performed the operation. </param>
     /// <param name="operation"> The operation that was performed. </param>
     /// <param name="result"> The result of the operation. </param>
-    public void Audit(string user, string operation, string result);
+    public void Audit(string user, string operation, string result, string? operationId = null);
 }

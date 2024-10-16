@@ -1,19 +1,10 @@
-using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text.Json;
-using Azure;
-using Azure.AI.OpenAI;
-using Azure.Communication.Email;
 using functions.Audit;
 using functions.Claims;
 using functions.Messaging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace functions
@@ -40,12 +31,13 @@ namespace functions
 
             foreach (var recipient in data.recipients)
             {
-                var emailSendOperation = await emailMessaging.SendEmailAsync(recipient, data.title, data.message);
+                var operationId = Guid.NewGuid().ToString();
+                var emailSendOperation = await emailMessaging.SendEmailAsync(recipient, data.title, data.message, operationId);
                 if (emailSendOperation != "Succeeded")
                 {
                     response += $"Failed to send email to {recipient}: {emailSendOperation}." + Environment.NewLine;
                 }
-                auditService.Audit(principal.Identity?.Name ?? "system", "email", $"Sent email to {recipient} with result {emailSendOperation}");
+                auditService.Audit(principal.Identity?.Name ?? "system", "email", $"Sent email to {recipient} with result {emailSendOperation}", operationId);
             }
 
             if (!string.IsNullOrEmpty(response))

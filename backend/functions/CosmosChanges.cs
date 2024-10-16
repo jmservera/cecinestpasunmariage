@@ -49,13 +49,15 @@ public class CosmosChanges(ILogger<CosmosChanges> logger, IEmailMessaging emailM
 
                 message += "\nThank you for registering!\n We look forward to having lots of fun together.\n You can review your changes at <a href=\"https://cecinestpasunmariage.org/registro/\">cecinestpasunmariage.org</a>";
 
-                var adminResult = await emailMessaging.SendEmailAsync(logAdmin, "Important user update at cecinestpasunmariage.org", adminMessage);
-                auditService.Audit("system", "update sent to admin", adminResult);
+                var operationId = Guid.NewGuid().ToString();
+                var adminResult = await emailMessaging.SendEmailAsync(logAdmin, "Important user update at cecinestpasunmariage.org", adminMessage, operationId);
+                auditService.Audit("system", $"update sent to admin {logAdmin}", adminResult, operationId);
 
                 if (!string.IsNullOrEmpty(email))
                 {
-                    var userResult = await emailMessaging.SendEmailAsync(email, $"Important update, you {operation} your user at cecinestpasunmariage.org", message);
-                    auditService.Audit("system", "update sent to user", userResult);
+                    var userOperationId = Guid.NewGuid().ToString();
+                    var userResult = await emailMessaging.SendEmailAsync(email, $"Important update, you {operation} your user at cecinestpasunmariage.org", message, userOperationId);
+                    auditService.Audit("system", $"{operation} sent to user {email}", userResult, userOperationId);
                 }
             }
         }
