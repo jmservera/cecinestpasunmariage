@@ -23,15 +23,26 @@ public class EmailMessagingACS(IConfiguration configuration, ILogger<EmailMessag
         },
         recipients: new EmailRecipients([new EmailAddress(to)]));
         var emailSendOperation = await emailClient.SendAsync(WaitUntil.Completed, emailMessage);
+        string maskedEmail = MaskEmail(to);
         if (emailSendOperation.Value.Status == EmailSendStatus.Failed)
         {
-            logger.LogError("Failed to send email to {to} with subject {subject} and result {result}", to, subject, emailSendOperation.Value);
+            logger.LogError("Failed to send email to {maskedEmail} with subject {subject} and result {result}", maskedEmail, subject, emailSendOperation.Value);
         }
         else
         {
-            logger.LogInformation("Email sent to {to} with subject {subject} and result {result}", to, subject, emailSendOperation.Value.Status);
+            logger.LogInformation("Email sent to {maskedEmail} with subject {subject} and result {result}", maskedEmail, subject, emailSendOperation.Value.Status);
         }
 
         return emailSendOperation.Value.Status.ToString();
+    }
+
+    private string MaskEmail(string email)
+    {
+        var atIndex = email.IndexOf('@');
+        if (atIndex <= 1)
+        {
+            return email; // Not enough characters to mask
+        }
+        return email.Substring(0, 1) + "****" + email.Substring(atIndex - 1);
     }
 }
