@@ -1,8 +1,9 @@
 param name string
 param location string
+param resourcesLocation string = location
 param repositoryUrl string
-param customDomains array
-param cosmosdb_resource_id string
+param customDomain string
+param cosmosdb_name string
 param functions_backend_id string
 param functions_backend_location string
 param tags object
@@ -25,14 +26,45 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
   }
 }
 
+resource cosmosdb_resource 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' existing = {
+  name: cosmosdb_name
+}
+
+resource dnszones_staticApp 'Microsoft.Network/dnszones@2023-07-01-preview' existing = {
+  name: customDomain
+}
+
+resource Microsoft_Network_dnszones_A_staticApp 'Microsoft.Network/dnszones/A@2023-07-01-preview' = {
+  parent: dnszones_staticApp
+  name: '@'
+  properties: {
+    TTL: 3600
+    targetResource: {
+      id: staticSite.id
+    }
+  }
+}
+
+resource Microsoft_Network_dnszones_CNAME_staticApp 'Microsoft.Network/dnszones/CNAME@2023-07-01-preview' = {
+  parent: dnszones_staticApp
+  name: '*'
+  properties: {
+    TTL: 3600
+    targetResource: {
+      id: staticSite.id
+    }
+  }
+}
+
 //custom domains
 
-resource staticSites_domains 'Microsoft.Web/staticSites/customDomains@2023-12-01' = [
-  for domain in customDomains: {
-    parent: staticSite
-    name: domain
-  }
-]
+resource staticSites_domains 'Microsoft.Web/staticSites/customDomains@2023-12-01' = {
+  parent: staticSite
+  name: customDomain
+  dependsOn: [
+    Microsoft_Network_dnszones_CNAME_staticApp
+  ]
+}
 
 // database and backend
 
@@ -40,8 +72,9 @@ resource staticSites_databaseConnections_default 'Microsoft.Web/staticSites/data
   parent: staticSite
   name: 'default'
   properties: {
-    resourceId: cosmosdb_resource_id
-    region: location
+    resourceId: cosmosdb_resource.id
+    region: resourcesLocation
+    connectionString: cosmosdb_resource.listConnectionStrings().connectionStrings[0].connectionString
   }
 }
 

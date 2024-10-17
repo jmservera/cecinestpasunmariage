@@ -1,11 +1,9 @@
 param base_name string
-param dnszones_name string
 param workspace_name string
 param location string = resourceGroup().location
 param static_app_location string = location
 param emailDataLocation string = 'switzerland'
 param custom_domain_name string
-param custom_domains array
 param tags object = {
   env: 'prod'
 }
@@ -83,10 +81,11 @@ module staticApp 'modules/static-app.bicep' = {
     location: static_app_location
     tags: tags
     repositoryUrl: staticAppRepositoryUrl
-    customDomains: custom_domains
-    cosmosdb_resource_id: cosmos.outputs.cosmosdb_resource_id
+    customDomain: custom_domain_name
+    cosmosdb_name: cosmos.outputs.cosmosdb_resource_name
     functions_backend_id: functions.outputs.function_id
     functions_backend_location: functions.outputs.location
+    resourcesLocation: location
   }
 }
 
@@ -121,31 +120,5 @@ module storage 'modules/site-storage.bicep' = {
     name: media_storage_account_name
     location: location
     tags: tags
-  }
-}
-
-resource dnszones_staticApp 'Microsoft.Network/dnszones@2023-07-01-preview' existing = {
-  name: dnszones_name
-}
-
-resource Microsoft_Network_dnszones_A_staticApp 'Microsoft.Network/dnszones/A@2023-07-01-preview' = {
-  parent: dnszones_staticApp
-  name: '@'
-  properties: {
-    TTL: 3600
-    targetResource: {
-      id: staticApp.outputs.staticSites_resource_id
-    }
-  }
-}
-
-resource Microsoft_Network_dnszones_CNAME_staticApp 'Microsoft.Network/dnszones/CNAME@2023-07-01-preview' = {
-  parent: dnszones_staticApp
-  name: '*'
-  properties: {
-    TTL: 3600
-    targetResource: {
-      id: staticApp.outputs.staticSites_resource_id
-    }
   }
 }
