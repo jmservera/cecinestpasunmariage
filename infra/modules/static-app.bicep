@@ -26,6 +26,15 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
   }
 }
 
+// resource config 'Microsoft.Web/staticSites/config@2023-12-01' = {
+//   parent: staticSite
+//   name: 'appsettings'
+//   properties: {
+//     DATABASE_CONTAINER_NAME: 'users'
+//     DATABASE_NAME: 'registrations'
+//   }
+// }
+
 resource cosmosdb_resource 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' existing = {
   name: cosmosdb_name
 }
