@@ -28,7 +28,7 @@ namespace functions
         static readonly HashSet<string> validMimeTypesForFace = ["image/jpeg", "image/png", "image/gif"];
 
         [Function(nameof(PictureDescriber))]
-        public async Task Run([BlobTrigger(GetPhotos.PicsContainerName + "/{name}", Connection = "")] BlobClient client, string name)
+        public async Task Run([BlobTrigger(GetPhotos.PicsContainerName + "/{name}", Connection = "STORAGE_CONNECTION_STRING")] BlobClient client, string name)
         {
             var properties = await client.GetPropertiesAsync();
             var metadata = properties.Value.Metadata;
