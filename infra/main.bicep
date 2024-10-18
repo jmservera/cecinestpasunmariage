@@ -30,7 +30,7 @@ var function_name = '${normalized_name}function'
 var staticSites_name = '${normalized_name}site'
 var media_storage_account_name = '${normalized_name}pictures' // 24 chars max
 var CommunicationServices_name = '${normalized_name}acs'
-var databaseAccounts_cecinestpasunmariagedb_name = '${normalized_name}db'
+var databaseAccount_name = '${normalized_name}db'
 
 module acs_email './modules/acs.email.bicep' = {
   name: '${CommunicationServices_name}email'
@@ -64,9 +64,9 @@ module acs 'modules/acs.bicep' = {
 }
 
 module cosmos 'modules/cosmos.bicep' = {
-  name: databaseAccounts_cecinestpasunmariagedb_name
+  name: databaseAccount_name
   params: {
-    name: databaseAccounts_cecinestpasunmariagedb_name
+    name: databaseAccount_name
     location: location
     tags: tags
     registrations_database_name: registrations_database_name
@@ -95,7 +95,7 @@ module functions 'modules/functions.bicep' = {
     name: function_name
     location: location
     tags: tags
-    cosmosdb_name: databaseAccounts_cecinestpasunmariagedb_name
+    cosmosdb_name: databaseAccount_name
     registrations_database_name: registrations_database_name
     user_registrations_container_name: user_registrations_container_name
     media_storage_account_name: media_storage_account_name
