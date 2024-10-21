@@ -1,27 +1,49 @@
+@description('Base name for all resources')
 param base_name string
+@description('Name of the existing App Insights workspace')
 param workspace_name string
+@description('Name of the resource group where the App Insights workspace sits')
 param workspace_rg_name string
+@description('Location of the resources. Defaults to the location of the resource group')
 param location string = resourceGroup().location
+@description('Location of the static app, in a separate parameter as it can be different from the location of the other resources because static apps are not avaliable in all regions. Defaults to the location of the resource group')
 param static_app_location string = location
-param emailDataLocation string = 'switzerland'
+@description('The location where the email service stores its data at rest.')
+param emailDataLocation string
+@description('Name of the existing DNS zone to use for the custom domain')
 param dns_zone_name string
+@description('Name of the resource group where the DNS zone sits')
 param dnszone_rg_name string = resourceGroup().name
+@description('Tags to apply to all resources')
 param tags object = {
   env: 'prod'
 }
-param staticAppRepositoryUrl string
-param telegram_token string
 
+@description('URL of the repository containing the static app code')
+param staticAppRepositoryUrl string
+
+@description('Telegram bot token, use Botfather to create a new bot and generate the token.')
+param telegram_token string
+@description('Exisiting Vision resource API key')
 param vision_key string
+@description('Exisiting Vision resource endpoint')
 param vision_endpoint string
+@description('Exisiting OpenAI resource deployment name')
 param aoai_deployment_name string
+@description('Exisiting OpenAI resource endpoint')
 param aoai_endpoint string
+@description('Exisiting OpenAI resource API key')
 param aoai_key string
+@description('Exisiting Computer Vision resource API key')
 param computer_vision_key string
+@description('Exisiting Computer Vision resource endpoint')
 param computer_vision_endpoint string
 
+@description('Name to use for the registration database. If you change this, you will have to modify the staticwebapp.database.config.json file in the static app repository.')
 param registrations_database_name string = 'registrations'
+@description('Name to use for the user registrations container. If you change this, you will have to modify the staticwebapp.database.config.json file in the static app repository.')
 param user_registrations_container_name string = 'users'
+@description('Default email to use as the sender for emails sent by the email service')
 param default_admin_email string
 
 // keep the first 19 chars of the start_name
