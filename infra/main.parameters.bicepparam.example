@@ -1,0 +1,18 @@
+using 'main.bicep'
+
+param base_name = 'devservezas'
+param workspace_name = 'devservezas'
+param dns_zone_name = 'dev.servezas.org'
+param static_app_location = 'westeurope'
+
+param staticAppRepositoryUrl = 'https://github.com/jmservera/cecinestpasunmariage'
+param telegram_token = '6405386134:AAGBhnS4SJiF9msjZA5rtE_ixF7WFgaCvMM'
+
+param vision_key = '0b34c265d008466db794a2ac4363ba39'
+param vision_endpoint = 'https://cecifaces.cognitiveservices.azure.com/'
+param aoai_deployment_name = 'gpt-4o-mini'
+param aoai_endpoint = 'https://jmaoaiswc.openai.azure.com/'
+param aoai_key = '526c9165f7384afd9d32f4d0cc5dad32'
+param computer_vision_key = '13d2afc3ce6d4a39a5af2d3a3754f7bd'
+param computer_vision_endpoint = 'https://noweddingcomputervision.cognitiveservices.azure.com/'
+param default_admin_email = 'jmservera@outlook.com'

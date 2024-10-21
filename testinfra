@@ -1,0 +1,2 @@
+#!/bin/bash
+az deployment group create -g devservezas --name test01 --template-file infra/main.bicep --parameters infra/main.parameters.bicepparam --what-if
