@@ -1,9 +1,11 @@
 param base_name string
 param workspace_name string
+param workspace_rg_name string
 param location string = resourceGroup().location
 param static_app_location string = location
 param emailDataLocation string = 'switzerland'
-param custom_domain_name string
+param dns_zone_name string
+param dnszone_rg_name string = resourceGroup().name
 param tags object = {
   env: 'prod'
 }
@@ -37,15 +39,16 @@ module acs_email './modules/acs.email.bicep' = {
   params: {
     name: CommunicationServices_name
     emailDataLocation: emailDataLocation
-    custom_domain_name: custom_domain_name
+    custom_domain_name: dns_zone_name
     tags: tags
   }
 }
 
 module domain_verification 'modules/domain-verifications.bicep' = {
   name: '${CommunicationServices_name}domainverification'
+  scope: resourceGroup(dnszone_rg_name)
   params: {
-    dnszone_name: custom_domain_name
+    dnszone_name: dns_zone_name
     verificationRecords: acs_email.outputs.verificationRecords
   }
 }
@@ -55,7 +58,7 @@ module acs 'modules/acs.bicep' = {
   params: {
     name: CommunicationServices_name
     emailDataLocation: emailDataLocation
-    custom_domain_name: custom_domain_name
+    custom_domain_name: dns_zone_name
     tags: tags
   }
   // dependsOn: [
@@ -81,11 +84,12 @@ module staticApp 'modules/static-app.bicep' = {
     location: static_app_location
     tags: tags
     repositoryUrl: staticAppRepositoryUrl
-    customDomain: custom_domain_name
+    customDomain: dns_zone_name
     cosmosdb_name: cosmos.outputs.cosmosdb_resource_name
     functions_backend_id: functions.outputs.function_id
     functions_backend_location: functions.outputs.location
     resourcesLocation: location
+    customDomain_rg_name: dnszone_rg_name
   }
 }
 
@@ -98,7 +102,7 @@ module functions 'modules/functions.bicep' = {
     cosmosdb_name: databaseAccount_name
     registrations_database_name: registrations_database_name
     user_registrations_container_name: user_registrations_container_name
-    media_storage_account_name: media_storage_account_name
+    media_storage_account_name: storage.outputs.storageAccountName
     telegram_token: telegram_token
     vision_key: vision_key
     vision_endpoint: vision_endpoint
@@ -111,6 +115,7 @@ module functions 'modules/functions.bicep' = {
     default_sender: acs_email.outputs.default_sender
     default_admin_email: default_admin_email
     app_insights_workspace_name: workspace_name
+    app_insights_rg_name: workspace_rg_name
   }
 }
 

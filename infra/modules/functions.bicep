@@ -19,6 +19,7 @@ param acs_name string
 param default_sender string
 param default_admin_email string
 param app_insights_workspace_name string
+param app_insights_rg_name string
 
 var storageAccountName = '${uniqueString(resourceGroup().id)}azfunctions'
 var hostingPlan_name = 'ASP-${name}-a456' //todo generate unique 4 digit id
@@ -38,6 +39,7 @@ resource acs_resource 'Microsoft.Communication/communicationServices@2023-06-01-
 
 resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existing = {
   name: app_insights_workspace_name
+  scope: resourceGroup(app_insights_rg_name)
 }
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {

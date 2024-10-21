@@ -3,6 +3,7 @@ param location string
 param resourcesLocation string = location
 param repositoryUrl string
 param customDomain string
+param customDomain_rg_name string
 param cosmosdb_name string
 param functions_backend_id string
 param functions_backend_location string
@@ -26,53 +27,57 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
   }
 }
 
-// resource config 'Microsoft.Web/staticSites/config@2023-12-01' = {
-//   parent: staticSite
-//   name: 'appsettings'
-//   properties: {
-//     DATABASE_CONTAINER_NAME: 'users'
-//     DATABASE_NAME: 'registrations'
-//   }
-// }
-
 resource cosmosdb_resource 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' existing = {
   name: cosmosdb_name
 }
 
-resource dnszones_staticApp 'Microsoft.Network/dnszones@2023-07-01-preview' existing = {
-  name: customDomain
-}
-
-resource Microsoft_Network_dnszones_A_staticApp 'Microsoft.Network/dnszones/A@2023-07-01-preview' = {
-  parent: dnszones_staticApp
-  name: '@'
-  properties: {
-    TTL: 3600
-    targetResource: {
-      id: staticSite.id
-    }
-  }
-}
-
-resource Microsoft_Network_dnszones_CNAME_staticApp 'Microsoft.Network/dnszones/CNAME@2023-07-01-preview' = {
-  parent: dnszones_staticApp
-  name: '*'
-  properties: {
-    TTL: 3600
-    targetResource: {
-      id: staticSite.id
-    }
-  }
-}
-
 //custom domains
+module staticSites_dns 'static-app-dns.bicep' = {
+  name: 'staticSites_dns'
+  scope: resourceGroup(customDomain_rg_name)
+  params: {
+    customDomain: customDomain
+    staticSite_id: staticSite.id
+  }
+}
 
-resource staticSites_domains 'Microsoft.Web/staticSites/customDomains@2023-12-01' = {
+resource staticSites_domains_start 'Microsoft.Web/staticSites/customDomains@2023-12-01' = {
   parent: staticSite
   name: customDomain
+  properties: {
+    validationMethod: 'dns-txt-token'
+  }
   dependsOn: [
-    Microsoft_Network_dnszones_CNAME_staticApp
+    staticSites_dns
   ]
+}
+
+module deployment_identity 'validation/deployment-identity.bicep' = {
+  name: 'deployment_identity'
+  params: {
+    location: location
+  }
+}
+
+module validate 'validation/deployment-script.bicep' = {
+  name: 'domain_verification'
+  params: {
+    dns_zone_name: customDomain
+    static_webapp_name: staticSite.name
+    identity_id: deployment_identity.outputs.identity_id
+  }
+  dependsOn: [
+    staticSites_dns
+  ]
+}
+
+module staticSites_txt 'static-app-dns-txt.bicep' = {
+  name: 'staticSites_txt_start'
+  scope: resourceGroup(customDomain_rg_name)
+  params: {
+    customDomain: customDomain
+    validationToken: validate.outputs.validationToken
+  }
 }
 
 // database and backend

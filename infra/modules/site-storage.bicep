@@ -32,3 +32,5 @@ resource storageAccounts_containers 'Microsoft.Storage/storageAccounts/blobServi
     name: containerName
   }
 ]
+
+output storageAccountName string = storageAccounts_resource.name
