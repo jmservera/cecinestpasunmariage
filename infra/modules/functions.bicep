@@ -45,6 +45,7 @@ resource workspace 'Microsoft.OperationalInsights/workspaces@2021-06-01' existin
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: storageAccountName
   location: location
+  tags: tags
   sku: {
     name: 'Standard_LRS'
   }
@@ -60,6 +61,7 @@ var storageAccount_connectionString = 'DefaultEndpointsProtocol=https;AccountNam
 resource hostingPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: hostingPlan_name
   location: location
+  tags: tags
   sku: {
     name: 'Y1'
     tier: 'Dynamic'
@@ -75,6 +77,7 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2023-12-01' = {
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: name
   location: location
+  tags: tags
   kind: 'web'
   properties: {
     Application_Type: 'web'

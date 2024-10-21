@@ -52,5 +52,6 @@ resource emailServices_acs_domain_senderUsernames 'microsoft.communication/email
   }
 ]
 
+output name string = emailServices_acs_resource.name
 output default_sender string = '${senderusernames[0].username}@${custom_domain_name}'
 output verificationRecords object = emailServices_acs_domain.properties.verificationRecords

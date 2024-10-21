@@ -5,7 +5,7 @@ resource dnszones_staticApp 'Microsoft.Network/dnszones@2023-07-01-preview' exis
   name: customDomain
 }
 
-resource Microsoft_Network_dnszones_A_staticApp 'Microsoft.Network/dnsZones/TXT@2023-07-01-preview' = {
+resource Microsoft_Network_dnszones_A_staticApp 'Microsoft.Network/dnsZones/TXT@2023-07-01-preview' = if (validationToken != '') {
   parent: dnszones_staticApp
   name: '@'
   properties: {

@@ -8,6 +8,11 @@ param cosmosdb_name string
 param functions_backend_id string
 param functions_backend_location string
 param tags object
+param identity_name string
+
+resource cosmosdb_resource 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' existing = {
+  name: cosmosdb_name
+}
 
 resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
   name: name
@@ -25,10 +30,6 @@ resource staticSite 'Microsoft.Web/staticSites@2023-12-01' = {
     provider: 'GitHub'
     enterpriseGradeCdnStatus: 'Disabled'
   }
-}
-
-resource cosmosdb_resource 'Microsoft.DocumentDB/databaseAccounts@2021-06-15' existing = {
-  name: cosmosdb_name
 }
 
 //custom domains
@@ -52,19 +53,12 @@ resource staticSites_domains_start 'Microsoft.Web/staticSites/customDomains@2023
   ]
 }
 
-module deployment_identity 'validation/deployment-identity.bicep' = {
-  name: 'deployment_identity'
-  params: {
-    location: location
-  }
-}
-
 module validate 'validation/deployment-script.bicep' = {
   name: 'domain_verification'
   params: {
     dns_zone_name: customDomain
     static_webapp_name: staticSite.name
-    identity_id: deployment_identity.outputs.identity_id
+    identity_name: identity_name
   }
   dependsOn: [
     staticSites_dns

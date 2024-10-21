@@ -34,8 +34,16 @@ var media_storage_account_name = '${normalized_name}pictures' // 24 chars max
 var CommunicationServices_name = '${normalized_name}acs'
 var databaseAccount_name = '${normalized_name}db'
 
+module deployment_identity 'modules/user-assigned-identity.bicep' = {
+  name: 'deployment_identity'
+  params: {
+    location: location
+    tags: tags
+  }
+}
+
 module acs_email './modules/acs.email.bicep' = {
-  name: '${CommunicationServices_name}email'
+  name: '${CommunicationServices_name}_email'
   params: {
     name: CommunicationServices_name
     emailDataLocation: emailDataLocation
@@ -44,8 +52,8 @@ module acs_email './modules/acs.email.bicep' = {
   }
 }
 
-module domain_verification 'modules/domain-verifications.bicep' = {
-  name: '${CommunicationServices_name}domainverification'
+module domain_verification_entries 'modules/domain-verification-entries.bicep' = {
+  name: '${CommunicationServices_name}_domainverification'
   scope: resourceGroup(dnszone_rg_name)
   params: {
     dnszone_name: dns_zone_name
@@ -56,17 +64,28 @@ module domain_verification 'modules/domain-verifications.bicep' = {
   ]
 }
 
+module domain_verification_start 'modules/domain-verification-start.bicep' = {
+  name: '${CommunicationServices_name}_domain_verification_start'
+  params: {
+    dnszone_name: dns_zone_name
+    identity_name: deployment_identity.outputs.identity_name
+    acs_name: acs.outputs.name
+    email_services_name: acs_email.outputs.name
+    tags: tags
+    emailDataLocation: emailDataLocation
+  }
+  dependsOn: [
+    domain_verification_entries
+  ]
+}
+
 module acs 'modules/acs.bicep' = {
-  name: '${CommunicationServices_name}domainlink'
+  name: '${CommunicationServices_name}_acs'
   params: {
     name: CommunicationServices_name
     emailDataLocation: emailDataLocation
-    custom_domain_name: dns_zone_name
     tags: tags
   }
-  // dependsOn: [
-  //   domain_verification // not needed by now
-  // ]
 }
 
 module cosmos 'modules/cosmos.bicep' = {
@@ -93,6 +112,7 @@ module staticApp 'modules/static-app.bicep' = {
     functions_backend_location: functions.outputs.location
     resourcesLocation: location
     customDomain_rg_name: dnszone_rg_name
+    identity_name: deployment_identity.outputs.identity_name
   }
 }
 
