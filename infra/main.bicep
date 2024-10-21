@@ -51,6 +51,9 @@ module domain_verification 'modules/domain-verifications.bicep' = {
     dnszone_name: dns_zone_name
     verificationRecords: acs_email.outputs.verificationRecords
   }
+  dependsOn: [
+    staticApp // do acs verification after the static app is created, txt will be overwritten
+  ]
 }
 
 module acs 'modules/acs.bicep' = {
