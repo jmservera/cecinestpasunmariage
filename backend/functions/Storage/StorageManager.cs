@@ -32,7 +32,7 @@ namespace functions.Storage
         /// <summary>
         /// Uploads a file to a container in Azure Blob Storage.
         /// </summary>
-        /// <param name="username">The username of the user uploading the file.</param>
+        /// <param name="username">The username of the user uploading the file. Username may be empty if the file is not user-specific</param>
         /// <param name="fileName">The name of the file to upload.</param>
         /// <param name="containerName">The name of the container to upload the file to.</param>
         /// <param name="stream">The stream containing the file to upload.</param>
@@ -42,10 +42,6 @@ namespace functions.Storage
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task UploadAsync(string username, string fileName, string containerName, Stream stream, string contentType, string? originalFileName, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new ArgumentNullException(nameof(username));
-            }
             if (string.IsNullOrEmpty(fileName))
             {
                 throw new ArgumentNullException(nameof(fileName));
@@ -126,7 +122,7 @@ namespace functions.Storage
         /// <returns>A task with the stream containing the file.</returns>
         public async Task<Stream> DownloadAsync(string username, string fileName, string containerName)
         {
-            if (string.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
+            // if (string.IsNullOrEmpty(username)) throw new ArgumentNullException(nameof(username));
             if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException(nameof(fileName));
             if (string.IsNullOrEmpty(containerName)) throw new ArgumentNullException(nameof(containerName));
 
