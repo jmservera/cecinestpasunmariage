@@ -56,9 +56,9 @@ resource staticSites_domains_start 'Microsoft.Web/staticSites/customDomains@2023
 module validate 'validation/deployment-script.bicep' = {
   name: 'domain_verification'
   params: {
-    dns_zone_name: customDomain
-    static_webapp_name: staticSite.name
-    identity_name: identity_name
+    dnsZoneName: customDomain
+    staticWebappName: staticSite.name
+    identityName: identity_name
   }
   dependsOn: [
     staticSites_dns

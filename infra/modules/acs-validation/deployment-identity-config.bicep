@@ -1,8 +1,8 @@
 /// https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/deployment-script-bicep?tabs=CLI
-param identity_name string
+param identityName string
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
-  name: identity_name
+  name: identityName
 }
 
 // Creates the custom role to access the actions needed for the deployment script
@@ -10,7 +10,7 @@ resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' 
 resource customRole 'Microsoft.Authorization/roleDefinitions@2022-05-01-preview' = {
   name: guid(
     'deployment-script-minimum-privilege-for-deployment-principal-acs',
-    identity_name,
+    identityName,
     subscription().subscriptionId,
     resourceGroup().name
   )
