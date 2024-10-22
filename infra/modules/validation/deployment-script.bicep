@@ -1,18 +1,19 @@
-param dns_zone_name string
-param identity_name string
+param dnsZoneName string
+param identityName string
 param location string = resourceGroup().location
-param static_webapp_name string
+param staticWebappName string
 
 // https://github.com/TheCloudWarrior/AzureStaticWebApp/blob/main/_modules/deploymentscript/main.bicep
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
-  name: identity_name
+  name: identityName
 }
 
-module deployment_identity_configuration 'deployment-identity-config.bicep' = {
+// this calls the module where we configure the identity permissions
+module deploymentIdentityConfiguration 'deployment-identity-config.bicep' = {
   name: 'deployment_identity_configuration'
   params: {
-    identity_name: identity_name
+    identityName: identityName
   }
 }
 
@@ -30,7 +31,7 @@ resource deploymentScript 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
   properties: {
     azCliVersion: '2.59.0'
     retentionInterval: 'PT1H'
-    arguments: '"${static_webapp_name}" "${resourceGroup().name}" "${dns_zone_name}"'
+    arguments: '"${staticWebappName}" "${resourceGroup().name}" "${dnsZoneName}"'
     cleanupPreference: 'OnExpiration'
     scriptContent: '''
       #!/bin/bash
@@ -40,7 +41,7 @@ resource deploymentScript 'Microsoft.Resources/deploymentScripts@2023-08-01' = {
     '''
   }
   dependsOn: [
-    deployment_identity_configuration
+    deploymentIdentityConfiguration
   ]
 }
 

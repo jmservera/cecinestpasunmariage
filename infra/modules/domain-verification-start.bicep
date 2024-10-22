@@ -18,9 +18,9 @@ resource emailServices_acs_domain 'Microsoft.Communication/emailServices/domains
 module acs_validation 'acs-validation/deployment-script.bicep' = {
   name: 'acs_validation'
   params: {
-    identity_name: identity_name
-    dns_zone_name: dnszone_name
-    email_service_name: email_services_name
+    identityName: identity_name
+    dnsZoneName: dnszone_name
+    emailServiceName: email_services_name
   }
 }
 
