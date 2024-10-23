@@ -13,10 +13,10 @@ namespace functions
     {
         const string SetUpFunctionName = "Cecinestpasunbotreg";
         const string UpdateFunctionName = "Cecinestpasunbot";
-        readonly Bot _bot;
+        readonly TelegramBot _bot;
         readonly ILogger _logger;
 
-        public Cecinestpasunbot(ILoggerFactory loggerFactory, Bot bot)
+        public Cecinestpasunbot(ILoggerFactory loggerFactory, TelegramBot bot)
         {
             _logger = loggerFactory.CreateLogger<Cecinestpasunbot>();
             _bot = bot;
