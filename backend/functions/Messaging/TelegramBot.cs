@@ -1,23 +1,11 @@
-using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Globalization;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Web;
 using functions.Identity;
 using functions.Storage;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
-using Newtonsoft.Json;
 using Telegram.Bot;
-using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
-using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -99,7 +87,7 @@ namespace functions.Messaging
                 AllowedUpdates = Array.Empty<UpdateType>() // receive all update types except ChatMember related updates
             };
 
-            var handler = new TelegramHandler(chatService, chatHistoryManager, chatUserMapper, uploader, logger, localizer, _client);
+            var handler = new TelegramHandler(chatService, chatHistoryManager, chatUserMapper, uploader, logger, localizer);
 
             _client.StartReceiving(
                 updateHandler: handler.HandleUpdateAsync,
