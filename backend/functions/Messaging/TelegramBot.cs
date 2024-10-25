@@ -63,7 +63,7 @@ namespace functions.Messaging
                 return;
             }
 
-            await new TelegramHandler(chatService, chatHistoryManager, chatUserMapper, uploader, logger, localizer).HandleUpdateAsync(_client, update, cancellationToken);
+            await new TelegramHandler(chatService, chatHistoryManager, configuration, chatUserMapper, uploader, logger, localizer, _client).HandleUpdateAsync(_client, update, cancellationToken);
         }
 
         public async Task SendMessage(long chatId, string text, IReplyMarkup? replyMarkup = null)
@@ -84,10 +84,10 @@ namespace functions.Messaging
             // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
             ReceiverOptions receiverOptions = new()
             {
-                AllowedUpdates = Array.Empty<UpdateType>() // receive all update types except ChatMember related updates
+                AllowedUpdates = [] // receive all update types except ChatMember related updates
             };
 
-            var handler = new TelegramHandler(chatService, chatHistoryManager, chatUserMapper, uploader, logger, localizer);
+            var handler = new TelegramHandler(chatService, chatHistoryManager, configuration, chatUserMapper, uploader, logger, localizer, _client);
 
             _client.StartReceiving(
                 updateHandler: handler.HandleUpdateAsync,

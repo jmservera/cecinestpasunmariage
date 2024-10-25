@@ -1,0 +1,25 @@
+<button
+  id="register"
+  name="register"
+  class="btn btn-primary"
+  data-toggle="modal"
+  data-target="#telegram_reg_modal"
+>
+  Telegram
+</button>
+
+{{ with resources.Get "js/telegram.ts" }} {{ if eq hugo.Environment
+"development" }} {{ with . | js.Build}}
+
+<script src="{{ .RelPermalink }}"></script>
+
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+$opts | fingerprint }}
+
+<script
+  src="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+  crossorigin="anonymous"
+></script>
+
+{{ end }} {{ end }} {{ end }}

@@ -41,7 +41,7 @@ public class MapChatToUser : IChatUserMapper
     private async Task EnsureInitializedAsync()
     {
         var db = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_dbName);
-        await db.Database.CreateContainerIfNotExistsAsync(_containerName, "/ChatId");
+        await db.Database.CreateContainerIfNotExistsAsync(_containerName, "/id");
     }
 
     public async Task<ChatUser?> GetUserAsync(string chatId)
@@ -69,6 +69,11 @@ public class MapChatToUser : IChatUserMapper
     public async Task SaveUserAsync(ChatUser user)
     {
         await EnsureInitializedAsync();
-        await _container.UpsertItemAsync(user, new PartitionKey(user.ChatId));
+        await _container.UpsertItemAsync(user);
+    }
+
+    public async Task RemoveUserAsync(string chatId)
+    {
+        await _container.DeleteItemAsync<ChatUser>(chatId, new PartitionKey(chatId));
     }
 }

@@ -1,3 +1,5 @@
-Vas a enlazar to cuenta con telegram:
+---
+title: "Enlaza tu cuenta de Telegram"
+---
 
-[Aceptar](link)
+{{< telegram_reg >}}

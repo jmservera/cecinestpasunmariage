@@ -1,26 +1,23 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net;
+using functions.Identity;
 using functions.Messaging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace functions
 {
-    public class Cecinestpasunbot
+    public class BotEndpoint(ILoggerFactory loggerFactory, TelegramBot bot, IChatUserMapper chatUserMapper)
     {
         const string SetUpFunctionName = "Cecinestpasunbotreg";
         const string UpdateFunctionName = "Cecinestpasunbot";
-        readonly TelegramBot _bot;
-        readonly ILogger _logger;
+        const string AuthenticateBot = "AuthenticateBot";
 
-        public Cecinestpasunbot(ILoggerFactory loggerFactory, TelegramBot bot)
-        {
-            _logger = loggerFactory.CreateLogger<Cecinestpasunbot>();
-            _bot = bot;
-        }
+        readonly ILogger _logger = loggerFactory.CreateLogger<BotEndpoint>();
 
         [Function(UpdateFunctionName)]
         public async Task<HttpResponseData> Update([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req, FunctionContext context)
@@ -30,7 +27,7 @@ namespace functions
             var response = req.CreateResponse(HttpStatusCode.OK);
             response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
             _logger.LogInformation("Handling update...");
-            await _bot.UpdateAsync(req, context.CancellationToken);
+            await bot.UpdateAsync(req, context.CancellationToken);
             _logger.LogInformation("Update handled.");
             response.WriteString("OK!");
             return response;
@@ -60,7 +57,7 @@ namespace functions
                 handleUpdateFunctionUrl = handleUpdateFunctionUrl.Replace(SetUpFunctionName, UpdateFunctionName, ignoreCase: true, culture: CultureInfo.InvariantCulture);
                 _logger.LogInformation("Registering bot with url {UpdateFunctionUrl}", handleUpdateFunctionUrl);
 
-                await _bot.Register(handleUpdateFunctionUrl);
+                await bot.Register(handleUpdateFunctionUrl);
                 _logger.LogInformation("Bot registered to the address {UpdateFunctionUrl}.", handleUpdateFunctionUrl);
                 response.WriteString("Bot registered!");
             }
@@ -68,6 +65,40 @@ namespace functions
             {
                 _logger.LogError(e, "Failed to register bot.");
                 response.WriteString("Failed to register bot.");
+            }
+
+            return response;
+        }
+
+        [Function(AuthenticateBot)]
+        public async Task<HttpResponseData> Authenticate([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
+        {
+            _logger.LogInformation("Authenticate function called.");
+
+            HttpResponseData response;
+
+            try
+            {
+                var chatUser = await req.ReadFromJsonAsync<ChatUser>();
+                if (string.IsNullOrEmpty(chatUser.ChatId) || string.IsNullOrEmpty(chatUser.UserId))
+                {
+                    response = req.CreateResponse(HttpStatusCode.BadRequest);
+                    response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                    _logger.LogWarning("Received an empty request.");
+                    response.WriteString("Empty request.");
+                    return response;
+                }
+                await chatUserMapper.SaveUserAsync(chatUser);
+                response = req.CreateResponse(HttpStatusCode.OK);
+                response.Headers.Add("Content-Type", "application/json; charset=utf-8");
+                response.WriteString(JsonConvert.SerializeObject(chatUser));
+                await bot.SendMessage(long.Parse(chatUser.ChatId), "You have been authenticated!", new ReplyKeyboardRemove());
+            }
+            catch (Exception e)
+            {
+                response = req.CreateResponse(HttpStatusCode.BadRequest);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                _logger.LogError(e, "Failed to register user.");
             }
 
             return response;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using functions.Identity;
 using functions.Storage;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -16,11 +17,11 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace functions.Messaging
 {
-    public class TelegramHandler(IBotTextHandler chatService, IChatHistoryManager chatHistoryManager, IChatUserMapper chatUserMapper,
-                                 IStorageManager uploader, ILogger<TelegramBot> logger, IStringLocalizer<TelegramBot> localizer)
+    public class TelegramHandler(IBotTextHandler chatService, IChatHistoryManager chatHistoryManager,
+                                 IConfiguration config,
+                                 IChatUserMapper chatUserMapper, IStorageManager uploader,
+                                 ILogger<TelegramBot> logger, IStringLocalizer<TelegramBot> localizer, ITelegramBotClient client)
     {
-
-        private ITelegramBotClient? client;
 
         /// <summary>
         /// Handles an update from the bot.
@@ -44,11 +45,12 @@ namespace functions.Messaging
             if (user is null)
             {
                 logger.LogWarning("Received a message from an unknown user {ChatId} {User}.", message.Chat.Id, message.Chat.Username);
-
+                var botname = await botClient.GetMeAsync(cancellationToken);
                 ChatUser chatUser = new()
                 {
                     ChatId = message.Chat.Id.ToString(),
-                    UserId = message.Chat.Username ?? ""
+                    UserId = message.Chat.Username ?? "",
+                    BotName = botname.Username
                 };
 
                 var usr = JsonConvert.SerializeObject(chatUser);
@@ -56,7 +58,19 @@ namespace functions.Messaging
                 var userEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(usr));
 
                 var redirect = WebUtility.UrlEncode($"/telegram/?id={userEncoded}");
-                var button = KeyboardButton.WithWebApp("🔑 Click to login through our website", new WebAppInfo() { Url = $"https://p85mr95b-4280.uks1.devtunnels.ms/sso/?post_login_redirect_uri={redirect}" });
+                var baseUri = config.GetValue<string>("BASE_URI");
+                if (string.IsNullOrEmpty(baseUri))
+                {
+                    throw new InvalidOperationException("BASE_URI is not set.");
+                }
+                UriBuilder uriBuilder = new(baseUri)
+                {
+                    Path = "/sso",
+                    Query = $"post_login_redirect_uri={redirect}"
+                };
+
+                var button = KeyboardButton.WithWebApp("🔑 Click to login through our website",
+                 new WebAppInfo() { Url = uriBuilder.Uri.ToString() });
                 var replyMarkup = new ReplyKeyboardMarkup(button) { ResizeKeyboard = true };
 
                 await client.SendTextMessageAsync(message.Chat.Id, "Please click on the login button to use this bot", replyMarkup: replyMarkup, cancellationToken: cancellationToken);
@@ -183,6 +197,13 @@ namespace functions.Messaging
                     await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "History cleared",
+                        cancellationToken: cancellationToken);
+                    break;
+                case "/logout":
+                    await chatUserMapper.RemoveUserAsync(message.Chat.Id.ToString());
+                    await client.SendTextMessageAsync(
+                        chatId: message.Chat.Id,
+                        text: "Logged out",
                         cancellationToken: cancellationToken);
                     break;
                 default:

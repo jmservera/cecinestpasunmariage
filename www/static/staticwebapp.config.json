@@ -2,7 +2,9 @@
   "routes": [
     {
       "route": "/api/Cecinestpasunbot",
-      "allowedRoles": ["anonymous"]
+      "allowedRoles": [
+        "anonymous"
+      ]
     },
     {
       "route": "/data-api/*",
@@ -60,7 +62,8 @@
       "headers": {
         "Cache-Control": "no-store"
       }
-    },{
+    },
+    {
       "route": "/en/carousel/",
       "allowedRoles": [
         "authenticated"
@@ -89,6 +92,33 @@
     },
     {
       "route": "/fr/carousel/",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/telegram/",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/en/telegram/",
+      "allowedRoles": [
+        "authenticated"
+      ],
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "route": "/fr/telegram/",
       "allowedRoles": [
         "authenticated"
       ],
