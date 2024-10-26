@@ -5,6 +5,7 @@ using functions.Identity;
 using functions.Messaging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace functions
 {
-    public class BotEndpoint(ILoggerFactory loggerFactory, TelegramBot bot, IStringLocalizer<TelegramBot> localizer, IChatUserMapper chatUserMapper)
+    public class BotEndpoint(ILoggerFactory loggerFactory, TelegramBot bot, IStringLocalizer<TelegramBot> localizer, IChatUserMapper chatUserMapper, IConfiguration configuration)
     {
         const string SetUpFunctionName = "Cecinestpasunbotreg";
         const string UpdateFunctionName = "Cecinestpasunbot";
@@ -91,6 +92,8 @@ namespace functions
                     response.WriteString("Empty request.");
                     return response;
                 }
+                var key = configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set.");
+                chatUser.CheckSealValidity(ChatUser.GetValidKey(key));
                 await chatUserMapper.SaveUserAsync(chatUser);
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
