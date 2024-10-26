@@ -9,6 +9,7 @@ namespace functions.Identity;
 /// </summary>
 public class MapChatToUser : IChatUserMapper
 {
+    private static bool _initialized = false;
     private readonly IConfiguration _configuration;
     private readonly CosmosClient _cosmosClient;
     private readonly Container _container;
@@ -37,8 +38,14 @@ public class MapChatToUser : IChatUserMapper
 
     private async Task EnsureInitializedAsync()
     {
-        var db = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_dbName);
-        await db.Database.CreateContainerIfNotExistsAsync(_containerName, "/id");
+        if (!_initialized)
+        {
+            // todo: thread safety
+            _logger.LogInformation("Initializing CosmosDB");
+            var db = await _cosmosClient.CreateDatabaseIfNotExistsAsync(_dbName);
+            await db.Database.CreateContainerIfNotExistsAsync(_containerName, "/id");
+            _initialized = true;
+        }
     }
 
     public async Task<ChatUser?> GetUserAsync(string chatId)
