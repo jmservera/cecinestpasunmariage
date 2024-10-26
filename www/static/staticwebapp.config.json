@@ -2,135 +2,103 @@
   "routes": [
     {
       "route": "/api/Cecinestpasunbot",
-      "allowedRoles": [
-        "anonymous"
-      ]
+      "allowedRoles": ["anonymous"]
     },
     {
       "route": "/data-api/*",
-      "allowedRoles": [
-        "authenticated"
-      ]
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/api/*",
-      "allowedRoles": [
-        "authenticated"
-      ]
+      "allowedRoles": ["authenticated"]
     },
     {
       "route": "/registro/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/fotos/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/carousel/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/en/registro/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/en/fotos/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/en/carousel/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/fr/registro/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/fr/fotos/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/fr/carousel/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/telegram/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/en/telegram/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/fr/telegram/",
-      "allowedRoles": [
-        "authenticated"
-      ],
+      "allowedRoles": ["authenticated"],
       "headers": {
         "Cache-Control": "no-store"
       }
     },
     {
       "route": "/admin/*",
-      "allowedRoles": [
-        "admin"
-      ],
+      "allowedRoles": ["admin"],
       "headers": {
         "Cache-Control": "no-store"
       }

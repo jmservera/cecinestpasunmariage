@@ -1,13 +1,4 @@
-<button
-  id="register"
-  name="register"
-  class="btn btn-primary"
-  data-toggle="modal"
-  data-target="#telegram_reg_modal"
->
-  Telegram
-</button>
-
+<div id="telegramRegistration"></div>
 {{ with resources.Get "js/telegram.ts" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build}}
 
