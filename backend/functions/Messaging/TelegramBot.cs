@@ -24,7 +24,7 @@ namespace functions.Messaging
      IChatUserMapper chatUserMapper
      ) : IDisposable
     {
-        private ITelegramBotClient _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
+        private readonly ITelegramBotClient _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
 
         private CancellationTokenSource? _cts;
 

@@ -5,13 +5,14 @@ using functions.Identity;
 using functions.Messaging;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace functions
 {
-    public class BotEndpoint(ILoggerFactory loggerFactory, TelegramBot bot, IChatUserMapper chatUserMapper)
+    public class BotEndpoint(ILoggerFactory loggerFactory, TelegramBot bot, IStringLocalizer<TelegramBot> localizer, IChatUserMapper chatUserMapper)
     {
         const string SetUpFunctionName = "Cecinestpasunbotreg";
         const string UpdateFunctionName = "Cecinestpasunbot";
@@ -80,6 +81,8 @@ namespace functions
             try
             {
                 var chatUser = await req.ReadFromJsonAsync<ChatUser>();
+                var language = chatUser.Language ?? "en";
+                CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
                 if (string.IsNullOrEmpty(chatUser.ChatId) || string.IsNullOrEmpty(chatUser.UserId))
                 {
                     response = req.CreateResponse(HttpStatusCode.BadRequest);
@@ -92,7 +95,7 @@ namespace functions
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
                 response.WriteString(JsonConvert.SerializeObject(chatUser));
-                await bot.SendMessage(long.Parse(chatUser.ChatId), "You have been authenticated!", new ReplyKeyboardRemove());
+                await bot.SendMessage(long.Parse(chatUser.ChatId), localizer.GetString("BotAuthenticated"), new ReplyKeyboardRemove());
             }
             catch (Exception e)
             {

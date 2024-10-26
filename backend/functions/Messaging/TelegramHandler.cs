@@ -39,6 +39,8 @@ namespace functions.Messaging
                 logger.LogWarning("Received an update that is not a message.");
                 return;
             }
+            var language = update.Message.From?.LanguageCode ?? "en";
+            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
 
             var user = await chatUserMapper.GetUserAsync(message.Chat.Id.ToString());
 
@@ -50,7 +52,7 @@ namespace functions.Messaging
                 {
                     ChatId = message.Chat.Id.ToString(),
                     UserId = message.Chat.Username ?? "",
-                    BotName = botname.Username
+                    Language = language
                 };
 
                 var usr = JsonConvert.SerializeObject(chatUser);
@@ -69,18 +71,16 @@ namespace functions.Messaging
                     Query = $"post_login_redirect_uri={redirect}"
                 };
 
-                var button = KeyboardButton.WithWebApp("🔑 Click to login through our website",
+                var button = KeyboardButton.WithWebApp(localizer.GetString("LoginButton"),
                  new WebAppInfo() { Url = uriBuilder.Uri.ToString() });
                 var replyMarkup = new ReplyKeyboardMarkup(button) { ResizeKeyboard = true };
 
-                await client.SendTextMessageAsync(message.Chat.Id, "Please click on the login button to use this bot", replyMarkup: replyMarkup, cancellationToken: cancellationToken);
+                await client.SendTextMessageAsync(message.Chat.Id, localizer.GetString("ClickLogin"), replyMarkup: replyMarkup, cancellationToken: cancellationToken);
             }
             else
             {
 
                 bool somethingWasSent = false;
-                var language = update.Message.From?.LanguageCode ?? "en";
-                CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
 
                 logger.LogInformation("Received a '{messageType}' update from user '{FirstName} {LastName} ({Username})'  chat '{ChatId}'.",
                     message.Type,

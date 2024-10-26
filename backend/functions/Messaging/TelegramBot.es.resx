@@ -26,6 +26,18 @@
         <value>El archivo no es de ningún formato aceptado</value>
         <comment>Mensaje enviado al usuario cuando el archivo enviado no es una imagen</comment>
     </data>
+    <data name="BotAuthenticated">
+        <value>Has sido autenticado, puedes empezar a usar el Bot.</value>
+        <comment>Mensaje enviado al usuario cuando el bot está autenticado</comment>
+    </data>
+    <data name="ClickLogin">
+        <value>Por favor, haz clic en el botón de inicio de sesión para usar este bot.</value>
+        <comment>Mensaje enviado al usuario cuando el bot no está autenticado</comment>
+    </data>
+    <data name="LoginButton">
+        <value>🔑 Haz clic para iniciar sesión a través de nuestro sitio web</value>
+        <comment>Texto del botón de inicio de sesión</comment>
+    </data>
     <data name="MetaPrompt">
         <value>Eres un Bot que responde a preguntas de la gran fiesta de Isa &amp; Juanma. Asegurate que nuestros invitados tengan toda la información que necesitan para disfrutar de la fiesta. Empieza dándoles la bienvenida y explicándoles qué pueden hacer en el Bot. Puedes realizar algunas acciones como:
 

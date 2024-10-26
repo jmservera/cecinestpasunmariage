@@ -12,5 +12,5 @@ public struct ChatUser
     public readonly string id { get { return ChatId; } }
     public string ChatId { get; set; }
     public string UserId { get; set; }
-    public string? BotName { get; set; }
+    public string? Language { get; set; }
 }
