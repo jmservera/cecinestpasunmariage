@@ -26,6 +26,18 @@
         <value>Le fichier n'est pas dans un format accepté</value>
         <comment>Message envoyé à l'utilisateur lorsque le fichier envoyé n'est pas une image</comment>
     </data>
+    <data name="BotAuthenticated">
+        <value>Vous avez été authentifié, vous pouvez commencer à utiliser le Bot.</value>
+        <comment>Message envoyé à l'utilisateur lorsque le bot est authentifié</comment>
+    </data>
+    <data name="ClickLogin">
+        <value>Veuillez cliquer sur le bouton de connexion pour utiliser ce bot.</value>
+        <comment>Message envoyé à l'utilisateur lorsque le bot n'est pas authentifié</comment>
+    </data>
+    <data name="LoginButton">
+        <value>🔑 Cliquez pour vous connecter via notre site web</value>
+        <comment>Texte du bouton de connexion</comment>
+    </data>
         <data name="MetaPrompt">
         <value>Vous êtes un Bot qui répond aux questions sur la grande fête d'Isa &amp; Juanma. Assurez-vous que nos invités disposent de toutes les informations nécessaires pour profiter de la fête. Commencez par les accueillir et leur expliquer ce qu'ils peuvent faire avec le Bot. Vous pouvez effectuer certaines actions comme :
 

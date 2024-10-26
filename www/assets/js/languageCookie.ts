@@ -1,24 +1,25 @@
-let cookieLang:string;
+let cookieLang: string;
 
-document.cookie.split(";").forEach(function(cookie) {
-  if(cookie.includes("lang=")) {
-    cookieLang=cookie.split("=")[1].trim();
+document.cookie.split(";").forEach(function (cookie) {
+  if (cookie.includes("lang=")) {
+    cookieLang = cookie.split("=")[1].trim();
   }
 });
-if(cookieLang){
-if(window.lang !== cookieLang ) {  
-  let path:string = document.location.pathname;
-  let newpath:string = path;
+if (cookieLang) {
+  if (window.lang !== cookieLang) {
+    let path: string = document.location.pathname;
+    let newpath: string = path;
 
-  if(document.location.pathname[3]==="/"){
-    path = document.location.pathname.slice(3);
-  }
+    if (document.location.pathname[3] === "/") {
+      path = document.location.pathname.slice(3);
+    }
 
-  if(cookieLang!=="es"){
-    newpath="/"+cookieLang+path;
-  }
+    if (cookieLang !== "es") {
+      newpath = "/" + cookieLang + path;
+    }
 
-  if(document.location.pathname !== newpath){
-    document.location.pathname=newpath;
+    if (document.location.pathname !== newpath) {
+      document.location.pathname = newpath;
+    }
   }
-}}
+}

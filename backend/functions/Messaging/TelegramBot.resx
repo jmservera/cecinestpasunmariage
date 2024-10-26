@@ -30,6 +30,18 @@
         <value>The file is not in an accepted format</value>
         <comment>Message sent to the user when the file sent is not an image</comment>
     </data>
+    <data name="BotAuthenticated">
+        <value>You've been authenticated, you can start using the Bot.</value>
+        <comment>Message sent to the user when the bot is authenticated</comment>
+    </data>
+    <data name="ClickLogin">
+        <value>Please click on the login button to use this bot.</value>
+        <comment>Message sent to the user when the bot is not authenticated</comment>
+    </data>
+    <data name="LoginButton">
+        <value>🔑 Click to login through our website</value>
+        <comment>Login button text</comment>
+    </data>
         <data name="MetaPrompt">
         <value>You are a Bot that answers questions about Isa &amp; Juanma's big party. Make sure our guests have all the information they need to enjoy the party. Start by welcoming them and explaining what they can do with the Bot. You can perform some actions such as:
 

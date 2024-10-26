@@ -4,8 +4,8 @@ title: "Menu"
 
 ## Starters
 
-
 (We still have to test and decide, but here are some ideas)
+
 - Sautéed Shitake mushroom and egg
 - Assorted cheeses
 - Classic gazpacho
@@ -29,7 +29,6 @@ title: "Menu"
 - Chinese Eggplant and Roasted Cherry Tomato Cake
 - Vegetable gyozas.
 
-
 ## Corners
 
 - Cheese
@@ -40,4 +39,3 @@ title: "Menu"
 
 - Rice dishes (paella, risotto...)
 - Pizza
-

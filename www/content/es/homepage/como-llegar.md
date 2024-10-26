@@ -39,7 +39,6 @@ Dirección: Carretera Otura a Dílar s/n, 18152 Dílar, Granada <br />
 
 Tendremos un autobús que saldrá desde el [**Hotel Abades Nevada Palace**](https://www.abadeshoteles.com/es/hotel-abades-nevada-palace-in-granada/) a las 12.30 para llevar al sitio de la celebración a todo el que quiera usarlo (por favor, confirma en el registro si estás interesado para contar el número de plazas que necesitamos). <br />
 
-
 #### Desde la estación de tren
 
 ##### En Uber/Taxi
@@ -57,7 +56,6 @@ El viaje cuesta menos de 2€. <br />
 El tranvia tarda 17 minunos y pasa cada 10 minutos. Hay que caminar 5 minutos. <br />
 El autobús tarda 38 minunos y pasa cada 10 minutos. Hay que caminar 15 minutos. <br />
 
-
 #### Desde el aeropuerto
 
 ##### En Uber/Taxi
@@ -68,16 +66,15 @@ Desde la estación de tren al hotel costará aprox. 100€.
 
 ##### En trasporte público
 
-Hay un autobús desde el aeropuerto que sale 30 minutos después de la llegada de cada vuelo. Cuesta 3€. 
-[Autobús Ruta 245](https://www.granadadirect.com/transporte/autobuses-aeropuerto-granada/). 
+Hay un autobús desde el aeropuerto que sale 30 minutos después de la llegada de cada vuelo. Cuesta 3€.
+[Autobús Ruta 245](https://www.granadadirect.com/transporte/autobuses-aeropuerto-granada/).
 Tarda aprox. 45 minutos en llegar al centro de Granada. <br />
 
 Baja en 9 paradas, en "Acera de Darro" (frente al Corte Inglés). <br />
 
 Desde ahí coger la línea 8 (frente al Corte Inglés) y esperar 11 paradas. Baja en "el Palacio de Deportes". <br />
 
-Consulta el trayecto también en [Google Maps](https://www.google.es/maps/dir/Aeropuerto+de+F.G.L.+Granada-Ja%C3%A9n+(GRX),+A-4075,+Chauchina,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1750637,-3.7680021,12z/am=t/data=!4m14!4m13!1m5!1m1!1s0xd7201ae692e9a55:0xcbd3ce42b1495573!2m2!1d-3.7779577!2d37.1877446!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu)
-
+Consulta el trayecto también en [Google Maps](<https://www.google.es/maps/dir/Aeropuerto+de+F.G.L.+Granada-Ja%C3%A9n+(GRX),+A-4075,+Chauchina,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1750637,-3.7680021,12z/am=t/data=!4m14!4m13!1m5!1m1!1s0xd7201ae692e9a55:0xcbd3ce42b1495573!2m2!1d-3.7779577!2d37.1877446!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu>)
 
 ### Llegar al hotel
 

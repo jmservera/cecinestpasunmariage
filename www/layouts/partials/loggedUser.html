@@ -1,7 +1,11 @@
 <div id="loggedUser">
   <div class="user-menu">
-    <span id="hello" class="user-info" style="display: none">Hello, <span id="username"></span>!</span>
-    <a id="logout" class="logout-option" style="display: none" href="/logout/">Logout</a>
+    <span id="hello" class="user-info" style="display: none"
+      >Hello, <span id="username"></span>!</span
+    >
+    <a id="logout" class="logout-option" style="display: none" href="/logout/"
+      >Logout</a
+    >
   </div>
   <a id="login" style="display: none" href="/sso/">Login</a>
   <a id="delete" style="display: none" href="/unregister/">Unregister</a>
@@ -9,6 +13,11 @@
 {{ with resources.Get "js/loggedUser.ts" }} {{ if eq hugo.Environment
 "development" }} {{ with . | js.Build}}
 <script src="{{ .RelPermalink }}"></script>
-{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build $opts | fingerprint }}
-<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+{{ end }} {{ else }} {{ $opts := dict "minify" true }} {{ with . | js.Build
+$opts | fingerprint }}
+<script
+  src="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+  crossorigin="anonymous"
+></script>
 {{ end }} {{ end }} {{ end }}

@@ -1,19 +1,19 @@
 import { getUserInfo } from "./userInfo";
 
-getUserInfo().then(info => {
+getUserInfo().then((info) => {
   const hello = document.querySelector<HTMLSpanElement>(
-    "div#loggedUser span#hello"
+    "div#loggedUser span#hello",
   );
   const logout = document.querySelector<HTMLAnchorElement>(
-    "div#loggedUser a#logout"
+    "div#loggedUser a#logout",
   );
   const login = document.querySelector<HTMLAnchorElement>(
-    "div#loggedUser a#login"
+    "div#loggedUser a#login",
   );
 
   if (info) {
     const username = document.querySelector<HTMLSpanElement>(
-      "div#loggedUser span#username"
+      "div#loggedUser span#username",
     );
     username.innerText = info.userDetails;
     hello.style.display = "";
@@ -30,8 +30,7 @@ window.onbeforeunload = function () {
   const active = document.activeElement as HTMLAnchorElement;
   if (active.href) {
     localStorage.setItem("lastPage", active.href);
-  }
-  else {
+  } else {
     localStorage.setItem("lastPage", window.location.href);
   }
 };

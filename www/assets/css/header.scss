@@ -2,109 +2,110 @@
 @import "ceci-variables.scss";
 
 body {
-    background-image: url("/images/background.png");
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: $button-color;
-    --color-text: $button-color;
-  }
+  background-image: url("/images/background.png");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: $button-color;
+  --color-text: $button-color;
+}
 
-  #site-head,
-  #site-head.withCenteredImage {
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: 800px;
-  }
+#site-head,
+#site-head.withCenteredImage {
+  background-position: top;
+  background-repeat: no-repeat;
+  background-size: 800px;
+}
 
-  #site-head a.btn:hover,
-  #site-head.withCenteredImage a.btn:hover {
-    background-color: $button-color !important;
-  }
+#site-head a.btn:hover,
+#site-head.withCenteredImage a.btn:hover {
+  background-color: $button-color !important;
+}
 
-  .post {
-    max-width: none;
-  }
+.post {
+  max-width: none;
+}
 
-  .post-content {
-    color: black;
-    --color-text: black;
-  }
+.post-content {
+  color: black;
+  --color-text: black;
+}
 
-  .post-content h3 {
-    color: $button-color-5;
-    --color-text: $button-color-5;
-  }
+.post-content h3 {
+  color: $button-color-5;
+  --color-text: $button-color-5;
+}
 
-  .post-content h4 {
-    color: $button-color-10;
-    --color-text: $button-color-10;
-  }
+.post-content h4 {
+  color: $button-color-10;
+  --color-text: $button-color-10;
+}
 
-  :root {
-    /* see variables.scss for more variables*/
-    --section-light-text-color: #893f40 !important;
-    --section-light-bg-color: transparent !important;
-    --section-dark-text-color: #893f40 !important;
-    --section-dark-bg-color: transparent !important;
+:root {
+  /* see variables.scss for more variables*/
+  --section-light-text-color: #893f40 !important;
+  --section-light-bg-color: transparent !important;
+  --section-dark-text-color: #893f40 !important;
+  --section-dark-bg-color: transparent !important;
 
-    /* define list element for unnumbered lists, leave empty for default list element */
-    /* fa-asterisk is the default icon if this variable definition is missing completely */
-    --ul-li-icon: fa-dashcube; /* this sets fa-dashcube as list icon */
-    --ul-li-icon: ; /* this sets the default html list icon */
-    --cover-text-color: var(--color-text);
-    --highlight: #f0dac8;
-    --sticky-menu-text-color: #edad53;
-  }
+  /* define list element for unnumbered lists, leave empty for default list element */
+  /* fa-asterisk is the default icon if this variable definition is missing completely */
+  --ul-li-icon: fa-dashcube; /* this sets fa-dashcube as list icon */
+  --ul-li-icon: ; /* this sets the default html list icon */
+  --cover-text-color: var(--color-text);
+  --highlight: #f0dac8;
+  --sticky-menu-text-color: #edad53;
+}
 
-  /* fix overlapping header arrow */
-  #site-head #header-arrow,#site-head.withCenteredImage #header-arrow {
-    margin: -24px auto;
-  }
+/* fix overlapping header arrow */
+#site-head #header-arrow,
+#site-head.withCenteredImage #header-arrow {
+  margin: -24px auto;
+}
 
 /* header.html contents */
-.user-info {    
-    max-width: 100px; /* Adjust based on your layout */
-    text-overflow:ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    display: inline-block;
-    text-decoration: underline;
-    cursor: pointer;
-  }
+.user-info {
+  max-width: 100px; /* Adjust based on your layout */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+  text-decoration: underline;
+  cursor: pointer;
+}
 
-  .user-menu {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .logout-option {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 10px;
-    background-color: #f9f9f9;
-    // min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding: 12px 16px;
-    z-index: 10;
-  }
-  
-  .user-menu:hover .logout-option {
-    display: block;
-  }
+.user-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.logout-option {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 10px;
+  background-color: #f9f9f9;
+  // min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 10;
+}
+
+.user-menu:hover .logout-option {
+  display: block;
+}
 
 .login {
-    position: absolute;
-    display: block;
-    top: 0;
-    right:10px;
-    z-index: 10;
-    margin: 0.5rem;
-    text-align: right;
-    background-color: $accent-background;
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 10px;
+  z-index: 10;
+  margin: 0.5rem;
+  text-align: right;
+  background-color: $accent-background;
 }
-.i18nList{
+.i18nList {
   position: absolute;
   display: block;
   top: 0;
@@ -114,44 +115,44 @@ body {
   padding: 0 0.2em 0 0.2em;
   background-color: $accent-background;
 }
-  /* Medium devices (tablets, 768px and up) */
-  @media (min-width: 768px) {
-    .user-info {
-        width: 400px; /* Adjust based on your layout */
-      max-width: 450px; /* Adjust based on your layout */
-    }
-    .login {
-        background-color: $no-accent-background;
-    }
-    .i18nList{
-        background-color: $no-accent-background;
-    }
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .user-info {
+    width: 400px; /* Adjust based on your layout */
+    max-width: 450px; /* Adjust based on your layout */
   }
-  
-  /* Large devices (desktops, 992px and up) */
-  @media (min-width: 992px) {
-    .user-info {
-        width: 400px;
-      max-width: 400px; /* Adjust based on your layout */
-    }
-    .login {
-        background-color: $no-accent-background;
-    }
-    .i18nList{
-        background-color: $no-accent-background;
-    }
+  .login {
+    background-color: $no-accent-background;
   }
-  
-  /* Extra large devices (large desktops, 1200px and up) */
-  @media (min-width: 1200px) {
-    .user-info {
-        width: 450px;
-      max-width: 450px; /* Adjust based on your layout */
-    }
-    .login {
-        background-color: $no-accent-background;
-    }
-    .i18nList{
-      background-color: $no-accent-background;
-    }
+  .i18nList {
+    background-color: $no-accent-background;
   }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .user-info {
+    width: 400px;
+    max-width: 400px; /* Adjust based on your layout */
+  }
+  .login {
+    background-color: $no-accent-background;
+  }
+  .i18nList {
+    background-color: $no-accent-background;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .user-info {
+    width: 450px;
+    max-width: 450px; /* Adjust based on your layout */
+  }
+  .login {
+    background-color: $no-accent-background;
+  }
+  .i18nList {
+    background-color: $no-accent-background;
+  }
+}

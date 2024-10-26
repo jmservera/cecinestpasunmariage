@@ -24,7 +24,7 @@ namespace functions.Messaging;
 /// This class uses the Azure OpenAI chat completion service to generate responses to chat messages.
 /// </remarks>
 /// <seealso cref="IBotTextHandler" />
-public class AzureOpenAIChatHandler(IChatCompletionService chatCompletionService, IChatHistoryManager chatHistoryManager, ILogger<AzureOpenAIChatHandler> logger, IStringLocalizer<Bot> localizer) : IBotTextHandler
+public class AzureOpenAIChatHandler(IChatCompletionService chatCompletionService, IChatHistoryManager chatHistoryManager, ILogger<AzureOpenAIChatHandler> logger, IStringLocalizer<TelegramBot> localizer) : IBotTextHandler
 {
     const string validMarkdown = @"*bold text*
 _italic text_
@@ -66,6 +66,7 @@ pre-formatted fixed-width code block written in the Python programming language
         history.Add(messageContent);
         try
         {
+            await client.SendChatActionAsync(message.Chat.Id, ChatAction.Typing, null, cancellationToken);
             var response = await chatCompletionService.GetChatMessageContentAsync(history, cancellationToken: cancellationToken);
             var msg = response.Content ?? "I'm sorry, I can't answer that.";
             try

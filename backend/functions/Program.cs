@@ -11,6 +11,7 @@ using Azure.AI.Vision.ImageAnalysis;
 using Azure;
 using functions.Audit;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using functions.Identity;
 
 [assembly: RootNamespace("functions")]
 
@@ -25,7 +26,7 @@ var host = new HostBuilder()
             services.AddLogging(configure => configure.AddConsole());
         }
         services.AddLocalization();
-        services.AddTransient<Bot>();
+        services.AddTransient<TelegramBot>();
         services.AddTransient<IStorageManager, StorageManager>();
 
         _ = services.AddTransient<IFaceClient, FaceClient>(provider =>
@@ -47,7 +48,8 @@ var host = new HostBuilder()
         })
         .AddTransient<IEmailMessaging, EmailMessagingACS>()
         .AddTransient<IChatHistoryManager, BotHistoryManager>()
-        .AddTransient<IBotTextHandler, AzureOpenAIChatHandler>();
+        .AddTransient<IBotTextHandler, AzureOpenAIChatHandler>()
+        .AddTransient<IChatUserMapper, MapChatToUser>();
 
         services.TryAdd(ServiceDescriptor.Singleton<IAuditServiceFactory, AuditInCosmosServiceFactory>());
         services.TryAdd(ServiceDescriptor.Singleton(typeof(IAuditService<>), typeof(AuditInCosmosService<>)));
@@ -78,12 +80,12 @@ if (isDevelopment)
     var factory = host.Services.GetRequiredService<ILoggerFactory>();
     var logger = factory.CreateLogger<Program>();
     logger.LogInformation("Running {Program} locally.", nameof(Program));
-    Bot? bot = null;
+    TelegramBot? bot = null;
     try
     {
         try
         {
-            bot = host.Services.GetRequiredService<Bot>();
+            bot = host.Services.GetRequiredService<TelegramBot>();
             await bot.RunBot();
         }
         catch (Exception ex)

@@ -16,10 +16,9 @@ function buildItem(): UserInput {
   let user: UserInput = new UserInput();
   const form = document.querySelector(`form[id="${formId}"]`);
   var values = Object.values(form).reduce((obj, field) => {
-    if(field.type==="checkbox"){
+    if (field.type === "checkbox") {
       obj[field.name] = field.checked;
-    }
-    else{
+    } else {
       obj[field.name] = field.value;
     }
     return obj;
@@ -31,8 +30,7 @@ function buildItem(): UserInput {
       console.log(n);
       if (key === "pax" || key === "children") {
         user[key] = parseInt(values[key]);
-      }
-      else user[key] = values[key];
+      } else user[key] = values[key];
     }
   });
 
@@ -63,7 +61,7 @@ async function createOrUpdate(): Promise<void> {
     }
     console.table(response);
     const redirectInput = document.querySelector<HTMLInputElement>(
-      `form[id="${formId}"] input[name="_redirect_url"]`
+      `form[id="${formId}"] input[name="_redirect_url"]`,
     );
     if (redirectInput) {
       const redirectUrl = redirectInput.value;
@@ -83,20 +81,20 @@ async function createOrUpdate(): Promise<void> {
 
 (async () => {
   const registrationForm = document.querySelector<HTMLFormElement>(
-    `form[id="${formId}"]`
+    `form[id="${formId}"]`,
   );
   if (registrationForm) {
     showLoading();
     try {
       const info = await getUserInfo();
       const email = registrationForm.querySelector<HTMLInputElement>(
-        'input[name="email"]'
+        'input[name="email"]',
       );
       if (email) {
         email.value = info.userDetails;
       }
       const origin = registrationForm.querySelector<HTMLInputElement>(
-        'input[name="origin"]'
+        'input[name="origin"]',
       );
       if (origin) {
         origin.value = info.userDetails;
@@ -119,19 +117,18 @@ async function createOrUpdate(): Promise<void> {
       if (user && user.id) {
         Object.keys(user).forEach((key) => {
           const inputElement = registrationForm.querySelector<HTMLInputElement>(
-            `input[name="${key}"]`
+            `input[name="${key}"]`,
           );
           if (inputElement) {
-            if(inputElement.type==="checkbox"){
+            if (inputElement.type === "checkbox") {
               inputElement.checked = user[key];
-            }
-            else{
+            } else {
               inputElement.value = user[key];
             }
           } else {
             const textArea =
               registrationForm.querySelector<HTMLTextAreaElement>(
-                `textarea[name="${key}"]`
+                `textarea[name="${key}"]`,
               );
             if (textArea) {
               textArea.value = user[key];

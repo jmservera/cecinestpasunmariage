@@ -15,4 +15,3 @@ Si vous venez de l'extérieur et que vous souhaitez passer le week-end ou visite
 Nous espérons que vous pourrez venir célébrer avec nous ce moment si spécial.
 
 Au fait, si vous vous demandez ce que signifie "!boda". En programmation, le symbole "!" est utilisé comme opérateur de négation logique. Vous pouvez le lire comme "pas de mariage".
-

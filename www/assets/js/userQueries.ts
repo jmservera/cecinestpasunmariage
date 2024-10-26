@@ -1,4 +1,3 @@
-
 export class UserInput {
   id: string;
   origin: string;
@@ -46,7 +45,7 @@ interface GraphError {
 
 export async function runQuery(
   query: string,
-  data?: QueryVariables
+  data?: QueryVariables,
 ): Promise<UserInput> {
   const response: { data: { user: UserInput }; errors: Array<GraphError> } =
     await execQuery(query, data);
@@ -59,11 +58,11 @@ export async function runQuery(
 
 export async function runQueryAll(
   query: string,
-  data?: QueryVariables
+  data?: QueryVariables,
 ): Promise<UserInput[]> {
   const response: { data: { users: { items: UserInput[] } } } = await execQuery(
     query,
-    data
+    data,
   );
   return response.data[Object.keys(response.data)[0]].items;
 }

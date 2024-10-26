@@ -2,73 +2,162 @@ using System.Data;
 using System.Globalization;
 using System.Net;
 using System.Text;
-using System.Text.Json;
 using System.Web;
+using functions.Identity;
 using functions.Storage;
-using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.ChatCompletion;
+using Newtonsoft.Json;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
-using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace functions.Messaging
 {
-
-    /// <summary>
-    /// A bot that can receive and send messages.
-    /// </summary>
-    /// <param name="logger"> The logger instance. </param>
-    /// <param name="localizer"> The localizer instance. </param>
-    /// <param name="uploader"> The storage manager instance. </param>
-    /// <param name="configuration"> The configuration instance. </param>
-    public class Bot(ILogger<Bot> logger, IStringLocalizer<Bot> localizer, IStorageManager uploader, IConfiguration configuration, IBotTextHandler chatService, IChatHistoryManager chatHistoryManager) : IDisposable
+    public class TelegramHandler(IBotTextHandler chatService, IChatHistoryManager chatHistoryManager,
+                                 IConfiguration config,
+                                 IChatUserMapper chatUserMapper, IStorageManager uploader,
+                                 ILogger<TelegramBot> logger, IStringLocalizer<TelegramBot> localizer, ITelegramBotClient client)
     {
-        private ITelegramBotClient _client = new TelegramBotClient(configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set."));
-
-        private CancellationTokenSource? _cts;
 
         /// <summary>
-        /// Registers the bot with the given URL.
+        /// Handles an update from the bot.
         /// </summary>
-        /// <param name="handleUpdateFunctionUrl"> The URL to register the bot with. </param>
-        /// <returns> A task that represents the asynchronous operation. </returns>
-        public async Task Register(string handleUpdateFunctionUrl)
-        {
-            await _client.SetWebhookAsync(handleUpdateFunctionUrl);
-        }
-
-        /// <summary>
-        /// Updates the bot with the given request.
-        /// </summary>
-        /// <param name="req"> The request to update the bot with. </param>
+        /// <param name="botClient"> The bot client. </param>
+        /// <param name="update"> The update to handle. </param>
         /// <param name="cancellationToken"> The cancellation token. </param>
         /// <returns> A task that represents the asynchronous operation. </returns>
-        public async Task UpdateAsync(HttpRequestData req, CancellationToken cancellationToken)
+        public async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            var request = await req.ReadAsStringAsync();
-            if (string.IsNullOrEmpty(request))
+            client = botClient;
+            // Only process Message updates: https://core.telegram.org/bots/api#message
+            if (update.Message is not { } message)
             {
-                logger.LogError("Received an empty request.");
+                logger.LogWarning("Received an update that is not a message.");
                 return;
             }
+            var language = update.Message.From?.LanguageCode ?? "en";
+            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
 
-            logger.LogInformation("Received a request: {Request}", request);
+            var user = await chatUserMapper.GetUserAsync(message.Chat.Id.ToString());
 
-            // Update is defined with Newtonsoft.Json attributes, so we need to deserialize it with Newtonsoft.Json
-            var update = Newtonsoft.Json.JsonConvert.DeserializeObject<Telegram.Bot.Types.Update>(request);
-            if (update is null)
+            if (user is null)
             {
-                logger.LogError("Failed to deserialize the update.");
-                return;
-            }
+                logger.LogWarning("Received a message from an unknown user {ChatId} {User}.", message.Chat.Id, message.Chat.Username);
+                var botname = await botClient.GetMeAsync(cancellationToken);
+                ChatUser chatUser = new()
+                {
+                    ChatId = message.Chat.Id.ToString(),
+                    UserId = message.Chat.Username ?? "",
+                    Language = language
+                };
 
-            await HandleUpdateAsync(_client, update, cancellationToken);
+                var usr = JsonConvert.SerializeObject(chatUser);
+                // encode user as a base64string
+                var userEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(usr));
+
+                var redirect = WebUtility.UrlEncode($"/telegram/?id={userEncoded}");
+                var baseUri = config.GetValue<string>("BASE_URI");
+                if (string.IsNullOrEmpty(baseUri))
+                {
+                    throw new InvalidOperationException("BASE_URI is not set.");
+                }
+                UriBuilder uriBuilder = new(baseUri)
+                {
+                    Path = "/sso",
+                    Query = $"post_login_redirect_uri={redirect}"
+                };
+
+                var button = KeyboardButton.WithWebApp(localizer.GetString("LoginButton"),
+                 new WebAppInfo() { Url = uriBuilder.Uri.ToString() });
+                var replyMarkup = new ReplyKeyboardMarkup(button) { ResizeKeyboard = true };
+
+                await client.SendTextMessageAsync(message.Chat.Id, localizer.GetString("ClickLogin"), replyMarkup: replyMarkup, cancellationToken: cancellationToken);
+            }
+            else
+            {
+
+                bool somethingWasSent = false;
+
+                logger.LogInformation("Received a '{messageType}' update from user '{FirstName} {LastName} ({Username})'  chat '{ChatId}'.",
+                    message.Type,
+                    message.Chat.FirstName,
+                    message.Chat.LastName,
+                    message.Chat.Username,
+                    message.Chat.Id
+                    );
+
+                if (message.Document is { } document)
+                {
+                    logger.LogInformation("Received a document {FileName} of size {FileSize} and type {MimeType} in chat {ChatId}",
+                        document.FileName,
+                        document.FileSize,
+                        document.MimeType,
+                        message.Chat.Id);
+                    await ProcessMessageAttachmentsAsync(message, cancellationToken);
+                    somethingWasSent = true;
+                }
+                if (message.Photo is { } p)
+                {
+                    logger.LogInformation("Received a photo '{Caption}' of size {FileSize} in chat {ChatId}",
+                            message.Caption,
+                            p.LastOrDefault()?.FileSize,
+                            message.Chat.Id);
+                    await ProcessMessageAttachmentsAsync(message, cancellationToken);
+                    somethingWasSent = true;
+                }
+                if (message.Video is { } v)
+                {
+                    logger.LogInformation("Received a video '{Caption}' of size {FileSize} in chat {ChatId}",
+                            message.Caption,
+                            v.FileSize,
+                            message.Chat.Id);
+                    await ProcessMessageAttachmentsAsync(message, cancellationToken);
+                    somethingWasSent = true;
+                }
+
+                // Only process text messages
+                if (message.Text is not { } messageText)
+                {
+                    if (!somethingWasSent)
+                    {
+                        logger.LogError("Didn't have a handler for a '{MessageType}' message in chat {ChatId}.", message.Type, message.Chat.Id);
+                        await client.SendTextMessageAsync(
+                            chatId: message.Chat.Id,
+                            parseMode: ParseMode.MarkdownV2,
+                            text: localizer.GetString("InvalidFile"),
+                            cancellationToken: cancellationToken);
+                    }
+                    return;
+                }
+
+                if (messageText.StartsWith('/'))
+                {
+                    await HandleCommand(message, cancellationToken);
+                }
+                else
+                {
+                    await chatService.HandleChat(client, message, messageText, cancellationToken);
+                }
+            }
+        }
+
+        public Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        {
+            client = botClient;
+
+            var ErrorMessage = exception switch
+            {
+                ApiRequestException apiRequestException
+                    => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
+                _ => exception.ToString()
+            };
+
+            logger.LogError(exception, ErrorMessage);
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -84,34 +173,41 @@ namespace functions.Messaging
             switch (command)
             {
                 case "/start":
-                    await _client.SendTextMessageAsync(
+                    await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: localizer.GetString("GreetingMessage"),
                         parseMode: ParseMode.MarkdownV2,
                         cancellationToken: cancellationToken);
                     break;
                 case "/help":
-                    await _client.SendTextMessageAsync(
+                    await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: localizer.GetString("Help"),
                         parseMode: ParseMode.MarkdownV2,
                         cancellationToken: cancellationToken);
                     break;
                 case "/echo":
-                    await _client.SendTextMessageAsync(
+                    await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "Echo",
                         cancellationToken: cancellationToken);
                     break;
                 case "/clear":
                     await chatHistoryManager.ClearHistoryAsync(message.From?.Username ?? "", message.Chat.Id, cancellationToken);
-                    await _client.SendTextMessageAsync(
+                    await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "History cleared",
                         cancellationToken: cancellationToken);
                     break;
+                case "/logout":
+                    await chatUserMapper.RemoveUserAsync(message.Chat.Id.ToString());
+                    await client.SendTextMessageAsync(
+                        chatId: message.Chat.Id,
+                        text: "Logged out",
+                        cancellationToken: cancellationToken);
+                    break;
                 default:
-                    await _client.SendTextMessageAsync(
+                    await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "Unknown command",
                         cancellationToken: cancellationToken);
@@ -135,7 +231,7 @@ namespace functions.Messaging
             if (file?.FilePath == null) return;
 
             await using var stream = new MemoryStream();
-            await _client.DownloadFileAsync(file.FilePath, stream, cancellationToken);
+            await client.DownloadFileAsync(file.FilePath, stream, cancellationToken);
             stream.Seek(0, SeekOrigin.Begin);
             string fileNameExt = $"{fileName}{Path.GetExtension(file.FilePath)}";
             await uploader.UploadAsync(username, fileNameExt, containerName, stream, mimeType, file.FilePath, cancellationToken);
@@ -155,14 +251,17 @@ namespace functions.Messaging
 
                 if (message.Photo != null)
                 {
+                    await client.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto, null, cancellationToken);
                     await ProcessPhotosAsync(message.Photo, username, cancellationToken);
                 }
                 else if (message.Document != null)
                 {
+                    await client.SendChatActionAsync(message.Chat.Id, ChatAction.UploadDocument, null, cancellationToken);
                     await ProcessDocumentAsync(message.Document, username, cancellationToken);
                 }
                 else if (message.Video != null)
                 {
+                    await client.SendChatActionAsync(message.Chat.Id, ChatAction.UploadVideo, null, cancellationToken);
                     await ProcessVideoAsync(message.Video, username, cancellationToken);
                 }
                 else
@@ -170,7 +269,7 @@ namespace functions.Messaging
                     throw new InvalidOperationException("Unsupported file type");
                 }
 
-                await _client.SendTextMessageAsync(
+                await client.SendTextMessageAsync(
                     chatId: message.Chat.Id,
                     parseMode: ParseMode.MarkdownV2,
                     text: localizer.GetString("PictureAdded"),
@@ -179,7 +278,7 @@ namespace functions.Messaging
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error sending to storage");
-                await _client.SendTextMessageAsync(
+                await client.SendTextMessageAsync(
                     chatId: message.Chat.Id,
                     parseMode: ParseMode.MarkdownV2,
                     text: localizer.GetString("PictureNotAdded"),
@@ -205,13 +304,13 @@ namespace functions.Messaging
             var fileName = uploader.GenerateUniqueName();
             if (video.Thumbnail != null)
             {
-                var file = await _client.GetFileAsync(video.Thumbnail.FileId, cancellationToken);
+                var file = await client.GetFileAsync(video.Thumbnail.FileId, cancellationToken);
                 await UploadFileToBlobAsync(GetPhotos.ThumbnailsContainerName, file, fileName, username, cancellationToken);
             }
 
             if (video != null)
             {
-                var file = await _client.GetFileAsync(video.FileId, cancellationToken);
+                var file = await client.GetFileAsync(video.FileId, cancellationToken);
                 await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken, video.MimeType);
             }
 
@@ -230,14 +329,14 @@ namespace functions.Messaging
             var fileName = uploader.GenerateUniqueName();
             if (thumb != null)
             {
-                var file = await _client.GetFileAsync(thumb.FileId, cancellationToken);
+                var file = await client.GetFileAsync(thumb.FileId, cancellationToken);
                 await UploadFileToBlobAsync(GetPhotos.ThumbnailsContainerName, file, fileName, username, cancellationToken);
             }
 
             var photo = photos.LastOrDefault();
             if (photo != null)
             {
-                var file = await _client.GetFileAsync(photo.FileId, cancellationToken);
+                var file = await client.GetFileAsync(photo.FileId, cancellationToken);
                 await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken);
             }
         }
@@ -260,13 +359,13 @@ namespace functions.Messaging
 
             var fileName = uploader.GenerateUniqueName();
 
-            var thumbFile = document.Thumbnail != null ? await _client.GetFileAsync(document.Thumbnail.FileId, cancellationToken) : null;
+            var thumbFile = document.Thumbnail != null ? await client.GetFileAsync(document.Thumbnail.FileId, cancellationToken) : null;
             if (thumbFile != null)
             {
                 await UploadFileToBlobAsync(GetPhotos.ThumbnailsContainerName, thumbFile, fileName, username, cancellationToken, document.MimeType);
             }
 
-            var file = await _client.GetFileAsync(document.FileId, cancellationToken);
+            var file = await client.GetFileAsync(document.FileId, cancellationToken);
             await UploadFileToBlobAsync(GetPhotos.PicsContainerName, file, fileName, username, cancellationToken, document.MimeType);
         }
 
@@ -284,155 +383,6 @@ namespace functions.Messaging
             {
                 throw new InvalidOperationException($"Invalid file type {mimeType}");
             }
-        }
-
-        /// <summary>
-        /// Handles an update from the bot.
-        /// </summary>
-        /// <param name="botClient"> The bot client. </param>
-        /// <param name="update"> The update to handle. </param>
-        /// <param name="cancellationToken"> The cancellation token. </param>
-        /// <returns> A task that represents the asynchronous operation. </returns>
-        async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
-        {
-            // TODO: use a strategy pattern to handle different types of updates
-
-            _client = botClient;
-            // Only process Message updates: https://core.telegram.org/bots/api#message
-            if (update.Message is not { } message)
-            {
-                logger.LogWarning("Received an update that is not a message.");
-                return;
-            }
-
-            bool somethingWasSent = false;
-            var language = update.Message.From?.LanguageCode ?? "en";
-            CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
-
-            logger.LogInformation("Received a '{messageType}' update from user '{FirstName} {LastName} ({Username})'  chat '{ChatId}'.",
-                message.Type,
-                message.Chat.FirstName,
-                message.Chat.LastName,
-                message.Chat.Username,
-                message.Chat.Id
-                );
-
-            if (message.Document is { } document)
-            {
-                logger.LogInformation("Received a document {FileName} of size {FileSize} and type {MimeType} in chat {ChatId}",
-                    document.FileName,
-                    document.FileSize,
-                    document.MimeType,
-                    message.Chat.Id);
-                await ProcessMessageAttachmentsAsync(message, cancellationToken);
-                somethingWasSent = true;
-            }
-            if (message.Photo is { } p)
-            {
-                logger.LogInformation("Received a photo '{Caption}' of size {FileSize} in chat {ChatId}",
-                        message.Caption,
-                        p.LastOrDefault()?.FileSize,
-                        message.Chat.Id);
-                await ProcessMessageAttachmentsAsync(message, cancellationToken);
-                somethingWasSent = true;
-            }
-            if (message.Video is { } v)
-            {
-                logger.LogInformation("Received a video '{Caption}' of size {FileSize} in chat {ChatId}",
-                        message.Caption,
-                        v.FileSize,
-                        message.Chat.Id);
-                await ProcessMessageAttachmentsAsync(message, cancellationToken);
-                somethingWasSent = true;
-            }
-
-            // Only process text messages
-            if (message.Text is not { } messageText)
-            {
-                if (!somethingWasSent)
-                {
-                    logger.LogError("Didn't have a handler for a '{MessageType}' message in chat {ChatId}.", message.Type, message.Chat.Id);
-                    await _client.SendTextMessageAsync(
-                        chatId: message.Chat.Id,
-                        parseMode: ParseMode.MarkdownV2,
-                        text: localizer.GetString("InvalidFile"),
-                        cancellationToken: cancellationToken);
-                }
-                return;
-            }
-
-            if (messageText.StartsWith('/'))
-            {
-                await HandleCommand(message, cancellationToken);
-            }
-            else
-            {
-                await chatService.HandleChat(_client, message, messageText, cancellationToken);
-            }
-        }
-
-        Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
-        {
-            _client = botClient;
-
-            var ErrorMessage = exception switch
-            {
-                ApiRequestException apiRequestException
-                    => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-                _ => exception.ToString()
-            };
-
-            logger.LogError(exception, ErrorMessage);
-            return Task.CompletedTask;
-        }
-
-
-        public async Task RunBot()
-        {
-            logger.LogInformation("Starting bot.");
-            if (_cts is not null)
-                throw new InvalidOperationException("Bot is already running.");
-            _cts = new();
-            // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
-            ReceiverOptions receiverOptions = new()
-            {
-                AllowedUpdates = Array.Empty<UpdateType>() // receive all update types except ChatMember related updates
-            };
-
-            _client.StartReceiving(
-                updateHandler: HandleUpdateAsync,
-                pollingErrorHandler: HandlePollingErrorAsync,
-                receiverOptions: receiverOptions,
-                cancellationToken: _cts.Token
-            );
-
-            var me = await _client.GetMeAsync();
-
-            logger.LogInformation("Start listening for {user}", me.Username);
-        }
-
-        public void StopBot()
-        {
-            _cts?.Cancel();
-        }
-
-        public void Dispose()
-        {
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _cts?.Dispose();
-            }
-        }
-
-        ~Bot()
-        {
-            Dispose(disposing: false);
         }
     }
 }

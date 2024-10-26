@@ -5,6 +5,7 @@ title: "Menú"
 ## Entrantes / Cóctel
 
 (Todavía tenemos que hacer pruebas y decidirlo, pero estas son algunas ideas)
+
 - Salteado de seta Shitake y Huevo
 - Quesos variados
 - Gazpacho clásico
@@ -28,7 +29,6 @@ title: "Menú"
 - Pastela de berenjena china y tomate cherry asado
 - Gyozas vegetales.
 
-
 ## Rincones
 
 - Quesos
@@ -39,4 +39,3 @@ title: "Menú"
 
 - Arroces (en paella, risotto...)
 - Pizza de horno de leña
-
