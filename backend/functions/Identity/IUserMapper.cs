@@ -1,3 +1,8 @@
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Unicode;
+using Microsoft.Identity.Client;
+
 namespace functions.Identity;
 
 public interface IChatUserMapper
@@ -5,12 +10,4 @@ public interface IChatUserMapper
     Task<ChatUser?> GetUserAsync(string chatId);
     Task RemoveUserAsync(string chatId);
     Task SaveUserAsync(ChatUser user);
-}
-
-public struct ChatUser
-{
-    public readonly string id { get { return ChatId; } }
-    public string ChatId { get; set; }
-    public string UserId { get; set; }
-    public string? Language { get; set; }
 }

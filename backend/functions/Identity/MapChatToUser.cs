@@ -13,9 +13,6 @@ public class MapChatToUser : IChatUserMapper
     private readonly CosmosClient _cosmosClient;
     private readonly Container _container;
     private readonly ILogger _logger;
-
-    private static bool _initialized = false;
-
     private readonly string _dbName;
 
     private const string _containerName = "ChatToUserMapping";

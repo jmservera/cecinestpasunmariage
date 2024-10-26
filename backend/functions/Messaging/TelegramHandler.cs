@@ -55,6 +55,8 @@ namespace functions.Messaging
                     Language = language
                 };
 
+                var key = config.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set.");
+                chatUser = ChatUser.TimeSeal(chatUser, ChatUser.GetValidKey(key));
                 var usr = JsonConvert.SerializeObject(chatUser);
                 // encode user as a base64string
                 var userEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(usr));
