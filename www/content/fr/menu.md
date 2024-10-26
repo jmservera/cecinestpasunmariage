@@ -5,6 +5,7 @@ title: "Menu"
 ## Entrées / Cocktails
 
 (Nous devons encore faire des tests et décider, mais voici quelques idées)
+
 - Sauté de champignons Shitake et œuf
 - Assortiment de fromages
 - Gazpacho classique

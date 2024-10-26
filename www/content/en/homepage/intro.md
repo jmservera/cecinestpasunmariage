@@ -4,7 +4,7 @@ weight: 3
 header_menu: true
 ---
 
-Dear friend or family, we are pleased to announce that we are hosting a party to celebrate a **special moment** in our lives. 
+Dear friend or family, we are pleased to announce that we are hosting a party to celebrate a **special moment** in our lives.
 
 A few years ago we decided that we wanted to be **all our lives together** and we want to have a **big party** to celebrate it. We are so excited to share this day with all the **people** who are **important in our lives**. If you got here through a QR, you are one of them ;)
 
@@ -15,4 +15,3 @@ If you are from abroad and want to come and spend the weekend, or visit Granada 
 We hope you can come and celebrate this special moment with us.
 
 That is, in case you're wondering what "!wedding" means. In programming, the symbol "!" is used as the logical negation operator. You can read it as "no wedding."
-

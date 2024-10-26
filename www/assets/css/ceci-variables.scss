@@ -1,5 +1,5 @@
 // do not rename to variables.scss because it overwrites the default variables.scss
-$accent-background:rgba(255,255,255,0.4);
+$accent-background: rgba(255, 255, 255, 0.4);
 $no-accent-background: transparent;
 
 $button-color: #893e3e;
@@ -9,10 +9,17 @@ $button-color-10: lighten($button-color, 10%);
 $button-color-lightness: lightness($button-color);
 
 $button-bg-color-hover: desaturate($button-color, 15%);
-$button-bg-color: change-color($button-color, $lightness: $button-color-lightness + 30,
-    $hue: 15);
+$button-bg-color: change-color(
+  $button-color,
+  $lightness: $button-color-lightness + 30,
+  $hue: 15
+);
 $button-color-hover: lighten($button-bg-color, 20%);
-$button-border-hover: change-color($button-color, $lightness: $button-color-lightness - 5, $hue: -15);
+$button-border-hover: change-color(
+  $button-color,
+  $lightness: $button-color-lightness - 5,
+  $hue: -15
+);
 $button-border-active: darken($button-border-hover, 10%);
 $success: green;
 $error: red;

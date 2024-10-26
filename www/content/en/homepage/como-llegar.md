@@ -22,7 +22,7 @@ Granada has an airport!
 Granada airport has a daily direct connection with Palma (Vueling). Arrival at 12.35. <br />
 Buy your ticket from the [Vueling](https://www.vueling.com/es) website.
 
-Granada Airport has three direct daily connections to Madrid (Iberia). 
+Granada Airport has three direct daily connections to Madrid (Iberia).
 Arrivals at 09.30, 13.15 and 21h. <br />
 Buy your ticket from the [Iberia](https://www.iberia.com/es/) website.
 
@@ -39,7 +39,6 @@ To travel from another destination you will have to arrive in Madrid or Barcelon
 Address: Carretera Otura a Dílar s/n, 18152 Dílar, Granada <br />
 
 We will have a bus that will leave from the [**Hotel Abades Nevada Palace**](https://www.abadeshoteles.com/es/hotel-abades-nevada-palace-in-granada/) at 12.30 to take everyone who wants to use it to the venue of the celebration (please confirm at registration if you are interested to count the number of seats we need). <br />
-
 
 #### From the train station
 
@@ -58,7 +57,6 @@ The trip costs less than €2. <br />
 The tram takes 17 minutes and runs every 10 minutes. You have to walk 5 minutes. <br />
 The bus takes 38 minutes and runs every 10 minutes. You have to walk 15 minutes. <br />
 
-
 #### From the airport
 
 ##### By Uber/Taxi
@@ -69,16 +67,15 @@ From the train station to the hotel it will cost approx. 100€.
 
 ##### By public transport
 
-There is a bus from the airport that departs 30 minutes after each flight arrives. It costs €3. 
-[Bus Route 245](https://www.granadadirect.com/transporte/autobuses-aeropuerto-granada/). 
+There is a bus from the airport that departs 30 minutes after each flight arrives. It costs €3.
+[Bus Route 245](https://www.granadadirect.com/transporte/autobuses-aeropuerto-granada/).
 It takes approx. 45 minutes to get to the centre of Granada. <br />
 
 Get off at 9 stops, at "Acera de Darro" (in front of "El Corte Inglés"). <br />
 
 From there, take line 8 (in front of "El Corte Inglés") and wait for 11 stops. Get off at "the Palacio de Deportes". <br />
 
-Check the route also at [Google Maps](https://www.google.es/maps/dir/Aeropuerto+de+F.G.L.+Granada-Ja%C3%A9n+(GRX),+A-4075,+Chauchina,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1750637,-3.7680021,12z/am=t/data=!4m14!4m13!1m5!1m1!1s0xd7201ae692e9a55:0xcbd3ce42b1495573!2m2!1d-3.7779577!2d37.1877446!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu)
-
+Check the route also at [Google Maps](<https://www.google.es/maps/dir/Aeropuerto+de+F.G.L.+Granada-Ja%C3%A9n+(GRX),+A-4075,+Chauchina,+Spain/Hotel+Abades+Nevada+Palace,+Calle+de+la+Sultana,+Granada,+Spain/@37.1750637,-3.7680021,12z/am=t/data=!4m14!4m13!1m5!1m1!1s0xd7201ae692e9a55:0xcbd3ce42b1495573!2m2!1d-3.7779577!2d37.1877446!1m5!1m1!1s0xd71fb59ed0beb59:0xa54b5e1ab3bc46c7!2m2!1d-3.5915434!2d37.1521507!3e3?entry=ttu>)
 
 ### How to arrive to the hotel
 

@@ -16,7 +16,7 @@ header_menu: true
 ![Code vestimentaire](/images/granada.jpeg)
 
 **Code vestimentaire** : Appelons-le « Cocktail Casual » <br/>
-Allez, une fête décontractée ou un cocktail.  <br/>
+Allez, une fête décontractée ou un cocktail. <br/>
 Pas besoin de cravate, pas de costume, pas de talons aiguilles. <br />
 
 ![Code vestimentaire](/images/dresscode.jpg)

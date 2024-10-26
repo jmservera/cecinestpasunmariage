@@ -15,6 +15,5 @@ You need to have some resources in place before the deployment:
 All the rest of resources will be created by the deployment.
 
 // TODO:
-//      * test that the function works in the prod environment (change of the storage account env variable)
-//      * Add RG variable for the existing resources (DNS Zone, Log Analytics, etc)
 //      * Create the script to validate domains and deploy swa and function app
+//      * Add translations to bot authentication
