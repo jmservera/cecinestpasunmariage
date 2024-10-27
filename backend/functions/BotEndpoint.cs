@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Net;
+using System.Security.Claims;
+using functions.Claims;
 using functions.Identity;
 using functions.Messaging;
 using Microsoft.Azure.Functions.Worker;
@@ -79,21 +81,26 @@ namespace functions
 
             HttpResponseData response;
 
+            var principal = ClaimsPrincipalParser.Parse(req);
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value; //get user id            
+
             try
             {
                 var chatUser = await req.ReadFromJsonAsync<ChatUser>();
                 var language = chatUser.Language ?? "en";
                 CultureInfo.CurrentCulture = CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
-                if (string.IsNullOrEmpty(chatUser.ChatId) || string.IsNullOrEmpty(chatUser.UserId))
+                if (string.IsNullOrEmpty(chatUser.ChatId))
                 {
                     response = req.CreateResponse(HttpStatusCode.BadRequest);
                     response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
-                    _logger.LogWarning("Received an empty request.");
+                    _logger.LogWarning("Received an empty request:{ChatUser}", JsonConvert.SerializeObject(chatUser));
                     response.WriteString("Empty request.");
                     return response;
                 }
                 var key = configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set.");
                 chatUser.CheckSealValidity(ChatUser.GetValidKey(key));
+                chatUser.UserAuthId = userId;
+                chatUser.UserDetails = principal.Identity?.Name;
                 await chatUserMapper.SaveUserAsync(chatUser);
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");

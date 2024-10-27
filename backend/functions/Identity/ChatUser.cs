@@ -10,7 +10,11 @@ public struct ChatUser
     public string UserId { get; set; }
     public string Hash { get; set; }
     public string IV { get; set; }
+    public string? UserDetails { get; set; }
+
     public string? Language { get; set; }
+
+    public string? UserAuthId { get; set; }
 
     const PaddingMode padding = PaddingMode.PKCS7;
     const CipherMode cipher = CipherMode.CFB;

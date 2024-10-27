@@ -72,6 +72,10 @@ public class MapChatToUser : IChatUserMapper
 
     public async Task SaveUserAsync(ChatUser user)
     {
+        if (user.UserAuthId == null)
+        {
+            throw new InvalidOperationException($"{nameof(user.UserAuthId)} is not set.");
+        }
         await EnsureInitializedAsync();
         await _container.UpsertItemAsync(user);
     }

@@ -1,6 +1,7 @@
 import { hideLoading, showLoading } from "./loading";
 import { getTranslation } from "./i18n";
 import { postEvent } from "@telegram-apps/bridge";
+import { getUserInfo } from "./userInfo";
 
 (async () => {
   showLoading();
@@ -14,15 +15,16 @@ import { postEvent } from "@telegram-apps/bridge";
     const urlParams = new URLSearchParams(window.location.search);
     const encodedChatUser = urlParams.get("id");
     // base64 decode chatUser and convert to json
-    const chatUser = JSON.parse(atob(encodedChatUser));
+    const decodedChatUser = atob(encodedChatUser);
+    const chatUser = JSON.parse(decodedChatUser);
 
-    if (chatUser.UserId && chatUser.ChatId) {
+    if (chatUser.ChatId) {
       const response = await fetch(`/api/AuthenticateBot`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(chatUser),
+        body: decodedChatUser,
       });
       if (response.status === 200) {
         msgDiv.innerText = getTranslation("telegram.registered");

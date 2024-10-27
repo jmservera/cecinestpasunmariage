@@ -79,18 +79,19 @@ namespace functions.Messaging
 
                 var loginTxt = localizer.GetString("ClickLogin");
 
-                await client.SendTextMessageAsync(message.Chat.Id, $"{loginTxt}.\n\n[Login]({uriBuilder.Uri})", parseMode: ParseMode.Markdown, replyMarkup: replyMarkup, cancellationToken: cancellationToken);
+                await client.SendTextMessageAsync(message.Chat.Id, $"{loginTxt}👇\n[Login]({uriBuilder.Uri})", parseMode: ParseMode.Markdown, replyMarkup: replyMarkup, cancellationToken: cancellationToken);
             }
             else
             {
 
                 bool somethingWasSent = false;
 
-                logger.LogInformation("Received a '{messageType}' update from user '{FirstName} {LastName} ({Username})'  chat '{ChatId}'.",
+                logger.LogInformation("Received a '{messageType}' update from user: '{FirstName} {LastName} ({Username}) - {UserDetails}'  chatId: '{ChatId}'.",
                     message.Type,
                     message.Chat.FirstName,
                     message.Chat.LastName,
                     message.Chat.Username,
+                    user.Value.UserDetails,
                     message.Chat.Id
                     );
 
