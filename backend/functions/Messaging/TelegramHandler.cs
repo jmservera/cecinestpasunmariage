@@ -46,7 +46,7 @@ namespace functions.Messaging
 
             if (user is null)
             {
-                logger.LogWarning("Received a message from an unknown user {ChatId} {User}.", message.Chat.Id, message.Chat.Username);
+                logger.LogWarning("Received a message from an unknown user {ChatId} ({User}). Auth loop.", message.Chat.Id, message.Chat.Username);
                 var botname = await botClient.GetMeAsync(cancellationToken);
                 ChatUser chatUser = new()
                 {
@@ -77,7 +77,9 @@ namespace functions.Messaging
                  new WebAppInfo() { Url = uriBuilder.Uri.ToString() });
                 var replyMarkup = new ReplyKeyboardMarkup(button) { ResizeKeyboard = true };
 
-                await client.SendTextMessageAsync(message.Chat.Id, localizer.GetString("ClickLogin"), replyMarkup: replyMarkup, cancellationToken: cancellationToken);
+                var loginTxt = localizer.GetString("ClickLogin");
+
+                await client.SendTextMessageAsync(message.Chat.Id, $"{loginTxt}.\n\n[Login]({uriBuilder.Uri})", parseMode: ParseMode.Markdown, replyMarkup: replyMarkup, cancellationToken: cancellationToken);
             }
             else
             {
