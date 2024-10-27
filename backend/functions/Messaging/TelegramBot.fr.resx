@@ -7,11 +7,20 @@
         <value>2.0</value>
     </resheader>
     <data name="GreetingMessage">
-        <value>Bienvenue sur le Bot de photos d'Isa &amp; Juanma\. Envoyez\-moi une photo de la fête et elle apparaîtra sur le [site web](https://cecinestpasunmariage.org/fr/fotos), ou posez\-moi des questions sur la fête\.</value>
+        <value>Bienvenue sur le Bot de photos d'Isa &amp; Juanma. Envoyez-moi une photo de la fête et elle apparaîtra sur le [site web](https://cecinestpasunmariage.org/fr/fotos), ou posez-moi des questions sur la fête.
+Vous pouvez également obtenir une liste de commandes en utilisant la commande `/help`</value>
         <comment>Message de bienvenue qui inclut le prénom de l'utilisateur.</comment>
     </data>
+    <data name="LoggedOut">
+        <value>Vos informations d'authentification ont été supprimées</value>
+        <comment>Message envoyé à l'utilisateur lorsque le bot est déconnecté</comment>
+    </data>
     <data name="Help">
-        <value>Envoyez\-moi simplement une photo et elle apparaîtra sur le [site web](https://cecinestpasunmariage.org/fr/fotos)</value>
+        <value>Dans cette conversation, vous pouvez m'envoyer des photos que vous souhaitez voir en direct dans le carrousel et poser des questions sur la fête. De plus, vous avez les commandes suivantes :
+    - /help : pour voir ce message
+    - /clear : pour effacer l'historique de la conversation
+    - /logout : pour supprimer vos informations d'authentification
+        </value>
         <comment>Message d'aide</comment>
     </data>
     <data name="PictureAdded">
@@ -31,7 +40,8 @@
         <comment>Message envoyé à l'utilisateur lorsque le bot est authentifié</comment>
     </data>
     <data name="ClickLogin">
-        <value>Veuillez cliquer sur le bouton de connexion pour utiliser ce bot.</value>
+        <value>Veuillez cliquer sur le bouton de connexion que vous trouverez sous le champ de saisie de texte pour utiliser ce bot. 👇
+Si cela ne fonctionne pas, vous pouvez également cliquer sur [ce lien]({0}).</value>
         <comment>Message envoyé à l'utilisateur lorsque le bot n'est pas authentifié</comment>
     </data>
     <data name="LoginButton">

@@ -11,9 +11,8 @@ public struct ChatUser
     public string Hash { get; set; }
     public string IV { get; set; }
     public string? UserDetails { get; set; }
-
+    public string? IdentityProvider { get; set; }
     public string? Language { get; set; }
-
     public string? UserAuthId { get; set; }
 
     const PaddingMode padding = PaddingMode.PKCS7;

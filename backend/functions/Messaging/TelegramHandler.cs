@@ -47,7 +47,6 @@ namespace functions.Messaging
             if (user is null)
             {
                 logger.LogWarning("Received a message from an unknown user {ChatId} ({User}). Auth loop.", message.Chat.Id, message.Chat.Username);
-                var botname = await botClient.GetMeAsync(cancellationToken);
                 ChatUser chatUser = new()
                 {
                     ChatId = message.Chat.Id.ToString(),
@@ -61,7 +60,13 @@ namespace functions.Messaging
                 // encode user as a base64string
                 var userEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(usr));
 
-                var redirect = WebUtility.UrlEncode($"/telegram/?id={userEncoded}");
+                var langRedirect = "";
+                if (language == "fr" || language == "en")
+                {
+                    langRedirect = $"/{language}";
+                }
+
+                var redirect = WebUtility.UrlEncode($"{langRedirect}/telegram/?id={userEncoded}");
                 var baseUri = config.GetValue<string>("BASE_URI");
                 if (string.IsNullOrEmpty(baseUri))
                 {
@@ -77,9 +82,9 @@ namespace functions.Messaging
                  new WebAppInfo() { Url = uriBuilder.Uri.ToString() });
                 var replyMarkup = new ReplyKeyboardMarkup(button) { ResizeKeyboard = true };
 
-                var loginTxt = localizer.GetString("ClickLogin");
+                var loginTxt = string.Format(localizer.GetString("ClickLogin"), uriBuilder.Uri);
 
-                await client.SendTextMessageAsync(message.Chat.Id, $"{loginTxt}👇\n[Login]({uriBuilder.Uri})", parseMode: ParseMode.Markdown, replyMarkup: replyMarkup, cancellationToken: cancellationToken);
+                await client.SendTextMessageAsync(message.Chat.Id, loginTxt, parseMode: ParseMode.Markdown, replyMarkup: replyMarkup, cancellationToken: cancellationToken);
             }
             else
             {
@@ -181,14 +186,14 @@ namespace functions.Messaging
                     await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: localizer.GetString("GreetingMessage"),
-                        parseMode: ParseMode.MarkdownV2,
+                        parseMode: ParseMode.Markdown,
                         cancellationToken: cancellationToken);
                     break;
                 case "/help":
                     await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: localizer.GetString("Help"),
-                        parseMode: ParseMode.MarkdownV2,
+                        parseMode: ParseMode.Markdown,
                         cancellationToken: cancellationToken);
                     break;
                 case "/echo":
@@ -208,13 +213,13 @@ namespace functions.Messaging
                     await chatUserMapper.RemoveUserAsync(message.Chat.Id.ToString());
                     await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
-                        text: "Logged out",
+                        text: localizer.GetString("LoggedOut"),
                         cancellationToken: cancellationToken);
                     break;
                 default:
                     await client.SendTextMessageAsync(
                         chatId: message.Chat.Id,
-                        text: "Unknown command",
+                        text: localizer.GetString("UnknownCommand"),
                         cancellationToken: cancellationToken);
                     break;
             }

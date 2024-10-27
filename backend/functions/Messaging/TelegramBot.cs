@@ -66,12 +66,14 @@ namespace functions.Messaging
             await new TelegramHandler(chatService, chatHistoryManager, configuration, chatUserMapper, uploader, logger, localizer, _client).HandleUpdateAsync(_client, update, cancellationToken);
         }
 
-        public async Task SendMessage(long chatId, string text, IReplyMarkup? replyMarkup = null)
+        public async Task SendMessage(long chatId, string text, bool isMarkdown, IReplyMarkup? replyMarkup = null)
         {
+
             await _client.SendTextMessageAsync(
                 chatId: chatId,
                 text: text,
-                replyMarkup: replyMarkup
+                replyMarkup: replyMarkup,
+                parseMode: isMarkdown ? ParseMode.Markdown : ParseMode.Html
             );
         }
 

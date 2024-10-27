@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
 namespace functions
@@ -40,7 +41,6 @@ namespace functions
         [Function(SetUpFunctionName)]
         public async Task<HttpResponseData> Register([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req)
         {
-
             _logger.LogInformation("Register function called.");
 
             var response = req.CreateResponse(HttpStatusCode.OK);
@@ -82,7 +82,27 @@ namespace functions
             HttpResponseData response;
 
             var principal = ClaimsPrincipalParser.Parse(req);
-            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value; //get user id            
+            if (principal.Identity?.IsAuthenticated ?? false)
+            {
+                _logger.LogInformation("User is authenticated, can link identity.");
+            }
+            else
+            {
+                _logger.LogWarning("User is not authenticated.");
+                response = req.CreateResponse(HttpStatusCode.Unauthorized);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                response.WriteString("Unauthorized.");
+                return response;
+            }
+            var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value; //get user id
+            if (string.IsNullOrEmpty(userId))
+            {
+                response = req.CreateResponse(HttpStatusCode.BadRequest);
+                response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+                _logger.LogWarning("User id is empty.");
+                response.WriteString("User id is empty.");
+                return response;
+            }
 
             try
             {
@@ -100,12 +120,14 @@ namespace functions
                 var key = configuration.GetValue<string>("TELEGRAM_TOKEN") ?? throw new InvalidOperationException("TELEGRAM_TOKEN is not set.");
                 chatUser.CheckSealValidity(ChatUser.GetValidKey(key));
                 chatUser.UserAuthId = userId;
+                chatUser.IdentityProvider = principal.Identity?.AuthenticationType;
                 chatUser.UserDetails = principal.Identity?.Name;
                 await chatUserMapper.SaveUserAsync(chatUser);
                 response = req.CreateResponse(HttpStatusCode.OK);
                 response.Headers.Add("Content-Type", "application/json; charset=utf-8");
                 response.WriteString(JsonConvert.SerializeObject(chatUser));
-                await bot.SendMessage(long.Parse(chatUser.ChatId), localizer.GetString("BotAuthenticated"), new ReplyKeyboardRemove());
+                await bot.SendMessage(long.Parse(chatUser.ChatId), localizer.GetString("BotAuthenticated"), false, new ReplyKeyboardRemove());
+                await bot.SendMessage(long.Parse(chatUser.ChatId), localizer.GetString("GreetingMessage"), true);
             }
             catch (Exception e)
             {

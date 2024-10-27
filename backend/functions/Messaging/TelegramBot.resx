@@ -7,15 +7,24 @@
         <value>2.0</value>
     </resheader>
     <data name="GreetingMessage">
-        <value>Welcome to the Isa &amp; Juanma's Picture Bot\. Send me a picture of the party and it will show up in the [website](https://cecinestpasunmariage.org/en/fotos), or ask me anything about the party\.</value>
+        <value>Welcome to the Isa &amp; Juanma's homemade Bot. Send me a picture of the party and it will show up in the [website](https://cecinestpasunmariage.org/en/fotos), or ask me anything about the party.
+You can also get a list of commands by using the command `/help`</value>
         <comment>Greeting message that includes the user's first name.</comment>
+    </data>
+    <data name="LoggedOut">
+        <value>Your authentication information has been deleted</value>
+        <comment>Message sent to the user when the bot is logged out</comment>
     </data>
     <data name="EchoMessage">
         <value>You said: {0}</value>
         <comment>Message sent to the user when the bot receives a message</comment>
     </data>
     <data name="Help">
-        <value>Just send me a picture and it will appear in the pictures [website](https://cecinestpasunmariage.org/en/fotos)</value>
+        <value>In this chat, you can send me photos that you want to see live in the carousel and also ask questions about the party. Additionally, you have the following commands:
+    - /help: to see this message
+    - /clear: to clear the conversation history
+    - /logout: to delete your authentication information
+        </value>
         <comment>Help message</comment>
     </data>
     <data name="PictureAdded">
@@ -35,7 +44,8 @@
         <comment>Message sent to the user when the bot is authenticated</comment>
     </data>
     <data name="ClickLogin">
-        <value>Please click on the login button to use this bot.</value>
+        <value>Please click on the login button you'll find under the text input to use this bot. 👇
+    If this doesn't work you can also click [this link]({0}).</value>
         <comment>Message sent to the user when the bot is not authenticated</comment>
     </data>
     <data name="LoginButton">
