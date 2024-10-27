@@ -1,4 +1,4 @@
-{{ with resources.Get "css/guestList.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
+{{ $opts := dict "transpiler" "dartsass" }}{{ with resources.Get "css/guestList.scss" | css.Sass $opts | resources.Minify | resources.Fingerprint }}
 <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" />
 {{ end }}
 

@@ -1,26 +1,27 @@
+@use "sass:color";
 // do not rename to variables.scss because it overwrites the default variables.scss
 $accent-background: rgba(255, 255, 255, 0.4);
 $no-accent-background: transparent;
 
 $button-color: #893e3e;
-$button-color-5: lighten($button-color, 5%);
-$button-color-10: lighten($button-color, 10%);
+$button-color-5: color.adjust($button-color, $lightness: 5%);
+$button-color-10: color.adjust($button-color, $lightness: 10%);
 
-$button-color-lightness: lightness($button-color);
+$button-color-lightness: color.channel($button-color, "lightness", $space: hsl);
 
-$button-bg-color-hover: desaturate($button-color, 15%);
-$button-bg-color: change-color(
+$button-bg-color-hover: color.adjust($button-color, $saturation: -15%);
+$button-bg-color: color.change(
   $button-color,
   $lightness: $button-color-lightness + 30,
   $hue: 15
 );
-$button-color-hover: lighten($button-bg-color, 20%);
-$button-border-hover: change-color(
+$button-color-hover: color.adjust($button-bg-color, $lightness: 20%);
+$button-border-hover: color.change(
   $button-color,
   $lightness: $button-color-lightness - 5,
   $hue: -15
 );
-$button-border-active: darken($button-border-hover, 10%);
+$button-border-active: color.adjust($button-border-hover, $lightness: -10%);
 $success: green;
 $error: red;
 $error-color: white;

@@ -16,7 +16,7 @@ popd
 
 echo "## Install Dart Sass"
 pushd /tmp
-curl -O --location https://github.com/sass/dart-sass/releases/download/1.79.4/dart-sass-1.79.4-linux-x64.tar.gz
-tar xvf dart-sass-1.79.4-linux-x64.tar.gz 
+curl -O --location https://github.com/sass/dart-sass/releases/download/1.80.4/dart-sass-1.80.4-linux-x64.tar.gz
+tar xvf dart-sass-1.80.4-linux-x64.tar.gz 
 sudo cp -r dart-sass/* /usr/local/bin/
 popd

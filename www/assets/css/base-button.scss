@@ -1,9 +1,9 @@
-@import "ceci-variables.scss";
+@use "ceci-variables.scss";
 
 button {
-  background-color: $button-bg-color;
-  color: $button-color;
-  border: 2px solid $button-color;
+  background-color: ceci-variables.$button-bg-color;
+  color: ceci-variables.$button-color;
+  border: 2px solid ceci-variables.$button-color;
   padding: 5px;
   margin: 0 1px 0 1px;
   width: auto;
@@ -13,29 +13,29 @@ button {
   border-radius: 5px;
 
   &:hover {
-    color: $button-color-hover;
-    stroke: $button-color-hover;
-    background-color: $button-bg-color-hover;
-    border: 2px solid $button-border-hover;
+    color: ceci-variables.$button-color-hover;
+    stroke: ceci-variables.$button-color-hover;
+    background-color: ceci-variables.$button-bg-color-hover;
+    border: 2px solid ceci-variables.$button-border-hover;
   }
 
   &:active {
     stroke: white;
     color: white;
-    background-color: $button-color;
-    border: 2px solid $button-border-active;
+    background-color: ceci-variables.$button-color;
+    border: 2px solid ceci-variables.$button-border-active;
   }
 }
 
 button.selected {
   @extend button;
-  background-color: $button-color;
-  color: $button-bg-color;
+  background-color: ceci-variables.$button-color;
+  color: ceci-variables.$button-bg-color;
 
   &:hover {
-    background-color: $button-bg-color-hover;
-    color: $button-color-hover;
-    stroke: $button-color-hover;
-    border: 2px solid $button-border-hover;
+    background-color: ceci-variables.$button-bg-color-hover;
+    color: ceci-variables.$button-color-hover;
+    stroke: ceci-variables.$button-color-hover;
+    border: 2px solid ceci-variables.$button-border-hover;
   }
 }

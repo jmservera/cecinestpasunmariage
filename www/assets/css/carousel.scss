@@ -5,8 +5,8 @@
 @use "../../node_modules/swiper/modules/scrollbar.scss";
 @use "../../node_modules/swiper/modules/autoplay.scss";
 
-@import "ceci-variables.scss";
-@import "base-button.scss";
+@use "ceci-variables.scss";
+@use "base-button.scss";
 
 .grid-container {
   columns: 5 200px;
@@ -30,7 +30,7 @@
     }
 
     &:hover {
-      border-color: $button-border-hover;
+      border-color: ceci-variables.$button-border-hover;
     }
 
     img {
@@ -106,14 +106,14 @@
 }
 
 .success {
-  background-color: $success;
+  background-color: ceci-variables.$success;
   /* Green */
 }
 
 .error {
-  background-color: $error;
+  background-color: ceci-variables.$error;
   /* Yellow */
-  color: $error-color;
+  color: ceci-variables.$error-color;
   /* Black text color for better contrast */
 }
 
