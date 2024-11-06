@@ -21,8 +21,8 @@ public class MapChatToUser : IChatUserMapper
     /// <summary>
     /// Initializes a new instance of the <see cref="MapChatToUser"/> class.
     /// </summary>
-    /// <param name="configuration"> The configuration instance. </param>
-    /// <param name="logger"> The logger instance. </param>
+    /// <param name="configuration">The configuration instance.</param>
+    /// <param name="logger">The logger instance.</param>
     /// <exception cref="InvalidOperationException"> Thrown when the DATABASE_CONNECTION_STRING is not set. </exception>
     public MapChatToUser(IConfiguration configuration, ILogger<MapChatToUser> logger)
     {
