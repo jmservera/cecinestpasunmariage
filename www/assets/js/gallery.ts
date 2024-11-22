@@ -73,6 +73,18 @@ async function gallery(page: number = current_page): Promise<void> {
       gallery(next_page);
     });
 
+    // Add click event listeners to the arrow buttons
+    $(".page").on("click", function () {
+      $(".page").off("click"); // remove all the clicks before starting anew
+      let next_page: number = parseInt($(this).attr("id"));
+      if (next_page === -1) {
+        next_page = current_page - 1;
+      } else if (next_page == 10000) {
+        next_page = current_page + 1;
+      }
+      gallery(next_page);
+    });
+
     let i: number = 0;
     $("#mygallery").html("");
     data.Pictures.forEach((element: any) => {
