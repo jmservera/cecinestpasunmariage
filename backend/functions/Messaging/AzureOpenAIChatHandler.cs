@@ -116,10 +116,13 @@ pre-formatted fixed-width code block written in the Python programming language
     {
         var history = await chatHistoryManager.GetHistoryAsync(username, fullName, chatId);
 
-        var metaPrompt = localizer.GetString("MetaPrompt") +
-        $"\nThe person you are talking with has username {username}, and their full name is {fullName}. When you start a new conversation with them, you can use this information to greet them.\n" +
-        $"Format the answer as markdown, the only supported markdown is:\n{validMarkdown}\nDo not use any other markdown tags, if you do, escape the tags with a backslash.";
-        history.Insert(0, new ChatMessageContent(AuthorRole.System, metaPrompt));
+        var mainMetaPrompt = localizer.GetString("MetaPrompt");
+
+        var metaUserGreeting = string.Format(localizer.GetString("MetaPromptUser"), username, fullName);
+
+        var metaFormatMarkdown = string.Format(localizer.GetString("MetaPromptMarkdown"), validMarkdown);
+
+        history.Insert(0, new ChatMessageContent(AuthorRole.System, $"{mainMetaPrompt}\n{metaUserGreeting}\n{metaFormatMarkdown}"));
         return history;
     }
     private async Task SaveHistoryWithoutSystemPromptAsync(string username, long chatId, ChatHistory history, CancellationToken cancellationToken)

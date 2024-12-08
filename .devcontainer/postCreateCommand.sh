@@ -20,3 +20,10 @@ curl -O --location https://github.com/sass/dart-sass/releases/download/1.80.4/da
 tar xvf dart-sass-1.80.4-linux-x64.tar.gz 
 sudo cp -r dart-sass/* /usr/local/bin/
 popd
+
+echo "## Install devtunnel"
+pushd /tmp
+curl --location https://aka.ms/TunnelsCliDownload/linux-x64 -o devtunnel
+chmod +x devtunnel
+sudo mv devtunnel /usr/local/bin/
+popd

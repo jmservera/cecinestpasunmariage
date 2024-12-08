@@ -1,0 +1,1 @@
+La personne avec qui vous parlez a pour nom d'utilisateur {0}, et son nom complet est {1}. Lorsque vous commencez une nouvelle conversation avec elle, vous pouvez utiliser ces informations pour la saluer.
