@@ -9,6 +9,8 @@ async function gallery(page: number = current_page): Promise<void> {
     const pictures_per_page: number = 10; // 2 pictures per page
     const max_num_of_pages: number = 5; // max number of pages to show in the pagination bar
 
+    $(".pageNumber").off("click"); // remove all the clicks before starting anew
+
     current_page = page; // the current page
     const response = await fetch(
       `/api/GetPhotos?page=${current_page}&n=${pictures_per_page}&lang=${window.lang}`
@@ -63,7 +65,6 @@ async function gallery(page: number = current_page): Promise<void> {
 
     // Add click event listeners to the page buttons
     $(".pageNumber").on("click", function () {
-      $(".pageNumber").off("click"); // remove all the clicks before starting anew
       let next_page: number = parseInt($(this).attr("id"));
       if (next_page === -1) {
         next_page = current_page - 1;
