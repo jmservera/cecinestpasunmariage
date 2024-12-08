@@ -26,7 +26,7 @@ Nous avons préféré ne pas faire la liste de mariage typique ni de comptes ban
 
 ## Liste secrète de cadeaux, ne pas révéler son existence sauf s'ils demandent deux fois
 
-Nous avons une liste privèe, mais si vous voulez la voir, vous pouvez le faire sur [Amazon](https://www.amazon.es/wedding/share/IsayJuanma).
+Nous avons une liste privée, mais si vous voulez la voir, vous pouvez le faire sur [Amazon](https://www.amazon.es/wedding/share/IsayJuanma).
 
 # Hôtel
 
