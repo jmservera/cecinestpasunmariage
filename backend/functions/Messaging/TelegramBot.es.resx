@@ -10,10 +10,8 @@
         <value>es</value>
     </data>
     <data name="GreetingMessage">
-        <value>Bienvenido al bot de las fotos de la gran fiesta de Isa &amp; Juanma. Envíame una
-            foto y aparecerá en la [página web](https://cecinestpasunmariage.org/fotos), o pregunta
-            lo que necesites saber sobre la fiesta.
-            También puedes obtener una lista de comandos usando el comando `/help`</value>
+        <value>Bienvenido al bot de las fotos de la gran fiesta de Isa &amp; Juanma. Envíame una foto y aparecerá en la [página web](https://cecinestpasunmariage.org/fotos), o pregunta lo que necesites saber sobre la fiesta.
+También puedes obtener una lista de comandos usando el comando `/help`</value>
         <comment>Mensaje de bienvenida que incluye el nombre del usuario.</comment>
     </data>
     <data name="LoggedOut">
@@ -21,11 +19,11 @@
         <comment>Mensaje enviado al usuario cuando el bot ha cerrado sesión</comment>
     </data>
     <data name="Help">
-        <value>En este chat puedes enviarme fotos que quieras ver en directo en el carrousel y
-            también realizar preguntas sobre la fiesta. Además tienes los siguientes comandos:
-            - /help: para ver este mensaje
-            - /clear: para borrar el historial de conversación
-            - /logout: para borrar tu información de autenticación
+        <value>En este chat puedes enviarme fotos que quieras ver en directo en el carrousel y también realizar preguntas sobre la fiesta. Además tienes los siguientes comandos:
+
+- /help: para ver este mensaje
+- /clear: para borrar el historial de conversación
+- /logout: para borrar tu información de autenticación
         </value>
         <comment>Mensaje de ayuda</comment>
     </data>
@@ -46,9 +44,8 @@
         <comment>Mensaje enviado al usuario cuando el bot está autenticado</comment>
     </data>
     <data name="ClickLogin">
-        <value>Por favor, haz clic en el botón de inicio de sesión que encontrarás debajo del campo
-            de texto para usar este bot. 👇
-            Si esto no funciona, también puedes hacer clic en [este enlace]({0}).</value>
+        <value>Por favor, haz clic en el botón de inicio de sesión que encontrarás debajo del campode texto para usar este bot. 👇
+Si esto no funciona, también puedes hacer clic en [este enlace]({0}).</value>
         <comment>Mensaje enviado al usuario para iniciar sesión</comment>
     </data>
     <data name="LoginButton">
