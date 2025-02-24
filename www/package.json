@@ -10,7 +10,7 @@
     "node": ">=18.0.0"
   },
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^2.0.1",
+    "@azure/static-web-apps-cli": "^2.0.4",
     "@types/jquery": "^3.5.32",
     "prettier": "^3.4.2",
     "prettier-plugin-go-template": "0.0.15"
