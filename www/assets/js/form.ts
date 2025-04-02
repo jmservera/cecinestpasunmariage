@@ -41,7 +41,7 @@ function registrationClosed(): boolean {
   // check if registration is allowed by a parameter in the URL
   const urlParams = new URLSearchParams(window.location.search);
   const registrationAllowed = urlParams.get("registrationAllowed");
-  if (!registrationAllowed) {
+  if (registrationAllowed !== "true") {
     const redirectUrl = "/registro-cerrado";
     const url = new URL(redirectUrl, window.location.href);
     window.location.href = url.href;
