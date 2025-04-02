@@ -37,10 +37,16 @@ function buildItem(): UserInput {
   return user;
 }
 
-function registrationClosed() {
-  const redirectUrl = "/registro-cerrado";
-  const url = new URL(redirectUrl, window.location.href);
-  window.location.href = url.href;
+function registrationClosed(): boolean {
+  // check if registration is allowed by a parameter in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const registrationAllowed = urlParams.get("registrationAllowed");
+  if (!registrationAllowed) {
+    const redirectUrl = "/registro-cerrado";
+    const url = new URL(redirectUrl, window.location.href);
+    window.location.href = url.href;
+  }
+  return !registrationAllowed;
 }
 
 async function createOrUpdate(): Promise<void> {
@@ -61,9 +67,9 @@ async function createOrUpdate(): Promise<void> {
       data.item.updatedAt = new Date().toISOString();
       response = await runQuery(updateGql, data);
     } else {
-      registrationClosed();
-      return;
-      // do not allow anymore...
+      if (registrationClosed()) {
+        return;
+      }
       data.item.createdAt = new Date().toISOString();
       data.item.updatedAt = data.item.createdAt;
       response = await runQuery(createGql, data);
@@ -154,8 +160,9 @@ async function createOrUpdate(): Promise<void> {
           });
         }
         else {
-          registrationClosed();
-          return;
+          if (registrationClosed()) {
+            return;
+          }
         }
       }
       catch (e) {
