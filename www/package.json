@@ -12,12 +12,14 @@
   "devDependencies": {
     "@azure/static-web-apps-cli": "^2.0.1",
     "@types/jquery": "^3.5.32",
+    "@types/qrcode": "^1.5.5",
     "prettier": "^3.4.2",
     "prettier-plugin-go-template": "0.0.15"
   },
   "dependencies": {
     "@telegram-apps/bridge": "^1.7.1",
     "justifiedGallery": "^3.8.1",
+    "qrcode": "^1.5.4",
     "swiper": "^11.1.15"
   }
 }

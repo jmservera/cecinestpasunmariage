@@ -1,3 +1,5 @@
+@use "ceci-variables.scss";
+
 .countdown {
   width: 100%;
 }
@@ -8,9 +10,10 @@
 }
 
 .countdown .text {
-  color: #edad53;
-  --color-text: #edad53;
+  color: $clock-text-color;
+  --color-text: $clock-text-color;
   font-size: calc(2vh);
+  
 }
 
 .countdown #days {

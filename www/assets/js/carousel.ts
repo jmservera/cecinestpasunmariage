@@ -1,5 +1,6 @@
 import { hideLoading, showLoading } from "./loading";
 import { getTranslation } from "./i18n";
+import { toCanvas } from "qrcode";
 
 // import Swiper JS
 import Swiper from "swiper";
@@ -62,7 +63,7 @@ async function loadPics(page: string): Promise<any> {
     const response: Response = await fetch(`/api/GetPhotos${page}`); // replace with your API endpoint
     data = await response.json();
     const template = document.getElementById(
-      "slide-template",
+      "slide-template"
     ) as HTMLTemplateElement;
     data.Pictures.forEach((element: any) => {
       const slide = template.content.cloneNode(true) as DocumentFragment;
@@ -118,7 +119,7 @@ async function carousel(): Promise<void> {
           });
           swiper.removeAllSlides();
           data = await loadPics(
-            `?page=0&n=${pictures_per_page}&lang=${window.lang}`,
+            `?page=0&n=${pictures_per_page}&lang=${window.lang}`
           );
           swiper.autoplay.start();
         }, 1000);
@@ -146,4 +147,7 @@ function showStatus(message: string, className: string = "") {
 
 $(async () => {
   await carousel();
+  const canvas = document.getElementById("qrcode") as HTMLCanvasElement;
+  const qrCodeUrl = new URL("../fotos", window.location.href).href;
+  toCanvas(canvas, qrCodeUrl);
 });

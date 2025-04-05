@@ -16,6 +16,7 @@
   "uploadError": "⚠ Error uploading picture.",
   "uploading": "Uploading...",
   "uploadInvalid": "⚠ Please select a file to upload.",
+  "uploadHere": "Upload your pictures here",
   "days": {
     "one": "day",
     "other": "days"
