@@ -86,6 +86,17 @@ const swiper = new Swiper(".swiper", {
   },
 });
 
+document.getElementById("playPause").addEventListener("click", (event) => {
+  const playPauseButton = event.currentTarget as HTMLButtonElement;
+  if (swiper.autoplay.running) {
+    swiper.autoplay.stop();
+    playPauseButton.innerHTML = "▶";
+  } else {
+    swiper.autoplay.start();
+    playPauseButton.innerHTML = "⏸";
+  }
+});
+
 async function loadPics(page: string): Promise<any> {
   let data: any = {};
   showLoading();
@@ -151,7 +162,6 @@ async function carousel(): Promise<void> {
       const video = currentSlide.querySelector("video") as HTMLVideoElement;
       if (img) {
         swiperBackground.style.backgroundImage = `url(${img.src})`;
-        img.style.transform = "scale(1)";
         img.classList.add("zoom-in");
       }
       if (video) {

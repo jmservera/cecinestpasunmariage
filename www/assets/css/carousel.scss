@@ -75,6 +75,7 @@
 
 .swiper-slide {
   position: relative;
+  display: flex;
 }
 
 .swiper-background {
@@ -91,7 +92,7 @@
 }
 
 .imgbox {
-  display: grid;
+  // display: grid;
   height: 100%;
 }
 .center {
@@ -101,10 +102,16 @@
 .center-fit {
   max-width: 100%;
   max-height: 100vh;
-  margin: auto;
+  margin-top: auto;
+  margin-bottom: auto;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.center-fit video {
+  max-width: 100%;
+  max-height: 100vh;
+  margin: auto;
 }
 
 .status {
