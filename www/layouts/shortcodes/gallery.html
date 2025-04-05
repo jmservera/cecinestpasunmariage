@@ -89,6 +89,8 @@
 </div>
 <div id="pages2"></div>
 
+<a href="../carousel" class="btn btn-primary"> Carousel </a>
+
 {{ $dev := (eq hugo.Environment "development") }} {{/* minify only in production
 */}} {{ $opts := dict "minify" (not $dev) }} {{ $galleryScript := resources.Get
 "js/gallery.ts" }} {{/* {{ $imgUpload := resources.Get "js/imgUpload.ts" }} */}}

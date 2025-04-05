@@ -23,6 +23,7 @@
   "uploadError": "⚠ Erreur lors du téléchargement de l'image.",
   "uploadInvalid": "⚠ Veuillez sélectionner un fichier à télécharger.",
   "uploading": "Téléchargement en cours...",
+  "uploadHere": "Téléchargez votres photos ici",
   "msgSendTitle": "Titre du message",
   "msgSendTitlePlaceholder": "Titre du message",
   "msgSendMessage": "Message",
