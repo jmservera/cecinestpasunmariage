@@ -37,6 +37,18 @@ function buildItem(): UserInput {
   return user;
 }
 
+function registrationClosed(): boolean {
+  // check if registration is allowed by a parameter in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const registrationAllowed = urlParams.get("registrationAllowed");
+  if (registrationAllowed !== "true") {
+    const redirectUrl = "/registro-cerrado";
+    const url = new URL(redirectUrl, window.location.href);
+    window.location.href = url.href;
+  }
+  return !registrationAllowed;
+}
+
 async function createOrUpdate(): Promise<void> {
   showLoading();
   try {
@@ -55,6 +67,9 @@ async function createOrUpdate(): Promise<void> {
       data.item.updatedAt = new Date().toISOString();
       response = await runQuery(updateGql, data);
     } else {
+      if (registrationClosed()) {
+        return;
+      }
       data.item.createdAt = new Date().toISOString();
       data.item.updatedAt = data.item.createdAt;
       response = await runQuery(createGql, data);
@@ -112,36 +127,47 @@ async function createOrUpdate(): Promise<void> {
         id.value = info.userId;
       }
 
-      const user = await runQuery(getByIdGql, { id: info.userId });
-      console.log(user);
-      if (user && user.id) {
-        Object.keys(user).forEach((key) => {
-          const inputElement = registrationForm.querySelector<HTMLInputElement>(
-            `input[name="${key}"]`,
-          );
-          if (inputElement) {
-            if (inputElement.type === "checkbox") {
-              inputElement.checked = user[key];
+      try {
+        const user = await runQuery(getByIdGql, { id: info.userId });
+        console.log(user);
+        if (user && user.id) {
+          Object.keys(user).forEach((key) => {
+            const inputElement = registrationForm.querySelector<HTMLInputElement>(
+              `input[name="${key}"]`,
+            );
+            if (inputElement) {
+              if (inputElement.type === "checkbox") {
+                inputElement.checked = user[key];
+              } else {
+                inputElement.value = user[key];
+              }
             } else {
-              inputElement.value = user[key];
+              const textArea =
+                registrationForm.querySelector<HTMLTextAreaElement>(
+                  `textarea[name="${key}"]`,
+                );
+              if (textArea) {
+                textArea.value = user[key];
+              } else {
+                const hiddenInput: HTMLInputElement =
+                  document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = key;
+                hiddenInput.value = user[key];
+                registrationForm.appendChild(hiddenInput);
+              }
             }
-          } else {
-            const textArea =
-              registrationForm.querySelector<HTMLTextAreaElement>(
-                `textarea[name="${key}"]`,
-              );
-            if (textArea) {
-              textArea.value = user[key];
-            } else {
-              const hiddenInput: HTMLInputElement =
-                document.createElement("input");
-              hiddenInput.type = "hidden";
-              hiddenInput.name = key;
-              hiddenInput.value = user[key];
-              registrationForm.appendChild(hiddenInput);
-            }
+          });
+        }
+        else {
+          if (registrationClosed()) {
+            return;
           }
-        });
+        }
+      }
+      catch (e) {
+        registrationClosed();
+        return;
       }
     } finally {
       hideLoading();
