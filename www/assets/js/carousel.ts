@@ -9,17 +9,19 @@ import { Manipulation, Navigation, Pagination, Autoplay } from "swiper/modules";
 const pictures_per_page: number = 20;
 const pictures_delay: number = 5000;
 
-// bind esc key to close fullscreen
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    document
-      .getElementsByClassName("fullscreen")[0]
-      .classList.remove("fullscreen");
+document.documentElement.addEventListener("fullscreenchange", (event) => {
+  if (document.fullscreenElement) {
+    document.getElementsByClassName("swiper")[0].classList.add("fullscreen");
+  } else {
+    document.getElementsByClassName("swiper")[0].classList.remove("fullscreen");
   }
 });
 
 document.getElementById("fullScreen").addEventListener("click", (event) => {
-  document.getElementsByClassName("swiper")[0].classList.add("fullscreen");
+  // set F11 fullscreen mode
+  if (document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen();
+  }
 });
 
 // use https://swiperjs.com/swiper-api
