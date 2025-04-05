@@ -86,29 +86,6 @@ const swiper = new Swiper(".swiper", {
   },
 });
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("zoom-in");
-    } else {
-      entry.target.classList.remove("zoom-in");
-    }
-  });
-});
-
-const videoObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    var video = entry.target as HTMLVideoElement;
-    if (video) {
-      if (entry.isIntersecting) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    }
-  });
-});
-
 async function loadPics(page: string): Promise<any> {
   let data: any = {};
   showLoading();
@@ -128,13 +105,11 @@ async function loadPics(page: string): Promise<any> {
         video.style.display = "block";
         video.src = element.Uri;
         video.title = element.Description;
-        videoObserver.observe(video);
       } else {
         const img = slide.querySelector("img") as HTMLImageElement;
         img.style.display = "block";
         img.src = element.Uri;
         img.title = element.Description;
-        observer.observe(img);
       }
       swiper.appendSlide(slide.firstElementChild as HTMLElement);
     });
@@ -150,10 +125,40 @@ async function loadPics(page: string): Promise<any> {
 
 async function carousel(): Promise<void> {
   showLoading();
+  const swiperBackground = document.querySelector(
+    ".swiper-background"
+  ) as HTMLElement;
   try {
     let data = { Next: null };
     data = await loadPics(`?page=0&n=${pictures_per_page}&lang=${window.lang}`);
     swiper.autoplay.start();
+
+    var previousSlide = null;
+    swiper.on("slideChange", () => {
+      if (previousSlide) {
+        const previousVideo = previousSlide.querySelector("video");
+        if (previousVideo) {
+          previousVideo.pause();
+        }
+        const previousImg = previousSlide.querySelector("img");
+        if (previousImg) {
+          previousImg.classList.remove("zoom-in");
+        }
+      }
+
+      const currentSlide = swiper.slides[swiper.activeIndex];
+      const img = currentSlide.querySelector("img");
+      const video = currentSlide.querySelector("video") as HTMLVideoElement;
+      if (img) {
+        swiperBackground.style.backgroundImage = `url(${img.src})`;
+        img.style.transform = "scale(1)";
+        img.classList.add("zoom-in");
+      }
+      if (video) {
+        video.play();
+      }
+      previousSlide = currentSlide;
+    });
 
     swiper.on("reachEnd", async () => {
       if (data.Next) {
@@ -163,13 +168,6 @@ async function carousel(): Promise<void> {
       } else {
         swiper.autoplay.stop();
         setTimeout(async () => {
-          //unobserve all images
-          swiper.slides.forEach((slide: HTMLElement) => {
-            const img = slide.querySelector("img");
-            observer.unobserve(img);
-            const video = slide.querySelector("video");
-            videoObserver.unobserve(video);
-          });
           swiper.removeAllSlides();
           data = await loadPics(
             `?page=0&n=${pictures_per_page}&lang=${window.lang}`
