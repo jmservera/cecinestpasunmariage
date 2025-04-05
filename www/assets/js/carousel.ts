@@ -9,11 +9,62 @@ import { Manipulation, Navigation, Pagination, Autoplay } from "swiper/modules";
 const pictures_per_page: number = 20;
 const pictures_delay: number = 5000;
 
+const wakelocks = (function wakelock() {
+  if ("wakeLock" in navigator) {
+    let wakeLock = null;
+
+    // Function to request a wake lock
+    const requestWakeLock = async () => {
+      try {
+        wakeLock = await navigator.wakeLock.request("screen");
+        console.log("Screen Wake Lock is active");
+      } catch (err) {
+        console.error(`${err.name}, ${err.message}`);
+      }
+    };
+
+    // Function to release the wake lock
+    const releaseWakeLock = async () => {
+      if (wakeLock !== null) {
+        await wakeLock.release();
+        wakeLock = null;
+        console.log("Screen Wake Lock is released");
+      }
+    };
+    return { requestWakeLock, releaseWakeLock };
+  }
+})();
+
+function awake(keepAwake: boolean) {
+  // Check if the Wake Lock API is supported
+  if (wakelocks) {
+    if (keepAwake) {
+      wakelocks.requestWakeLock();
+    } else {
+      wakelocks.releaseWakeLock();
+    }
+  } else {
+    console.log("Wake Lock API not supported, trying with animation frame.");
+    if (keepAwake) {
+      // Prevent the device from going to sleep
+      const preventSleep = () => {
+        window.requestAnimationFrame(preventSleep);
+      };
+      preventSleep();
+    } else {
+      // Allow the device to go to sleep
+      window.cancelAnimationFrame(0);
+    }
+  }
+}
+
 document.documentElement.addEventListener("fullscreenchange", (event) => {
   if (document.fullscreenElement) {
     document.getElementsByClassName("swiper")[0].classList.add("fullscreen");
+    awake(true);
   } else {
     document.getElementsByClassName("swiper")[0].classList.remove("fullscreen");
+    awake(false);
   }
 });
 
