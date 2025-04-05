@@ -20,6 +20,6 @@
     "@telegram-apps/bridge": "^1.7.1",
     "justifiedGallery": "^3.8.1",
     "qrcode": "^1.5.4",
-    "swiper": "^11.1.15"
+    "swiper": "^11.2.6"
   }
 }
