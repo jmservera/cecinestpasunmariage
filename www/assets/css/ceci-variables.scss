@@ -25,7 +25,42 @@ $button-border-hover: color.change(
 );
 $button-border-active: color.adjust($button-border-hover, $lightness: -10%);
 $success: green;
+$success-color: white;
 $error: red;
 $error-color: white;
 $warning: yellow;
 $warning-color: black;
+
+#__statusSpan.status {
+  position: fixed;
+  display: none;
+  padding: 5px 10px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #fff;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: #333;
+  z-index: 1000;
+}
+
+#__statusSpan.success {
+  /* Green */
+  background-color: $success;
+  color: $success-color;
+}
+
+#__statusSpan.error {
+  background-color: $error;
+  /* Yellow */
+  color: $error-color;
+  /* Black text color for better contrast */
+}
+#__statusSpan.warning {
+  background-color: $warning;
+  /* Yellow */
+  color: $warning-color;
+  /* Black text color for better contrast */
+}
