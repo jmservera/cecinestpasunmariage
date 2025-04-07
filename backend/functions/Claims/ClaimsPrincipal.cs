@@ -25,7 +25,30 @@ public static class ClaimsPrincipalParser
 
     public static ClaimsPrincipal Parse(HttpRequestData req)
     {
-        var data = req.Headers.GetValues("x-ms-client-principal").First();
+        req.Headers.TryGetValues("x-ms-client-principal", out var values);
+        if (values == null || !values.Any())
+        {
+            var referer = req.Headers.GetValues("referer").FirstOrDefault();
+            if (referer?.ToLower().Contains("fotoup", StringComparison.CurrentCultureIgnoreCase) ?? false)
+            {
+                var cookie = req.Headers.GetValues("cookie").FirstOrDefault();
+                // read cookie as json
+                var cookieValue = cookie?.Split(';').FirstOrDefault(c => c.Trim().StartsWith("nameRequest="))?.Split('=').LastOrDefault();
+                // decode cookie value from base64
+                if (!string.IsNullOrEmpty(cookieValue))
+                {
+                    var name = Convert.FromBase64String(cookieValue);
+                    var nameString = Encoding.UTF8.GetString(name);
+                    nameString = nameString.Replace('"', ' ').Trim();
+                    var cookieIdentity = new ClaimsIdentity("cookie");
+                    cookieIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, nameString));
+                    cookieIdentity.AddClaim(new Claim(ClaimTypes.Name, nameString));
+                    return new ClaimsPrincipal(cookieIdentity);
+                }
+            }
+            return new ClaimsPrincipal();
+        }
+        var data = values.First();
         var decoded = Convert.FromBase64String(data);
         var json = Encoding.UTF8.GetString(decoded);
         var principal = JsonSerializer.Deserialize<ClientPrincipal>(json, jsonOptions);

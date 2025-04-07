@@ -1,0 +1,43 @@
+@use "ceci-variables.scss";
+@use "base-button.scss";
+
+// Modal background overlay
+#name-request-modal {
+  display: none; // Hidden by default
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // Semi-transparent dark background
+  z-index: 1000; // Ensure it appears above other content
+  justify-content: center;
+  align-items: center;
+
+  // When modal is visible (display: block), show as flex
+  &[style*="display: block"] {
+    display: flex !important; // Override inline style with !important
+  }
+}
+
+// Modal content container
+.modal-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+
+  // When parent modal is visible, animate in the content
+  #name-request-modal[style*="display: block"] & {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
