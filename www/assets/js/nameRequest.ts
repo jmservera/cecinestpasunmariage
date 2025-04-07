@@ -1,7 +1,7 @@
 import { getUserInfo } from "./userInfo";
 
 // create a cookie named 'nameRequest' with a string value that is converted to a Base64 string when stored
-// and decoded when read. Use plain typescritt and no external libraries.
+// and decoded when read. Use plain TypeScript and no external libraries.
 // The cookie should expire in 30 days
 
 function setCookie(name: string, value: string, days: number) {
