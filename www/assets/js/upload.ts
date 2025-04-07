@@ -68,8 +68,7 @@ async function uploadFiles(event: Event): Promise<void> {
     }
   } catch (error) {
     console.error("Error:", error);
-    showStatus(error, "error");
-  }
+    showStatus(error.toString(), "error");
 }
 
 document.addEventListener("DOMContentLoaded", function () {
