@@ -119,16 +119,24 @@ namespace functions
             return [];
         }
 
+        static readonly string[] messages = [
+            "Please find a funny title for this picture.",
+            "Please find an hilarious title for this picture.",
+            "Please create the most funny title for this picture."
+        ];
+        static Random random = new();
+
         private async Task<Dictionary<string, string>> GenerateDescriptionsFromImageOrCaptionsAsync(string contentType, byte[]? image, IReadOnlyList<string> people, string? captions = null)
         {
 #pragma warning disable SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-            OpenAIPromptExecutionSettings settings = new() { ResponseFormat = "json_object" };
+            OpenAIPromptExecutionSettings settings = new() { ResponseFormat = "json_object", Temperature = 1.5f };
 #pragma warning restore SKEXP0010 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
             var history = new ChatHistory();
 
-            history.AddSystemMessage("You are an AI assistant that helps people find a funny description or title of pictures that may contain people known by the requester, in English, French and Spanish, " +
+            history.AddSystemMessage("You are an AI assistant that helps people create title of a picture with a funny twist that may contain people known by the requester, in English, French and Spanish, " +
             "considering the destination language characteristics" +
-            (people.Count > 0 ? " and do not translate the names for the people in the picture. " : "") +
+            (people.Count > 0 ? " and do not translate the names for the people in the picture. " : ".") +
+            "Be creative and avoid starting with the word 'when'. People may be disguised, if they are so, try to guess the movie or topic and add it to the joke.\n" +
             "The output should be a json file with the schema:\n" +
             "{\n\"en\":\"English description\",\n\"fr\": \"French translation\"\n,\n\"es\": \"Spanish translation\"}\n");
 
@@ -138,14 +146,19 @@ namespace functions
                 items.Add(new TextContent($"Here is the description for the picture: {captions}\n"));
             }
 
-            items.Add(new TextContent(people.Count > 0 ? $"In this picture you see the following people: {string.Join(',', people)}. Please find a funny title for this picture that includes the provided names." :
-                        "Please find a funny title for this picture."));
+            items.Add(new TextContent(people.Count > 0 ? $"In this picture you see the following people: {string.Join(',', people)}." +
+                        messages[random.Next(3)] +
+                        "that includes the provided names." :
+                        messages[random.Next(3)]));
             if (image != null)
             {
                 ImageContent imageContent = new(new ReadOnlyMemory<byte>(image), contentType);
                 items.Add(imageContent);
             }
+
             history.AddUserMessage(items);
+
+            logger.LogInformation("Prompt: {prompt}", history.Aggregate("", (acc, item) => acc + item.ToString()));
 
             var chatMessageContent = await chatCompletionService.GetChatMessageContentAsync(history, settings);
             var description = chatMessageContent.Content ?? throw new InvalidOperationException("No translations generated");
