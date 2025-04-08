@@ -29,7 +29,7 @@ public static class ClaimsPrincipalParser
         if (values == null || !values.Any())
         {
             var referer = req.Headers.GetValues("referer").FirstOrDefault();
-            if (referer?.ToLower().Contains("fotoup", StringComparison.CurrentCultureIgnoreCase) ?? false)
+            if (referer?.Contains("fotoup", StringComparison.CurrentCultureIgnoreCase) ?? false)
             {
                 var cookie = req.Headers.GetValues("cookie").FirstOrDefault();
                 // read cookie as json
