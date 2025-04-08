@@ -36,7 +36,7 @@ async function uploadFiles(event: Event): Promise<void> {
         if (file) {
           try {
             // Use fetch API to send the file to the server
-            const response = await fetch(`/api/upload?name=${file.name}`, {
+            const response = await fetch(`/api/upload?name=${encodeURIComponent(file.name)}`, {
               method: "POST",
               headers: {
                 "Content-Type": file.type, // Set the Content-Type header to the file's MIME type
