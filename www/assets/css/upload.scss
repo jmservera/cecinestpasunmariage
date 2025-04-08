@@ -1,0 +1,26 @@
+@use "ceci-variables.scss";
+
+@use "base-button.scss";
+
+.file-upload-btn {
+  @extend button;
+  stroke: ceci-variables.$button-color;
+  display: inline-flex;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+#imageInput,
+#imageUpload {
+  display: none;
+  /* Hide the file input */
+}
