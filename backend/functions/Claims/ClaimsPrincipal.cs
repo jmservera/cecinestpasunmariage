@@ -33,7 +33,8 @@ public static class ClaimsPrincipalParser
             {
                 var cookie = req.Headers.GetValues("cookie").FirstOrDefault();
                 // read cookie as json
-                var cookieValue = cookie?.Split(';').FirstOrDefault(c => c.Trim().StartsWith("nameRequest="))?.Split('=').LastOrDefault();
+                var cookieValue = cookie?.Split(';')
+                    .FirstOrDefault(c => c.Trim().StartsWith("nameRequest="))?["nameRequest=".Length..];
                 // decode cookie value from base64
                 if (!string.IsNullOrEmpty(cookieValue))
                 {
