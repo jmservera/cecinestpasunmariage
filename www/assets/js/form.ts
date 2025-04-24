@@ -63,6 +63,7 @@ async function createOrUpdate(): Promise<void> {
     const existingUser = await runQuery(getByIdGql, data);
 
     var response: UserInput;
+    registrationClosed();
     if (existingUser) {
       data.item.updatedAt = new Date().toISOString();
       response = await runQuery(updateGql, data);
@@ -76,7 +77,7 @@ async function createOrUpdate(): Promise<void> {
     }
     console.table(response);
     const redirectInput = document.querySelector<HTMLInputElement>(
-      `form[id="${formId}"] input[name="_redirect_url"]`,
+      `form[id="${formId}"] input[name="_redirect_url"]`
     );
     if (redirectInput) {
       const redirectUrl = redirectInput.value;
@@ -96,20 +97,20 @@ async function createOrUpdate(): Promise<void> {
 
 (async () => {
   const registrationForm = document.querySelector<HTMLFormElement>(
-    `form[id="${formId}"]`,
+    `form[id="${formId}"]`
   );
   if (registrationForm) {
     showLoading();
     try {
       const info = await getUserInfo();
       const email = registrationForm.querySelector<HTMLInputElement>(
-        'input[name="email"]',
+        'input[name="email"]'
       );
       if (email) {
         email.value = info.userDetails;
       }
       const origin = registrationForm.querySelector<HTMLInputElement>(
-        'input[name="origin"]',
+        'input[name="origin"]'
       );
       if (origin) {
         origin.value = info.userDetails;
@@ -132,9 +133,10 @@ async function createOrUpdate(): Promise<void> {
         console.log(user);
         if (user && user.id) {
           Object.keys(user).forEach((key) => {
-            const inputElement = registrationForm.querySelector<HTMLInputElement>(
-              `input[name="${key}"]`,
-            );
+            const inputElement =
+              registrationForm.querySelector<HTMLInputElement>(
+                `input[name="${key}"]`
+              );
             if (inputElement) {
               if (inputElement.type === "checkbox") {
                 inputElement.checked = user[key];
@@ -144,7 +146,7 @@ async function createOrUpdate(): Promise<void> {
             } else {
               const textArea =
                 registrationForm.querySelector<HTMLTextAreaElement>(
-                  `textarea[name="${key}"]`,
+                  `textarea[name="${key}"]`
                 );
               if (textArea) {
                 textArea.value = user[key];
@@ -158,14 +160,12 @@ async function createOrUpdate(): Promise<void> {
               }
             }
           });
-        }
-        else {
+        } else {
           if (registrationClosed()) {
             return;
           }
         }
-      }
-      catch (e) {
+      } catch (e) {
         registrationClosed();
         return;
       }
