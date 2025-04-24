@@ -1,0 +1,37 @@
+{{ $size := .Get 0 | default 24 }} {{ $opts := dict "transpiler" "dartsass" }}{{
+with resources.Get "css/name-request.scss" | css.Sass $opts | resources.Minify |
+resources.Fingerprint }}
+<link
+  rel="stylesheet"
+  href="{{ .RelPermalink }}"
+  integrity="{{ .Data.Integrity }}"
+/>
+{{ end }} {{ $dev := (eq hugo.Environment "development") }} {{/* minify only in
+production */}} {{ $opts := dict "minify" (not $dev) }} {{ $galleryScript :=
+resources.Get "js/nameRequest.ts" }} {{/* {{ $imgUpload := resources.Get
+"js/imgUpload.ts" }} */}} {{ $name := cond $dev "nameRequest.ts"
+"nameRequest.min.ts" }} {{/* concat the Typescript so that it does not repeat
+imports */}} {{ $js := slice $galleryScript | resources.Concat (printf "js/%s"
+$name) | js.Build $opts }} {{/* add Fingerprint only in production */}} {{ $js
+:= cond $dev $js (resources.Fingerprint $js) }}
+
+<div id="name-request-modal">
+  <div class="modal-content">
+    <h2>Enter your name</h2>
+    <form id="name-request-form">
+      <label for="name-request">Name:</label>
+      <input type="text" id="name-request" name="name-request" required />
+      <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
+    </form>
+  </div>
+</div>
+
+<span id="name-request-name"> </span><br />
+
+<script
+  src="{{ $js.RelPermalink }}"
+  integrity="{{ $js.Data.Integrity }}"
+  crossorigin="anonymous"
+  defer
+></script>
