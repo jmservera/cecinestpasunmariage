@@ -146,28 +146,35 @@ async function carousel(): Promise<void> {
 
     var previousSlide = null;
     swiper.on("slideChange", () => {
-      if (previousSlide) {
-        const previousVideo = previousSlide.querySelector("video");
-        if (previousVideo) {
-          previousVideo.pause();
+      try {
+        if (previousSlide) {
+          const previousVideo = previousSlide.querySelector("video");
+          if (previousVideo?.src) {
+            previousVideo.pause();
+          }
+          const previousImg = previousSlide.querySelector("img");
+          if (previousImg?.src) {
+            previousImg.classList.remove("zoom-in");
+          }
         }
-        const previousImg = previousSlide.querySelector("img");
-        if (previousImg) {
-          previousImg.classList.remove("zoom-in");
-        }
-      }
 
-      const currentSlide = swiper.slides[swiper.activeIndex];
-      const img = currentSlide.querySelector("img");
-      const video = currentSlide.querySelector("video") as HTMLVideoElement;
-      if (img) {
-        swiperBackground.style.backgroundImage = `url(${img.src})`;
-        img.classList.add("zoom-in");
+        const currentSlide = swiper.slides[swiper.activeIndex];
+        const img = currentSlide.querySelector("img");
+        const video = currentSlide.querySelector("video") as HTMLVideoElement;
+        if (img?.src) {
+          swiperBackground.style.backgroundImage = `url(${img.src})`;
+          img.classList.add("zoom-in");
+        }
+        if (video?.src) {
+          video.play();
+        }
+        previousSlide = currentSlide;
+      } catch (slideChangeError) {
+        console.error("Error:", slideChangeError);
+        if (swiper.autoplay.running) {
+          showStatus(slideChangeError, "error");
+        }
       }
-      if (video) {
-        video.play();
-      }
-      previousSlide = currentSlide;
     });
 
     swiper.on("reachEnd", async () => {
