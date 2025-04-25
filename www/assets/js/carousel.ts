@@ -113,6 +113,12 @@ async function loadPics(page: string): Promise<any> {
 
       if (element.Uri.includes(".mp4")) {
         const video = slide.querySelector("video") as HTMLVideoElement;
+        try {
+          video.pause();
+        } catch (videoError) {
+          console.error("Error (maybe previous one had no video):", videoError);
+        }
+        video.autoplay = false;
         video.style.display = "block";
         video.src = element.Uri;
         video.title = element.Description;
@@ -190,7 +196,7 @@ async function carousel(): Promise<void> {
             `?page=0&n=${pictures_per_page}&lang=${window.lang}`
           );
           swiper.autoplay.start();
-        }, 1000);
+        }, 5000);
       }
     });
   } catch (error) {
