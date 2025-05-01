@@ -165,14 +165,19 @@ async function carousel(): Promise<void> {
         }
 
         const currentSlide = swiper.slides[swiper.activeIndex];
-        const img = currentSlide.querySelector("img");
-        const video = currentSlide.querySelector("video") as HTMLVideoElement;
-        if (img?.src) {
-          swiperBackground.style.backgroundImage = `url(${img.src})`;
-          img.classList.add("zoom-in");
+        if (currentSlide) {
+          const img = currentSlide.querySelector("img");
+          const video = currentSlide.querySelector("video") as HTMLVideoElement;
+          if (img?.src) {
+            swiperBackground.style.backgroundImage = `url(${img.src})`;
+            img.classList.add("zoom-in");
+          }
+          if (video?.src) {
+            video.play();
+          }
         }
-        if (video?.src) {
-          video.play();
+        else {
+          console.warn("Current slide not found, maybe swiper is empty or loading.");
         }
         previousSlide = currentSlide;
       } catch (slideChangeError) {
@@ -195,7 +200,7 @@ async function carousel(): Promise<void> {
           data = await loadPics(
             `?page=0&n=${pictures_per_page}&lang=${window.lang}`
           );
-          swiper.autoplay.start();
+          setTimeout(() => swiper.autoplay.start(), 1000);
         }, 5000);
       }
     });

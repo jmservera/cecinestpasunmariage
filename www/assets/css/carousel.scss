@@ -60,6 +60,15 @@
   background-color: black;
 }
 
+.swiper.fullscreen .swiper-button-next,
+.swiper.fullscreen .swiper-button-prev {
+  color: transparent;
+  transition: color 0.25s ease-in-out;
+  &:hover {
+    color: white;
+  }
+}
+
 .description-overlay {
   position: absolute;
   bottom: 0;
