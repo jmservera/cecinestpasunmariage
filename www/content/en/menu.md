@@ -2,40 +2,44 @@
 title: "Menu"
 ---
 
+The party menu is cocktail-style, with a selection of dishes so everyone can serve themselves as they wish.
+
 ## Starters
 
-(We still have to test and decide, but here are some ideas)
+* Vegetable chips of yucca, sweet potato, and purple potato with yogurt sauce  
+* "Oreo" of potato and carrot salad  
+* Quinoa salad with tropical touches  
+* Poké with wakame seaweed and soy mayonnaise  
+* Roasted pepper hummus with carrot sticks and pita bread  
+* "Totopos" with avocado cream and pico de gallo  
 
-- Sautéed Shitake mushroom and egg
-- Assorted cheeses
-- Classic gazpacho
-- Beetroot gazpacho
-- Creamy Ajoblanco with Mango Ice Cream
-- Salmorejo
-- Mini Greek Salad
-- Spring rolls with soy sauce
-- Fried Camembert with Blueberry Jam
-- Tabbouleh
-- Fried aubergines with honey
-- Sautéed broad beans with red onion
-- Hummus cone with almond crisp
-- Mango and avocado uramaki with Kimchi mayonnaise
-- Wakame seaweed nigiri with wasabi mayonnaise
-- Miniburger
-- Carrot croquettes
-- Boletus croquettes
-- Sautéed shallots with honey and raisins.
-- Nachos with guacamole and pico de gallo
-- Chinese Eggplant and Roasted Cherry Tomato Cake
-- Vegetable gyozas.
+## Main Courses
 
-## Corners
+* Goat cheese lollipops with quince paste and crunchy almonds  
+* Shimeji mushroom tartlets with quail egg  
+* Crispy asparagus gyozas with truffle mayonnaise  
+* Vegetable wok with rice noodles and soy sauce  
+* Sweet potato tempura with red wine reduction  
+* Falafel with kefir and mustard sauce  
+* Mushroom croquettes
+* Cauliflower, apple, and white chocolate croquettes  
+* Spinach risotto with red fruit emulsion and hazelnuts  
+* Baby broad beans with "salaílla"  
+* Eggplant with sugarcane honey
 
-- Cheese
-- Vegetarian sushi
-- Pickles
-- Salmorejo, various gazpachos and ajoblanco
-- Mexican Corner
+## Food Stations
 
-- Rice dishes (paella, risotto...)
-- Pizza
+* Cheese station with artisan jams  
+* Cold soups corner  
+* Mini roasted potatoes corner with sauces  
+* Pasta and sauces corner  
+
+## Desserts
+
+* Cream profiteroles
+* "Piononos"  
+* Cheesecake by Cris's Mom  
+
+## Late-night Snack
+
+* Wood-fired oven pizzas

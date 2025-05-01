@@ -2,40 +2,44 @@
 title: "Menu"
 ---
 
-## Entrées / Cocktails
+Le menu de la fête est sous forme de cocktail, avec une sélection de plats pour que chacun puisse se servir à sa guise.
 
-(Nous devons encore faire des tests et décider, mais voici quelques idées)
+## Entrées
 
-- Sauté de champignons Shitake et œuf
-- Assortiment de fromages
-- Gazpacho classique
-- Gazpacho de betterave
-- Ajoblanco crémeux avec glace à la mangue
-- Salmorejo
-- Mini salade grecque
-- Rouleaux de printemps avec sauce soja
-- Camembert frit avec confiture de myrtilles
-- Taboulé
-- Aubergines frites au miel
-- Fèves de la vallée sautées avec oignon rouge
-- Cône de houmous avec croquant d'amandes
-- Uramaki de mangue et avocat avec mayonnaise de Kimchi
-- Niguiri d'algue wakame avec mayonnaise de wasabi
-- Mini burger
-- Croquettes de carottes
-- Croquettes de cèpes
-- Échalotes sautées au miel et aux raisins secs
-- Nachos avec guacamole et pico de gallo
-- Pastilla d'aubergine chinoise et tomates cerises rôties
-- Gyozas végétariennes
+* Chips végétales de manioc, patate douce et pomme de terre violette avec sauce au yaourt  
+* Oreo de salade de pommes de terre et carottes  
+* Salade de quinoa aux touches tropicales  
+* Poké aux algues wakame et mayonnaise de soja  
+* Houmous de poivron rôti avec bâtonnets de carotte et pain pita  
+* Totopos, avec crème d'avocat et ,pico de gallo,  
 
-## Stations
+## Plats principaux
 
-- Fromages
-- Sushi végétarien
-- Condiments
-- Salmorejo, différents gazpachos et ajoblanco
-- Coin mexicain
+* Sucettes de fromage de chèvre avec pâte de coing et amandes croquantes  
+* Tartelettes aux champignons shimeji avec œuf de caille  
+* Gyozas croustillants aux asperges vertes et mayonnaise à la truffe  
+* Wok de légumes aux nouilles de riz et sauce soja  
+* Tempura de patate douce avec réduction de vin rouge  
+* Falafel avec sauce au kéfir et moutarde  
+* Croquettes aux champignons  
+* Croquettes de chou-fleur, pomme et chocolat blanc  
+* Risotto aux épinards avec émulsion de fruits rouges et noisettes  
+* Petites fèves avec "salaílla"  
+* Aubergines au miel de canne  
 
-- Riz (en paella, risotto...)
-- Pizza au four à bois
+## Coins gourmands
+
+* Station de fromages et confitures artisanales  
+* Coin des crèmes froides  
+* Coin des mini pommes de terre rôties avec sauces  
+* Coin des pâtes et sauces  
+
+## Desserts
+
+* Petits choux à la crème  
+* "Piononos"  
+* Gâteau au fromage de la maman de Cris  
+
+## En-cas nocturne
+
+* Pizzas au feu de bois

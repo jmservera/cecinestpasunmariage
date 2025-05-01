@@ -2,40 +2,45 @@
 title: "Menú"
 ---
 
-## Entrantes / Cóctel
+El menú de la fiesta es en modo cóctel, con una selección de platos para que cada uno pueda servirse lo que quiera.
 
-(Todavía tenemos que hacer pruebas y decidirlo, pero estas son algunas ideas)
+## Entrantes 
+ 
+* Chips vegetales de yuca, boniato y patata violeta con salsa de yogur  
+* Oreo de ensaladilla de patata y zanahoria 
+* Ensalada de quinoa con toques tropicales      
+* Poké con alga wakame y mayonesa de soja              
+* Humus de pimiento asado con palitos de zanahoria y pan de pita   
+* Totopos con crema de aguacate y pico de gallo 
+ 
+## Principales
 
-- Salteado de seta Shitake y Huevo
-- Quesos variados
-- Gazpacho clásico
-- Gazpacho de remolacha
-- Ajoblanco cremoso con helado de mango
-- Salmorejo
-- Mini ensalada griega
-- Rollitos de primavera con salsa de soja
-- Camembert frito con mermelada de arándanos
-- Tabulé
-- Berenjenas fritas con miel
-- Habitas de la vega salteadas con cebolla roja
-- Cono de Hummus con crocanti de almendra
-- Uramaki de Mango y aguacate con mayonesa de Kimchi
-- Niguiri de alga wakame con mayonesa de wasabi
-- Miniburger
-- Croquetas de zanahoria
-- Croquetas de boletus
-- Chalotas salteadas con miel y pasas.
-- Nachos con guacamole y pico de gallo
-- Pastela de berenjena china y tomate cherry asado
-- Gyozas vegetales.
+* Chup & chups de queso de cabra con membrillo y almendra crocanti 
+* Tartaletas de setas shimeji con huevo de codorniz             
+* Gyozas crujientes de espárragos verdes y mayonesa trufada 
+* Wok de verduras con fideos de arroz y salsa de soja 
+* Boniato en tempura con reducción de vino tinto 
+* Falafel con salsa de kéfir y mostaza 
+* Croquetas de setas 
+* Croquetas de coliflor, manzana y chocolate blanco 
+* Risotto de espinacas con emulsión de frutos rojos y avellanas 
+* Habitas con salaílla 
+* Berenjenas con miel de caña 
 
-## Rincones
+## Rincones 
 
-- Quesos
-- Sushi vegetariano
-- Encurtidos
-- Salmorejo, gazpachos varios y ajoblanco
-- Rincon mexicano
+* Estación de quesos y mermeladas artesanas 
+* Rincón de cremas frías  
+* Rincón de mini patatas asadas con salsas 
+* Rincón de pastas y salsas 
 
-- Arroces (en paella, risotto...)
-- Pizza de horno de leña
+
+## Postres 
+
+* Petisú de crema 
+* Piononos 
+* Tarta de queso de la Madre de Cris 
+
+## Resopón
+
+* Pizzas de horno de leña
