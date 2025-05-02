@@ -1,5 +1,5 @@
 ---
-title: "Comparte tu foto"
+title: "Partagez votre photo"
 ---
 
 {{< nameRequest >}}
