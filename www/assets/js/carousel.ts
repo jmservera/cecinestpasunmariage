@@ -226,7 +226,7 @@ function showStatus(message: string, className: string = "") {
 
 $(async () => {
   await carousel();
-  const canvas = document.getElementById("qrcode") as HTMLCanvasElement;
-  const qrCodeUrl = new URL("../fotoup", window.location.href).href;
-  toCanvas(canvas, qrCodeUrl);
+  // const canvas = document.getElementById("qrcode") as HTMLCanvasElement;
+  // const qrCodeUrl = new URL("../fotoup", window.location.href).href;
+  // toCanvas(canvas, qrCodeUrl);
 });

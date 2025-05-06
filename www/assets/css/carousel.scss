@@ -79,12 +79,12 @@
   padding: 20px;
   display: flex;
   z-index: 2;
-  font-size: x-large;
 }
 
 .description-overlay p {
   width: 65%;
   margin: 0 auto;
+  font-size: 80%;
 }
 
 .swiper-slide {
@@ -178,4 +178,8 @@
   to {
     transform: scale(1.5);
   }
+}
+
+.qr-code {
+  visibility: hidden;
 }
