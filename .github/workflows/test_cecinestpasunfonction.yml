@@ -37,7 +37,7 @@ jobs:
         working-directory: ${{ env.SRC_PATH }}
 
       - name: Upload dotnet test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dotnet-results-${{ env.DOTNET_VERSION }}
           path: ${{ env.SRC_PATH }}/TestResults-${{ env.DOTNET_VERSION }}
